@@ -1,4 +1,5 @@
 var express = require('express'),
+	morgan = require('morgan'),
     bodyParser      = require('body-parser'),
     methodOverride  = require('method-override'),
     sessions        = require('./routes/sessions'),
