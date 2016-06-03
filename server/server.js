@@ -1,4 +1,5 @@
 var express = require('express'),
+	morgan = require('morgan'),
     bodyParser      = require('body-parser'),
     methodOverride  = require('method-override'),
     sessions        = require('./routes/sessions'),
@@ -20,7 +21,7 @@ app.all('*', function(req, res, next) {
 app.get('/sessions', sessions.findAll);
 app.get('/sessions/:id', sessions.findById);
 
-app.set('port', process.env.PORT || 8080);
+app.set('port', process.env.PORT || 5000);
 
 app.listen(app.get('port'), function () {
     console.log('Express server listening on port ' + app.get('port'));
