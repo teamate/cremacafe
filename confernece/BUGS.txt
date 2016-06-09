@@ -1,0 +1,3 @@
+categories.html:
+----------------
+1. use ng-src to set the img src depends on the platform
