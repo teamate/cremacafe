@@ -1,8 +1,60 @@
-<ion-view view-title="Sessions">
-  <ion-content>
-    <ion-list>
-      <ion-item ng-repeat="session in sessions"
-                href="#/app/sessions/{{session.id}}">{{session.title}}</ion-item>
-    </ion-list>
+<ion-view view-title="קרמה קפה">
+  <ion-content> 
+    <div class="container">
+        <div id="content-slider">
+            <div id="slider">
+                <div id="mask">
+                    <ul>
+                        <li id="first" class="firstanimation">
+                            <a href=#><img src="img/coffe_and_sweet_sale.jpg"/></a>
+                            <div class="tooltip"><h1>!מבצע קפה ומאפה ב5 ש"ח בלבד</h1></div>
+                        </li>
+                        <li id="second" class="secondanimation">
+                            <a href="#"><img src="img/pizza_sale.png"/></a>
+                            <div class="tooltip"><h1>!מבצע פיצה משפחית ב20 ש"ח בלבד</h1></div>
+                        </li>
+                        <li id="third" class="thirdanimation">
+                            <a href="#"><img src="img/sandwich_sale.jpg"/></a>
+                            <div class="tooltip"><h1>!מבצע כל סוגי הסנדוויצ'ים ב10 ש"ח בלבד</h1></div>
+                        </li> 
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+      <button class="button button-large button-positive" id="quick-order">
+        הזמנה מהירה 
+      </button>
+      <div class="favorites">
+      <button class="button button-large button-clear button-dark ion-star icon-left" id="favoriets">
+        מועדפים
+      </button>
+      <ion-slide-box id="favorite-items">
+          <ion-slide>
+            <a ui-sref="#" class="item item-avatar item-icon-right">
+                    <img src="img/cruason.jpg">
+                    <h2>קרואסון שוקולד</h2>
+                    <p>2.50 ש"ח ליחידה</p>
+                    <i class="icon ion-android-delete"></i>
+            </a>
+          </ion-slide>
+          <ion-slide>
+            <a ui-sref="#" class="item item-avatar item-icon-right">
+                <img src="img/cruason.jpg">
+                <h2>קפה הפוך</h2>
+                <p>5 ש"ח ליחידה</p>
+                <i class="icon ion-android-delete"></i>
+            </a>
+              </ion-slide>
+          <ion-slide>
+            <a ui-sref="#" class="item item-avatar item-icon-right">
+                <img src="img/cruason.jpg">
+                <h2>סנדוויץ' טונה</h2>
+                <p>10 ש"ח ליחידה</p>
+                <i class="icon ion-android-delete"></i>
+            </a>
+              </ion-slide>
+      </ion-slide-box>
+          </div>
   </ion-content>
 </ion-view>

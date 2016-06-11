@@ -1,5 +1,7 @@
 /* Empty. Add your own CSS if you like */
 
+html, body { height: 100%; }
+
 .menu .bar{
   background-image: url("../img/coffee_menu_background.jpg");
   background-size: cover;
@@ -53,4 +55,154 @@
   padding-left: 3px;
   font-weight: 300;
 }
+
+   #slider{
+    background: #000;
+    border: 5px solid #eaeaea;
+    box-shadow: 1px 1px 5px rgba(0,0,0,0.7);
+    height: 250px;
+    width: 80%; 
+    max-width: 680px;
+    margin: 40px auto 0;
+    overflow: visible;
+    position: relative;
+  }
+
+  #mask{
+    overflow: hidden;
+    height: 240px;
+  }
+
+  #slider ul{
+    margin: 0;
+    padding: 0;
+    height: 250px;
+    width: inherit;
+    position: relative;
+  }
+
+  #slider a{
+    width: 100%;
+    height: 100%;
+  }  
+
+  #slider li{
+    width: inherit;
+    height: 250px;
+    position: absolute;
+    top: 100px;
+    list-style: none;
+  }
+
+  #slider img{
+    width: 100%;
+    height: 250px;
+  }
+  #slider li.firstanimation{
+    animation: cycle 24s linear infinite;
+  }
+
+  #slider li.secondanimation{
+    animation: cycletwo 24s linear infinite;
+  }
+  #slider li.thirdanimation{
+    animation: cyclethree 24s linear infinite;
+  }
+
+  @keyframes cycle{
+    0% {top: 0px;}
+    3.33% {top: 0px;}
+    26.64% {top:0px; opacity: 1; z-index: 0;}
+    29.97% {top: 325px; opacity: 0; z-index: 0;}
+    30.97% {top:-325px; opacity: 0; z-index: 0;}
+    93.34% {top:-325px; opacity: 0; z-index: 0;}
+    96.67% {top: -325px; opacity: 0; }
+    100% {top: 0px; opacity: 1;}
+  }
+
+  @keyframes cycletwo{
+    0% {top: -325px; opacity: 0;}
+    26.64% {top: -325px; opacity: 0}
+    29.97% {top:0px; opacity: 1;}
+    33.3% {top: 0px; opacity: 1;}
+    59.94% {top: 0px; opacity: 1; z-index: 0;}
+    63.27% {top: 325px; opacity: 0; z-index: 0;}
+    64.27% {top: -325px; opacity: 0; z-index: -1; }
+    100% {top: -325px; opacity: 0; z-index: -1;}
+  }
+
+  @keyframes cyclethree{
+    0% {top: -325px; opacity: 0;}
+    59.94% {top: -325px; opacity: 0;}
+    63.27% {top:0px; opacity: 1;}
+    66.6% {top: 0px; opacity: 1;}
+    93.24% {top: 0px; opacity: 1;}
+    96.57% {top: 325px; opacity: 0; z-index: 0;}
+    97.57% {top: -325px; opacity: 0; z-index: -1;}
+    100% {top: -325px; opacity: 0; z-index: -1;}
+  }
+
+  #slider .tooltip{
+    background: rgba(0,0,0,0.7);
+    width: 100%;
+    height; 40px;
+    position: relative;
+    bottom: 85px;
+  }
+
+  #slider .tooltip h1{
+    color: #fff;
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 30px;
+    padding: 0 0 0 10px;
+  }
+
+  #slider .tooltip {
+    transition: all 0.3 ease-in-out;
+  }
+
+  @media screen and (max-height: 380px){
+    #slider{
+      height: 200px;
+    }
+
+    #mask{
+      height:190px;
+    }
+
+    #slider img{
+      height:190px;
+    }
+}
+      
+#quick-order{
+    margin:0 auto;
+    display:block;
+    position: relative;
+    top: 30px;
+    font-size: 25px;
+}
+
+.favoriets{
+    display: block;
+}
+
+#favoriets{
+    margin: 0 auto;
+    display: block;
+    position: relative;
+    top: 40px;
+    font-size: 25px;
+    
+}
+
+#favorite-items{
+    display: block;
+    top: 40px;
+}
+
+
+
+
 

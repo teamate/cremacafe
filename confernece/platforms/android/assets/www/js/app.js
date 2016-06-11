@@ -42,6 +42,16 @@ angular.module('starter', ['ionic', 'starter.controllers',, 'ionic-material'])
       }
     })
 
+    .state('app.breads', {
+      url: "/breads",
+      views: {
+        'menuContent': {
+          templateUrl: "templates/breads.html",
+          controller: 'BreadsCtrl'
+        }
+      }
+    })
+
   .state('app.search', {
     url: '/search',
     views: {
