@@ -3,7 +3,32 @@ var express = require('express'),
     bodyParser      = require('body-parser'),
     methodOverride  = require('method-override'),
     sessions        = require('./routes/sessions'),
+    mongoose        = require('mongoose'),
+    Menu            = require('./models/menu')
     app = express();
+
+
+mongoose.connect('mongodb://baza:bgu4life@ds013414.mlab.com:13414/crema_cafe_db');
+
+var resturantMenu = new Menu({
+    name:'chris',
+    username: 'nadavbara',
+    password: '1234'
+});
+
+
+resturantMenu.save(function (err) {
+    if(err){console.log(err)};
+    console.log('something worked');
+})
+
+/*
+Menu.find({}, function(err, users) {
+    if (err) throw err;
+
+    // object of all the users
+    console.log(users);
+});*/
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
