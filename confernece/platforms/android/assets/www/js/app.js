@@ -31,6 +31,19 @@ angular.module('starter', ['ionic', 'starter.controllers',, 'ionic-material'])
     templateUrl: 'templates/menu.html',
     controller: 'AppCtrl'
   })
+  
+  .state('app.login', {
+      url: '/login',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/login.html',
+                controller: 'LoginCtrl'
+            },
+            'fabContent': {
+                template: ''
+            }
+        }
+    })
 
     .state('app.categories', {
       url: "/categories",
@@ -43,7 +56,7 @@ angular.module('starter', ['ionic', 'starter.controllers',, 'ionic-material'])
     })
 
     .state('app.breads', {
-      url: "/breads",
+      url: "/categories/breads",
       views: {
         'menuContent': {
           templateUrl: "templates/breads.html",
@@ -89,5 +102,5 @@ angular.module('starter', ['ionic', 'starter.controllers',, 'ionic-material'])
     }
 });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/sessions');
+  $urlRouterProvider.otherwise("/app/login");
 });

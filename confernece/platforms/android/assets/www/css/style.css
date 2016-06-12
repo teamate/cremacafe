@@ -1,6 +1,8 @@
 /* Empty. Add your own CSS if you like */
 
-html, body { height: 100%; }
+ion-content{
+    background-color: #F2EFCE;
+}
 
 .menu .bar{
   background-image: url("../img/coffee_menu_background.jpg");
@@ -21,8 +23,26 @@ html, body { height: 100%; }
   width: 60px;
 }
 
-.item{
+#cart-button{
+    margin-right: 20px;
+    padding-right: 60px;
+}
+
+#cart-button span{
+    display: inline;
+}
+
+.list{
+    background-color: transparent;
+}
+
+#category-item, #breads-item{
   margin-bottom: 10px;
+  box-shadow: 0 0.5px 0 0 #ffffff inset, 0 1px 2px 0 #B3B3B3;
+}
+
+#breads-item{
+    padding-bottom: 40px;
 }
 
 .card-title-shadow
@@ -184,22 +204,49 @@ html, body { height: 100%; }
     font-size: 25px;
 }
 
-.favoriets{
-    display: block;
-}
+
 
 #favoriets{
-    margin: 0 auto;
-    display: block;
+    float: right;
     position: relative;
     top: 40px;
     font-size: 25px;
+    margin-bottom: 40px;
     
 }
 
 #favorite-items{
-    display: block;
-    top: 40px;
+    display: table-row;
+}
+
+video#bgvid { 
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -100;
+    -ms-transform: translateX(-50%) translateY(-50%);
+    -moz-transform: translateX(-50%) translateY(-50%);
+    -webkit-transform: translateX(-50%) translateY(-50%);
+    transform: translateX(-50%) translateY(-50%);
+}
+
+.app-icon {
+    background-color: #fff;
+    background: url('../img/nespresso_logo.jpg') center;
+    background-size: cover;
+    border-radius: 50%;
+    height: 125px;
+    margin: 0 auto;
+    width: 125px;
+}
+
+.social-login {
+    position: fixed;
+    bottom: 0;
 }
 
 
