@@ -1,24 +1,13 @@
 var mongoose = require('mongoose');
+var Category = require('./categories')
+
 var Schema = mongoose.Schema;
 
 // create a schema
 var menu = new Schema({
   name: String,
-  username: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  admin: Boolean,
-  location: String,
-  meta: {
-    age: Number,
-    website: String
-  },
-  created_at: Date,
-  updated_at: Date
+  categories : [Category.schema]
 });
 
-// the schema is useless so far
-// we need to create a model using it
-var Menu = mongoose.model('Menu', menu);
-
 // make this available to our users in our Node applications
-module.exports = Menu;
+module.exports = mongoose.model('Menu', menu);
