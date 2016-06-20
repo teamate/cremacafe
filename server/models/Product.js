@@ -13,7 +13,7 @@ var product = new Schema({
         extraName:String,
         extraPrice:Number
     }],
-    productPictrue : String
+    productPicture : String
 
 });
 
