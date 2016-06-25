@@ -237,7 +237,7 @@ ion-content{
     border-bottom: 3px grey solid;
 }
 
-@media screen and (max-he)
+
 
 video#bgvid { 
     position: fixed;
@@ -272,6 +272,17 @@ video#bgvid {
 ion-checkbox{
     text-align: right;  
 }
+
+.tosafot, .sauces{
+    width: 50%;
+    float:left;
+}
+
+textarea{
+    width: 100%;
+}
+
+
 
 
 

@@ -42,8 +42,20 @@ angular.module('AppServices', ['ngResource'])
     }
 })
 
+.factory('Coffee', function(Order){
+    
+    this.getCoffeeSizes = function(){
+        var coffee_sizes = [{value:"0", size:"גדול", price:5},{value:"1", size:"קטן", price:7},{value:"2", size:"בינוני", price:9}];
+        return coffee_sizes;
+    }
+    
+    this.getCoffeeTypes = function(){
+        var coffee_types = [{value:"0", name:"הפוך", checked: true},{value:"1", name:"שחור", checked: false},{value:"2", name:"תה", checked: false},{value:"3", name:"שוקו", checked: false}];
+    }
+    return this;
+})
 
-.service('Sandwitch', function () {
+.factory('Sandwitch', function () {
     this.getSandwitchesMenu = function(){
         var result = HttpReqs.GetRequest("#");
         
@@ -87,7 +99,7 @@ angular.module('AppServices', ['ngResource'])
     
 })
 
-.factory('Order', function(){
+.factory('Order', function($cordovaFile, $ionicPlatform){
     this.WriteToFile = function(data){
     }
     

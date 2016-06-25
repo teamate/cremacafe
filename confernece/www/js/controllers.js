@@ -20,7 +20,7 @@ angular.module('starter.controllers', ['AppServices'])
     $ionicNavBarDelegate.showBackButton(true);
   })
 
-  .controller('BreadsCtrl', function($scope, $stateParams, $ionicNavBarDelegate) {
+  .controller('CoffeeCtrl', function($scope, $stateParams, $ionicNavBarDelegate) {
   })
 
 .controller('MakeTostCtrl', function($scope, $location, $stateParams, $ionicNavBarDelegate, $ionicPopup, Tost) {
@@ -63,9 +63,10 @@ angular.module('starter.controllers', ['AppServices'])
         var extra_info = $scope.exInfo;
         var result = Tost.AddToOrder($ionicPopup);
         if(result){
-            var successPopup = $ionicPopup.show({
+            var successPopup = $ionicPopup.show({   
                 title: '!ההזמנה עודכנה',
                 subTitle: 'להכניס פה פירוט של כמות הפריטים והחיר הכולל',
+                scope: $scope, 
                 buttons: [{
                         text:'המשך לקנות',
                         type: 'button-default',
