@@ -76,7 +76,7 @@ ion-content{
   font-weight: 300;
 }
 
-   #slider{
+/*   #slider{
     background: #000;
     border: 5px solid #eaeaea;
     box-shadow: 1px 1px 5px rgba(0,0,0,0.7);
@@ -218,6 +218,26 @@ ion-content{
 #favorite-items{
     display: table-row;
 }
+*/
+
+.top-container{
+    background-color: white;
+}
+
+.top-container a{
+    margin: 0 auto;
+    display: block;
+    width: 20%;
+}
+
+
+.tosts-header{
+    padding-top: 50px;
+    padding-bottom: 50px;
+    border-bottom: 3px grey solid;
+}
+
+@media screen and (max-he)
 
 video#bgvid { 
     position: fixed;
@@ -249,7 +269,9 @@ video#bgvid {
     bottom: 0;
 }
 
-
+ion-checkbox{
+    text-align: right;  
+}
 
 
 

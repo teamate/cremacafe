@@ -1,0 +1,26 @@
+<ion-view view-title="טוסטים">
+    <ion-content>
+            <div>
+                <ion-radio ng-repeat="x in breadTypes" name="breadChoice" ng-model="$parent.breadChoice" ng-value="x" ng-change="BreadTypeChange($parent.breadChoice)">{{x.name}}, {{x.price}}</ion-radio>
+            </div>
+            <div>
+                <h4>תוספות</h4>
+            </div>
+            <div>
+                <ion-checkbox class="item-checkbox-right" ng-repeat="x in tosafot" ng-model="x.checked" ng-checked="x.checked" ng-change="TosafotChange(x)">{{x.name}}, {{x.price}}</ion-checkbox>  
+            </div>
+            <div>
+                <h4>רטבים</h4>
+            </div>
+            <div>
+                <ion-checkbox class="item-checkbox-right" ng-repeat="x in sauces" ng-model="x.checked" ng-checked="x.checked" ng-change="SaucesChange(x)">{{x.name}}, {{x.price}}</ion-checkbox>
+            </div>
+            <textarea class="form-control" rows="4" ng-model="exInfo" placeholder="הערות"></textarea>
+            <div>
+                <h3>סה"כ: <span ng-bind="totalPrice"></span> ש"ח</h3>
+            </div>
+            <button class="button button-positive" ng-click="AddTostToOrder()">
+                הוסף להזמנה
+            </button>
+    </ion-content>
+</ion-view>
