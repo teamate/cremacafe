@@ -1,23 +1,14 @@
 var express = require('express'),
 	morgan = require('morgan'),
-    mongodb = require('mongodb').MongoClient,
     bodyParser      = require('body-parser'),
     methodOverride  = require('method-override'),
     menu        = require('./routes/menu'),
     mongoose        = require('mongoose'),
-    Category        = require('./models/categories'),
-    Product        = require('./models/product'),
+    mongodb         = require('./dbConnections/mongoDbconnection')
     app = express();
 
-//var url = 'mongodb://baza:bgu4life@ds013414.mlab.com:13414/crema_cafe_db';
+
 var url = 'mongodb://localhost:27017/crema_test_db';
-// mongoose.connect(url);
-/*var db = mongodb.connect(url,function (err, db) {
-    console.log("connected to db");
-    return db;
-});*/
-
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
@@ -33,11 +24,17 @@ app.all('*', function(req, res, next) {
 
 
 
-app.use('/', menu);
-//app.get('/sessions/:id', sessions.findById);
+app.use('/menu', menu);
 
 app.set('port', process.env.PORT || 5000);
+mongodb.connect(url,function(err){
+    if(err){
+        console.log("failed connecting to db: " + url);
+        process.exit(1);
+    }else{
+        app.listen(app.get('port'), function () {
+            console.log('Express server listening on port ' + app.get('port'));
+        });
+    }
+})
 
-app.listen(app.get('port'), function () {
-    console.log('Express server listening on port ' + app.get('port'));
-});
