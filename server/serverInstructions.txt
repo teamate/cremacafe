@@ -1,0 +1,19 @@
+API:
+
+/menu/categories - returns all categories
+/menu/categories:category_id - returns specific category (you want id or name??)
+/menu/categories:category_id/products - returns all prodcuts of category
+/menu/products - returns all products
+/menu/products:product_id - returns spefcific product
+
+instructions on how to start the server:
+
+1. install node.js
+2. install mongodb
+3. install robomongo (optional - gui for the db)
+4. go to your mongodb folder, open cmd, and run "mongod" (if an error occurs, read the error, you might need to add C:/data/db folder)
+5. open robomongo and create a new connection to your mongodb.
+6. go to project_location/server and run in cmd "npm install"
+7. run "npm start" or "node server.js"
+8. you should see a message "Express is running in port 5000"
+9. try the api methods using the browser or postman.
