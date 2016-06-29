@@ -1,9 +1,14 @@
 /* Empty. Add your own CSS if you like */
 
+/*App Content*/
 ion-content{
     background-color: #F2EFCE;
 }
 
+/*End of App Content*/
+
+
+/*Navigation Menu*/
 .menu .bar{
   background-image: url("../img/coffee_menu_background.jpg");
   background-size: cover;
@@ -23,6 +28,9 @@ ion-content{
   width: 60px;
 }
 
+/*End of Navigation Menu*/
+
+/*Cart Button*/
 #cart-button{
     margin-right: 20px;
     padding-right: 60px;
@@ -31,7 +39,9 @@ ion-content{
 #cart-button span{
     display: inline;
 }
+/*End of Cart Button*/
 
+/*Categories*/
 .list{
     background-color: transparent;
 }
@@ -220,6 +230,8 @@ ion-content{
 }
 */
 
+/*End of Categories Menu*/
+
 .top-container{
     background-color: white;
 }
@@ -238,7 +250,7 @@ ion-content{
 }
 
 
-
+/*Log In Screen*/
 video#bgvid { 
     position: fixed;
     top: 50%;
@@ -268,12 +280,14 @@ video#bgvid {
     position: fixed;
     bottom: 0;
 }
+/*End of Log In Screen*/
 
+/*Toast, Coffee, Pizza, Sandwich*/
 ion-checkbox{
     text-align: right;  
 }
 
-.tosafot, .sauces{
+.tosafot, .sauces, .coffee, .milk{
     width: 50%;
     float:left;
 }
@@ -281,7 +295,7 @@ ion-checkbox{
 textarea{
     width: 100%;
 }
-
+/*End of Toast, Coffee, Pizza, Sandwich*/
 
 
 

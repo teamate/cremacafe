@@ -44,14 +44,35 @@ angular.module('AppServices', ['ngResource'])
 
 .factory('Coffee', function(Order){
     
+    var uerCoffee = {};
+    
     this.getCoffeeSizes = function(){
-        var coffee_sizes = [{value:"0", size:"גדול", price:5},{value:"1", size:"קטן", price:7},{value:"2", size:"בינוני", price:9}];
+        var coffee_sizes = [{value:"0", name:"גדול", price:5},{value:"1", name:"קטן", price:7},{value:"2", name:"בינוני", price:9}];
         return coffee_sizes;
     }
     
     this.getCoffeeTypes = function(){
-        var coffee_types = [{value:"0", name:"הפוך", checked: true},{value:"1", name:"שחור", checked: false},{value:"2", name:"תה", checked: false},{value:"3", name:"שוקו", checked: false}];
+        var coffee_types = [{value:"0", name:"הפוך", checked: true, price:0},{value:"1", name:"שחור", checked: false, price:0},{value:"2", name:"תה", checked: false, price:0},{value:"3", name:"שוקו", checked: false, price:0}];
+        return coffee_types;
     }
+    
+    this.getMilkTypes = function(){
+        var milk_types = [{value:"0", name:"חלב 1%", checked:true, price:0},{value:"1", name:"חלב 2%", checked:true, price:0},{value:"2", name:"חלב 3%", checked:true, price:0},{value:"3", name:"חלב סויה", checked:true, price:0}];
+        return milk_types
+    }
+    
+    this.CreateCoffee = function(size, coffeeType, milkType, info, totalPrice){
+            userCoffee = {"name":"coffee", "size":size, "coffeeType":coffeeType, "milkType":milkType, "info":info, "price":totalPrice};
+        }
+    
+        this.AddToOrder = function(){
+            //Here i need to use the order service in order to write in the order file
+            Order.WriteToFile(userCoffee);
+            userCoffee = {};
+            return 1;
+        }
+    
+    
     return this;
 })
 
@@ -65,7 +86,7 @@ angular.module('AppServices', ['ngResource'])
 
 .factory('Tost', function(Order){
     
-        var userTostsArray;
+        var userTosts;
     
         this.getBreadTypes = function() {
             var bread_types = [{"value":"0","name":"גבטה", "price":15},{"value":"1","name":"בייגל", "price":20 },{"value":"2","name":"קמח מלא", "price":20}];
@@ -85,13 +106,14 @@ angular.module('AppServices', ['ngResource'])
             return sauces;
         }
         
-        this.AddToTostsArray = function(bread, tosafot, sauces, info, totalPrice){
-            userTostsArray = {"name":"bread", "tosafot":tosafot, "sauces":sauces, "info":info, "price":totalPrice};
+        this.CreateTost = function(bread, tosafot, sauces, info, totalPrice){
+            userTosts = {"name":"bread", "tosafot":tosafot, "sauces":sauces, "info":info, "price":totalPrice};
         }
     
         this.AddToOrder = function(){
             //Here i need to use the order service in order to write in the order file
-            Order.WriteToFile(userTostsArray);
+            Order.WriteToFile(userTosts);
+            userTosts = {};
             return 1;
         }
         
