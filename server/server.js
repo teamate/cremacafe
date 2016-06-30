@@ -2,9 +2,13 @@ var express = require('express'),
 	morgan = require('morgan'),
     bodyParser      = require('body-parser'),
     methodOverride  = require('method-override'),
-    sessions        = require('./routes/sessions'),
+    menu        = require('./routes/menu'),
+    mongoose        = require('mongoose'),
+    mongodb         = require('./dbConnections/mongoDbconnection')
     app = express();
 
+
+var url = 'mongodb://localhost:27017/crema_test_db';
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true
@@ -18,11 +22,19 @@ app.all('*', function(req, res, next) {
     next();
 });
 
-app.get('/sessions', sessions.findAll);
-app.get('/sessions/:id', sessions.findById);
+
+
+app.use('/menu', menu);
 
 app.set('port', process.env.PORT || 5000);
+mongodb.connect(url,function(err){
+    if(err){
+        console.log("failed connecting to db: " + url);
+        process.exit(1);
+    }else{
+        app.listen(app.get('port'), function () {
+            console.log('Express server listening on port ' + app.get('port'));
+        });
+    }
+})
 
-app.listen(app.get('port'), function () {
-    console.log('Express server listening on port ' + app.get('port'));
-});
