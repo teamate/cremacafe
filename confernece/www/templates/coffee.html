@@ -1,0 +1,30 @@
+<ion-view view-title="קפה" >
+  <ion-content dir="rtl">
+      <div>
+                <ion-radio ng-repeat="x in cupSize" name="cupChoice" ng-model="$parent.cupChoice" ng-value="x" ng-change="CupSizeChange($parent.cupChoice)" dir="ltr">{{x.name}}<span>  <b>{{x.price}} ש"ח</b></span></ion-radio>
+            </div>
+        <div class="coffee">
+                <div>
+                    <h4>סוגי קפה</h4>
+                </div>
+                <div>
+                    <ion-checkbox class="item-checkbox-right" ng-repeat="x in coffeeTypes" ng-model="x.checked" ng-checked="x.checked" ng-change="CoffeeTypeChange(x)">{{x.name}}<span><br><b>{{x.price}} ש"ח</b></span></ion-checkbox>
+                </div>
+            </div>
+            <div class="milk">
+                <div>
+                    <h4>סוגי חלב</h4>
+                </div>
+                <div>
+                    <ion-checkbox class="item-checkbox-right" ng-repeat="x in milkTypes" ng-model="x.checked" ng-checked="x.checked" ng-change="MilkTypeChange(x)" >{{x.name}}<span><br><b>{{x.price}} ש"ח</b></span></ion-checkbox>  
+                </div>
+            </div>
+            <textarea class="form-control" rows="4" ng-model="exInfo" placeholder="הערות"></textarea>
+            <div>
+                <h3>סה"כ: <span ng-bind="totalPrice" ></span> ש"ח</h3>
+            </div>
+            <button class="button button-positive" ng-click="AddCoffeeToOrder()" style="float:left;">
+                הוסף להזמנה
+            </button>
+  </ion-content>
+</ion-view>

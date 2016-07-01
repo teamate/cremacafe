@@ -4,7 +4,7 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers'])
+angular.module('starter', ['ionic', 'starter.controllers', 'ionic-material', 'ngCordova'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -31,6 +31,49 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     templateUrl: 'templates/menu.html',
     controller: 'AppCtrl'
   })
+  
+  .state('app.login', {
+      url: '/login',
+        views: {
+            'menuContent': {
+                templateUrl: 'templates/login.html',
+                controller: 'LoginCtrl'
+            },
+            'fabContent': {
+                template: ''
+            }
+        }
+    })
+
+    .state('app.categories', {
+      url: "/categories",
+      views: {
+        'menuContent': {
+          templateUrl: "templates/categories.html",
+          controller: 'CategoriesCtrl'
+        }
+      }
+    })
+
+    .state('app.coffee', {
+      url: "/categories/coffee",
+      views: {
+        'menuContent': {
+          templateUrl: "templates/coffee.html",
+          controller: 'CoffeeCtrl'
+        }
+      }
+    })
+  
+  .state('app.makeTost', {
+      url: "/categories/makeTost",
+      views: {
+        'menuContent': {
+          templateUrl: "templates/makeTost.html",
+          controller: 'MakeTostCtrl'
+        }
+      }
+    })
 
   .state('app.search', {
     url: '/search',
@@ -58,6 +101,15 @@ angular.module('starter', ['ionic', 'starter.controllers'])
       }
   }
 })
+  .state('app.order', {
+  url: "/order",
+  views: {
+      'menuContent': {
+          templateUrl: "templates/order.html",
+          controller: 'OrderCtrl'
+      }
+  }
+})
 
   .state('app.session', {
     url: "/sessions/:sessionId",
@@ -69,5 +121,5 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     }
 });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/sessions');
+  $urlRouterProvider.otherwise("/app/login");
 });

@@ -1,0 +1,21 @@
+!!!!!!!!!!!!!!!!!!
+!! instructions !!
+!!!!!!!!!!!!!!!!!!
+
+1. Download latest java updates.
+2. Download latest jdk.
+3. run "javac -version" on your CLI to check your java version.
+4. download android sdk
+5. Set ANDROID_HOME to be the path to the android sdk installation folder.
+6. Add to Path the path of tools folder and the path of the platform-tools folder inside the android sdk folder.
+7. Connect your android device to pc. IMPORTANT! Make sure your device is on debugging mode!
+8. Go to Installation path\Android\sdk\platform-tools and in your CLI type adb devices to check if your device is connected.
+9. Go to your ionic app folder.
+10. Run on your CLI "ionic platform add android"
+11. Run on your CLI "ionic build android"
+12. Run on your CLI "ionic run android"
+13. ENJOY :)
+
+
+Written by Amit Baz
+ 
