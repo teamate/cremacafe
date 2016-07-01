@@ -121,7 +121,12 @@ angular.module('AppServices', ['ngResource'])
     
 })
 
-.factory('Order', function($cordovaFile, $ionicPlatform){
+.factory('Order', function(){
+    
+    this.IsOrderExit = function(){
+        
+    }
+                        
     this.WriteToFile = function(data){
     }
     

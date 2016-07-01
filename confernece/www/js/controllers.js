@@ -171,7 +171,8 @@ angular.module('starter.controllers', ['AppServices'])
     $ionicNavBarDelegate.showBackButton(false);
 })
 
-.controller('OrderCtrl', function($scope, $stateParams, $ionicNavBarDelegate){
+.controller('OrderCtrl', function($scope, $stateParams, $ionicNavBarDelegate, Order){
+    $scope.check = "amit";
     
 })
 
