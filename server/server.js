@@ -3,6 +3,7 @@ var express = require('express'),
     bodyParser      = require('body-parser'),
     methodOverride  = require('method-override'),
     menu        = require('./routes/menu'),
+    auth        = require ('./routes/auth')
     mongoose        = require('mongoose'),
     mongodb         = require('./dbConnections/mongoDbconnection')
     app = express();
@@ -25,6 +26,7 @@ app.all('*', function(req, res, next) {
 
 
 app.use('/menu', menu);
+app.use('/auth', auth);
 
 app.set('port', process.env.PORT || 5000);
 mongodb.connect(url,function(err){
