@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
 var db = null;
-angular.module('starter', ['ionic', 'starter.controllers', 'ionic-material', 'ngCordova'])
+angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova'])
 
 .run(function($ionicPlatform, $cordovaSQLite) {
   $ionicPlatform.ready(function() {
@@ -128,5 +128,5 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic-material', 'ng
     }
 });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise("/app/login");
+  $urlRouterProvider.otherwise("/app/sessions");
 });
