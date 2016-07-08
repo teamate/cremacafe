@@ -1,6 +1,6 @@
 angular.module('starter.controllers', ['AppServices'])
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout) {
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $state, Order) {
 
   // With the new view caching in Ionic, Controllers are only called
   // when they are recreated or on app start, instead of every page change.
@@ -10,14 +10,28 @@ angular.module('starter.controllers', ['AppServices'])
   //});
 
   // Form data for the login modal
+    $scope.GoToOrder = function(){
+        $state.go('app.order', {}, {reload: true});
+    }
+    
+    $scope.$root.OrderLength = Order.getOrderLength();
 
 })
 
 .controller('LoginCtrl', function($scope, $stateParams) {
   })
 
-  .controller('CategoriesCtrl', function($scope, $stateParams, $ionicNavBarDelegate) {
+  .controller('CategoriesCtrl', function($scope, $stateParams, $ionicNavBarDelegate, Categories) {
     $ionicNavBarDelegate.showBackButton(true);
+    $scope.showSpinner = true;
+    
+    var categories = Categories.getCategories();
+    categories.then(function(result){
+        $scope.showSpinner = false;
+        $scope.categories = result.data;
+    }, function(err){
+        
+    });
   })
 
   .controller('CoffeeCtrl', function($scope, $stateParams, $ionicNavBarDelegate, $ionicPopup, Coffee) {
@@ -53,7 +67,7 @@ angular.module('starter.controllers', ['AppServices'])
     
     //adds a coffee to the order
     $scope.AddCoffeeToOrder = function(){
-        Tost.CreateCoffee(chosen_cup_size, coffeeType, milkType, extra_info, totalPrice);
+        Coffee.CreateCoffee(chosen_cup_size, $scope.coffeeTypes, $scope.milkTypes, extra_info, totalPrice);
         var coffeeT = $scope.coffeeTypes.filter(function(coffee){return coffee.checked == true;});
         var milkT = $scope.MilkTypes.filter(function(milk){return milk.checked == true});
         var extra_info = $scope.exInfo;
@@ -94,46 +108,45 @@ angular.module('starter.controllers', ['AppServices'])
     
   })
 
-.controller('MakeTostCtrl', function($scope, $location, $stateParams, $ionicNavBarDelegate, $ionicPopup, Tost) {
-    $scope.breadTypes = Tost.getBreadTypes();
-    $scope.tosafot = Tost.getTosafot();
-    $scope.sauces = Tost.getSauces();
+.controller('ToastCtrl', function($rootScope, $scope, $location,$state, $stateParams, $ionicNavBarDelegate, $ionicPopup, Tost, Order) {
     
-    var chosen_bread_item = $scope.breadTypes[0]; //default
-    $scope.$parent.breadChoice = chosen_bread_item;
-    var totalPrice = $scope.totalPrice = chosen_bread_item.price; //Default
+    var toast = null;
+    var totalPrice = 0;
+    $scope.extra_info = "";
+    $scope.exInfo = "";
+    $scope.showSpinner = true;
     
-    //handles change events in bread types ion-radio
-    $scope.BreadTypeChange = function(item){
-        totalPrice += item.price - chosen_bread_item.price;
-        $scope.totalPrice = totalPrice;
-        chosen_bread_item = item;
-    };
+    Tost.getToast()
+    .then(function(res){
+        $scope.showSpinner = false;
+        console.log(res.data);
+        toast = res.data;
+        console.log(toast.extra);
+        if(toast.extra)
+            $scope.extras = toast.extras;
+        totalPrice = $scope.totalPrice = JSON.parse(toast.productPrice); //Default
+    }, function(err){
+        //TODO
+    });
     
-    $scope.TosafotChange = function(item){
+    $scope.ExtrasChange = function(item){
         if(item.checked)
-            totalPrice += item.price;
+            totalPrice += JSON.parse(item.extraPrice);
         else
-            totalPrice -= item.price;
-        $scope.totalPrice = totalPrice;
-    }
-    
-    $scope.SaucesChange = function(item){
-        if(item.checked)
-            totalPrice += item.price;
-        else
-            totalPrice -= item.price;
+            totalPrice -= JSON.parse(item.extraPrice);
         $scope.totalPrice = totalPrice;
     }
     
     //adds a tost to the order
     $scope.AddTostToOrder = function(){
-        Tost.CreateTost(chosen_bread_item, tosafot, sauces, extra_info, totalPrice);
-        var tosafot = $scope.tosafot.filter(function(tosefet){return tosefet.checked == true;});
-        var sauces = $scope.sauces.filter(function(sauce){return sauce.checked == true});
+        var extras = $scope.extras.filter(function(extra){return extra.checked == true;});
         var extra_info = $scope.exInfo;
+        Tost.CreateTost(extras, extra_info, totalPrice);
         var result = Tost.AddToOrder($ionicPopup);
-        if(result){
+        $scope.extras.filter(function(extra){extra.checked = false; return;});
+        if( result){
+            $scope.exInfo = "";
+            $scope.$root.OrderLength = Order.getOrderLength();
             var successPopup = $ionicPopup.show({   
                 title: '!ההזמנה עודכנה',
                 subTitle: 'להכניס פה פירוט של כמות הפריטים והחיר הכולל',
@@ -150,7 +163,7 @@ angular.module('starter.controllers', ['AppServices'])
                         type: 'button-default',
                         onTap: function(e){
                             console.log('הכן טוסט חדש');
-                            $location.path('app/categories/makeTost');
+                            $location.path('app/categories/toast');
 
                         }
                     },{
@@ -158,7 +171,7 @@ angular.module('starter.controllers', ['AppServices'])
                         type: 'button-positive',
                         onTap: function(e){
                             console.log('גש לקופה');
-                            $location.path('app/order');
+                            $state.go('app.order', {}, {reload: true});
 
                         }
                     }]
@@ -169,10 +182,46 @@ angular.module('starter.controllers', ['AppServices'])
 
 .controller('SessionsCtrl', function($rootScope, $scope, $ionicNavBarDelegate ) {
     $ionicNavBarDelegate.showBackButton(false);
+    
 })
 
-.controller('OrderCtrl', function($scope, $stateParams, $ionicNavBarDelegate, Order){
-    $scope.check = "amit";
+.controller('OrderCtrl', function($scope,$timeout, $stateParams, $ionicNavBarDelegate,$ionicPlatform, Order){
+    $scope.showDeleteButton = false;
+    
+    $scope.$on('$ionicView.enter', function() {
+    // code to run each time view is entered
+        $scope.showSpinner = true;
+        $ionicPlatform.ready(function(){
+            var order = Order.ReadFromStorage();
+            console.log($scope.check);
+            console.log(order);
+            $scope.order = order;
+            $timeout(function(){
+                $scope.showSpinner = false;
+                console.log('update with timeout fired');
+            }, 1000);
+        });
+    });
+    
+    
+    
+    
+    $scope.removeProduct = function(index){
+        $ionicPlatform.ready(function(){
+            $scope.order.splice(index, 1)
+            Order.RemoveItem(index);
+            $scope.$root.OrderLength = Order.getOrderLength();
+        })
+        
+    }
+    
+    $scope.clearOrder = function(){
+        $ionicPlatform.ready(function(){
+           Order.ClearLocalStorage(); 
+            $scope.order = Order.ReadFromStorage();
+            $scope.$root.OrderLength = Order.getOrderLength();
+        })
+    }
     
 })
 

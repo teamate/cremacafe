@@ -8,7 +8,8 @@ var express = require('express'),
     app = express();
 
 
-var url = 'mongodb://localhost:27017/crema_test_db';
+//var url = 'mongodb://localhost:27017/crema_test_db';
+var url = 'mongodb://baza:bgu4life@ds011715.mlab.com:11715/crema_test_db';
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true

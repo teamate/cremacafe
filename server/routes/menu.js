@@ -4,6 +4,7 @@ var mongo = require('mongodb');
 var dbConnection = require('../dbConnections/mongoDbconnection')
 
 router.get('/categories', function (req, res) {
+    console.log('got here');
     var db = dbConnection.get();
     var collection = db.collection('categories');
     collection.find().toArray(function (err, docs) {

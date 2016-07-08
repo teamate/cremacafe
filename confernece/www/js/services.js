@@ -3,15 +3,18 @@ angular.module('AppServices', ['ngResource'])
 .factory('HttpReqs', function($http){
     
     this.ParseGetParams = function(params){
-        var result = '?';
-        for(var key in params){
-            result += key + '=';
-            result += params[key] + '&';
+        var result = '';
+        if(params != ''){
+            var result = '?';
+            for(var key in params){
+                result += key + '=';
+                result += params[key] + '&';
+            }
+
+            result = result.substring(0, substring.length-1);
         }
         
-        result = result.substring(0, substring.length-1);
-        
-        return result
+        return result;
     }
     
     this.GetRequest = function(path, params){
@@ -20,9 +23,9 @@ angular.module('AppServices', ['ngResource'])
             method: 'GET',
             url: path + '/' + parsed_params
         }).then(function successCallback(response){
-            //TODO
+            return response;
         }, function errorCallback(response){
-            //TODO
+            return response;
         });
     }
     
@@ -40,11 +43,13 @@ angular.module('AppServices', ['ngResource'])
            //TODO 
         });
     }
+    
+    return this
 })
 
 .factory('Coffee', function(Order){
     
-    var uerCoffee = {};
+    var userCoffee = {};
     
     this.getCoffeeSizes = function(){
         var coffee_sizes = [{value:"0", name:"גדול", price:5},{value:"1", name:"קטן", price:7},{value:"2", name:"בינוני", price:9}];
@@ -67,7 +72,7 @@ angular.module('AppServices', ['ngResource'])
     
         this.AddToOrder = function(){
             //Here i need to use the order service in order to write in the order file
-            Order.WriteToFile(userCoffee);
+            Order.WriteToStorage(userCoffee);
             userCoffee = {};
             return 1;
         }
@@ -84,35 +89,29 @@ angular.module('AppServices', ['ngResource'])
     }
 })
 
-.factory('Tost', function(Order){
+.factory('Tost', function($http, Order){
     
         var userTosts;
     
-        this.getBreadTypes = function() {
-            var bread_types = [{"value":"0","name":"גבטה", "price":15},{"value":"1","name":"בייגל", "price":20 },{"value":"2","name":"קמח מלא", "price":20}];
-            
-            return bread_types;
-        }
-    
-        this.getTosafot = function(){
-            var tosafot = [{"value":"0", "name":"זיתים", "checked": false, "price":1},{"value":"1", "name":"טונה", "checked": false, "price":2},{"value":"2", "name":"גבינה צהובה", "checked": false, "price":3},{"value":"3", "name":"ביצה קשה", "checked": false, "price":4},{"value":"4", "name":"בצל", "checked": false, "price":5}];
-            
-            return tosafot;
-        }    
+        this.getToast = function(){
+            var toast = $http.get("http://192.168.0.33:5000/menu/products/toast");
+            return toast;
+        } 
         
-        this.getSauces = function(){
-            var sauces = [{"value":"0", "name":"רסק עגבניות", "checked": false, "price":1},{"value":"1", "name":"קטשופ", "checked": false, "price":2},{"value":"2", "name":"מיונז", "checked": false, "price":3},{"value":"3", "name":"שום", "checked": false, "price":4},{"value":"4", "name":"אלף האיים", "checked": false, "price":5}];
-            
-            return sauces;
-        }
-        
-        this.CreateTost = function(bread, tosafot, sauces, info, totalPrice){
-            userTosts = {"name":"bread", "tosafot":tosafot, "sauces":sauces, "info":info, "price":totalPrice};
+        this.CreateTost = function(extras, info, totalPrice){
+            console.log(extras, info, totalPrice);
+            var parsed_extras = "";
+            for(var i = 0; i<extras.length; i++)
+                parsed_extras += extras[i].extraDisplayName+", ";
+            parsed_extras = parsed_extras.substring(0, parsed_extras.length-2);
+            parsed_info = "בתוספת\n"+parsed_extras;
+            console.log(parsed_info);
+            userTosts = {"name":"טוסט", "details":parsed_info, "extraInfo":info, "price":totalPrice};
         }
     
         this.AddToOrder = function(){
             //Here i need to use the order service in order to write in the order file
-            Order.WriteToFile(userTosts);
+            Order.WriteToStorage(userTosts);
             userTosts = {};
             return 1;
         }
@@ -121,16 +120,71 @@ angular.module('AppServices', ['ngResource'])
     
 })
 
-.factory('Order', function(){
+.factory('Order', function($ionicPlatform, $cordovaSQLite){
     
-    this.IsOrderExit = function(){
+    var localStorage = window.localStorage;
+    var self = this;
+                        
+    this.WriteToStorage = function(data){
+        $ionicPlatform.ready(function(){
+            console.log("data: ", data);
+            var temp = [];
+            var res = JSON.parse(localStorage.getItem("order"));
+            console.log("res: "+res);
+            if(res != null)
+                temp = res;
+            temp.push(data);
+            console.log(temp);
+            localStorage.setItem("order",JSON.stringify(temp));
+//            window.localStorage.clear();
+        });
+    }
+    
+    this.ReadFromStorage = function(){ 
+        var result = [];
+        $ionicPlatform.ready(function(){
+            result = JSON.parse(localStorage.getItem("order"));
+            console.log(result);
+        
+        });
+        
+        return result;
+    }
+    
+    this.ClearLocalStorage = function(){
+        $ionicPlatform.ready(function(){
+            localStorage.clear();
+        });
+    }
+    
+    this.RemoveItem = function(index){
+        $ionicPlatform.ready(function(){
+            var result = JSON.parse(localStorage.getItem("order"));
+            result.splice(index, 1);
+            //self.ClearLocalStorage();
+            localStorage.setItem("order",JSON.stringify(result));
+        })
+    }
+    
+    this.getOrderLength = function(){
+        var length = 0;
+        $ionicPlatform.ready(function(){
+           var result;
+            if((result = JSON.parse(localStorage.getItem("order"))) != null)
+                length = result.length;
+            console.log("order length is:" + length); 
+        })
+        return length;
+        
         
     }
-                        
-    this.WriteToFile = function(data){
-    }
     
-    this.ReadFromFile = function(){ 
+    return this;
+})
+
+.factory('Categories', function($http){
+    this.getCategories = function(){
+        return $http.get("http://192.168.0.33:5000/menu/categories");
     }
     
     return this;

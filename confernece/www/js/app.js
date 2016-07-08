@@ -4,9 +4,10 @@
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'ionic-material', 'ngCordova'])
+var db = null;
+angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova'])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $cordovaSQLite) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -19,6 +20,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic-material', 'ng
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
+//    $ionicPlatform.ready(function(){
+//        db = $cordovaSQLite.openDB("local.db");
+//        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS products(id integer primary key not null auto_increment identity(1,1), product_name text not null, product_info text not null, produt_price float not null)");
+//        $cordoveSQLite.execute(db, "CREATE TABLE IF NOT EXISTS order(id integer primary key no null auto_increment identity(1,1), products integer foreign key references products(id) not null, total_price float not null, delay_time integer not null, costumer_name text not null, costumer_phone text not null)");
+//    });
+    
   });
 })
 
@@ -65,12 +72,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic-material', 'ng
       }
     })
   
-  .state('app.makeTost', {
-      url: "/categories/makeTost",
+  .state('app.toast', {
+      url: "/categories/toast",
       views: {
         'menuContent': {
-          templateUrl: "templates/makeTost.html",
-          controller: 'MakeTostCtrl'
+          templateUrl: "templates/toast.html",
+          controller: 'ToastCtrl'
         }
       }
     })
@@ -121,5 +128,5 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ionic-material', 'ng
     }
 });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise("/app/login");
+  $urlRouterProvider.otherwise("/app/sessions");
 });

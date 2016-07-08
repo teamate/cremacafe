@@ -1,6 +1,8 @@
 <ion-view view-title="טוסטים">
     <ion-content dir="rtl">
-            <div>
+            <ion-spinner class="spinner spinner-energized" icon="lines" ng-show="showSpinner">sdfsdf</ion-spinner>
+            <div ng-show="!showSpinner">
+<!--
                 <ion-radio ng-repeat="x in breadTypes" name="breadChoice" ng-model="$parent.breadChoice" ng-value="x" ng-change="BreadTypeChange($parent.breadChoice)" dir="ltr">{{x.name}}<span>  <b>{{x.price}} ש"ח</b></span></ion-radio>
             </div>
         <div class="sauces">
@@ -11,20 +13,22 @@
                     <ion-checkbox class="item-checkbox-right" ng-repeat="x in sauces" ng-model="x.checked" ng-checked="x.checked" ng-change="SaucesChange(x)">{{x.name}}<span><br><b>{{x.price}} ש"ח</b></span></ion-checkbox>
                 </div>
             </div>
+-->
             <div class="tosafot">
                 <div>
                     <h4 dir="rtl">תוספות</h4>
                 </div>
                 <div>
-                    <ion-checkbox class="item-checkbox-right" ng-repeat="x in tosafot" ng-model="x.checked" ng-checked="x.checked" ng-change="TosafotChange(x)" >{{x.name}}<span><br><b>{{x.price}} ש"ח</b></span></ion-checkbox>  
+                    <ion-checkbox class="item-checkbox-right" ng-repeat="x in extras" ng-model="x.checked" ng-checked="x.checked" ng-change="ExtrasChange(x)" >{{x.extraDisplayName}}<span><br><b>{{x.extraPrice}} ש"ח</b></span></ion-checkbox>  
                 </div>
             </div>
-            <textarea class="form-control" rows="4" ng-model="exInfo" placeholder="הערות"></textarea>
+            <textarea class="form-control" rows="4" ng-model="$parent.exInfo" placeholder="הערות"></textarea>
             <div>
                 <h3>סה"כ: <span ng-bind="totalPrice" ></span> ש"ח</h3>
             </div>
             <button class="button button-positive" ng-click="AddTostToOrder()" style="float:left;">
                 הוסף להזמנה
             </button>
+        </div>
     </ion-content>
 </ion-view>
