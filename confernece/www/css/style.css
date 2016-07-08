@@ -2,7 +2,20 @@
 
 /*App Content*/
 ion-content{
-    background-color: #F2EFCE;
+    //background-color: #F2EFCE;
+}
+
+.spinner svg{
+    width: 50px;
+    height: 50px;
+}
+
+.spinner{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    /* bring your own prefixes */
+    transform: translate(-50%, -50%);
 }
 
 /*End of App Content*/
@@ -42,6 +55,8 @@ ion-content{
 /*End of Cart Button*/
 
 /*Categories*/
+
+
 .list{
     background-color: transparent;
 }
@@ -297,6 +312,9 @@ textarea{
 }
 /*End of Toast, Coffee, Pizza, Sandwich*/
 
-
+/*Order*/
+.orderProduct{
+    border-bottom: 50px dotted green;
+}
 
 

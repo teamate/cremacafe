@@ -1,8 +1,43 @@
 <ion-view view-title="ההזמנה שלי">
-    <ion-content>
-        <div class="empty-order">
-          <h4>אין מוצרים בהזמנה</h4>
-            <span ng-bind="check"></span>
+    <ion-content > 
+        <ion-spinner class="spinner spinner-energized" icon="lines" ng-show="showSpinner"></ion-spinner>
+        <div ng-show="!showSpinner">
+            <div class="empty-order" ng-show="order.length == 0">
+              <h4>אין מוצרים בהזמנה</h4>
+                <span ng-bind="check"></span>
+            </div>
+            <ion-list class="list" show-delete="showDeleteButton" can-swipe="false" >
+                <ion-item class="item orderProduct item-remove-animate"  ng-repeat="x in order" item="x ">
+                    <div style="float:right; text-align:right;">
+                        <h3 >{{x.name}}</h3>
+                        <h4>{{x.details}}</h4>
+                        <h4>{{x.extraInfo}}</h4>
+                        <h4>{{x.price}} ש"ח</h4>
+                    </div>
+                    <ion-delete-button class="ion-minus-circled"
+                           ng-click="removeProduct($index)">
+                    </ion-delete-button>
+                </ion-item>
+            </ion-list>
+            <textarea class="form-control" rows="4" ng-model="$parent.exInfo" placeholder="הערות"></textarea>
+            <div class="list">
+
+              <label class="item item-input item-select">
+                <div class="input-label">
+                  מתי אני אוסף את ההזמנה?
+                </div>
+                <select>
+                  <option selected>עכשיו</option>
+                  <option >בעוד 15 דקות</option>
+                  <option>בעוד חצי שעה</option>
+                </select>
+              </label>
+
+            </div>
+            <div class="buttons">
+            <a class="button-icon icon ion-minus-circled" ng-click="showDeleteButton = !showDeleteButton" ></a>
+            <button ng-click="clearOrder()">מחק זכרון</button>
+            </div>
         </div>
     </ion-content>
 </ion-view>
