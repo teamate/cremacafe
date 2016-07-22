@@ -1,7 +1,6 @@
 <ion-view view-title="ההזמנה שלי">
     <ion-nav-buttons side="left">
         <a id="delete-button" class="button button-icon ion-minus-circled" ng-click="$root.showDeleteButton = !$root.showDeleteButton;"> </a>
-        <a id="delete-button" class="button button-icon ion-android-delete" ng-click="clearOrder()"> </a>
     </ion-nav-buttons>
     <ion-content class="order-content">
         <ion-spinner class="spinner spinner-energized" icon="lines" ng-show="showSpinner"></ion-spinner>
@@ -13,16 +12,16 @@
             <ion-list class="list order-list" show-delete="$root.showDeleteButton" can-swipe="false">
                 <ion-item class="item orderProduct item-remove-animate" ng-repeat="x in order" item="x">
                     <div style="float:right; text-align:right;">
-                        <h3 class="md-title">{{x.name}}</h3>
-                        <h4 class="md-subhead">{{x.details}}</h4>
-                        <p class="md-body-1" dir='rtl'><q ng-show="x.extraInfo.length > 0">הערות: {{x.extraInfo}}</q></p>
+                        <h3 class="md-title">{{x.productName}}</h3>
+                        <h4 class="md-subhead">{{x.productDetails}}</h4>
+                        <p class="md-body-1" dir='rtl'><q ng-show="x.extraInfo.length > 0">הערות: {{x.productExtraInfo}}</q></p>
                     </div>
                     <div>
                         <md-button class="md-icon-button ion-minus-round"></md-button>
                         <p style="display:inline;">0</p>
                         <md-button class="md-icon-button ion-plus-round"></md-button>
                     </div>
-                    <h4 style="float:left;padding-left:30px;color:red;">&#8362; מחיר: {{x.price}} </h4>
+                    <h4 style="float:left;padding-left:30px;color:red;">&#8362; מחיר: {{x.productPrice}} </h4>
                     <ion-delete-button class="ion-minus-circled" ng-click="removeProduct($index)"> </ion-delete-button>
                 </ion-item>
             </ion-list>

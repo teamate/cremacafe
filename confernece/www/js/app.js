@@ -4,6 +4,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
 var db = null;
+var api_url = "http://cremacafe.herokuapp.com"
 angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMaterial']).run(function ($ionicPlatform, $cordovaSQLite) {
   $ionicPlatform.ready(function () {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -53,6 +54,22 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMater
       'menuContent': {
         templateUrl: "templates/coffee.html"
         , controller: 'CoffeeCtrl'
+      }
+    }
+  }).state('app.sandwiches', {
+    url: "/categories/sandwiches"
+    , views: {
+      'menuContent': {
+        templateUrl: "templates/sandwiches.html"
+        , controller: 'SandwitchCtrl'
+      }
+    }
+  }).state('app.shakshuka', {
+    url: "/categories/shakshuka"
+    , views: {
+      'menuContent': {
+        templateUrl: "templates/shakshuka.html"
+        , controller: 'ShakshukaCtrl'
       }
     }
   }).state('app.toast', {

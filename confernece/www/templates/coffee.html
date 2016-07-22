@@ -1,31 +1,38 @@
-<ion-view view-title="קפה" >
-  <ion-content dir="rtl">
-      <div>
-                <ion-radio ng-repeat="x in cupSize" name="cupChoice" ng-model="$parent.cupChoice" ng-value="x" ng-change="CupSizeChange($parent.cupChoice)" dir="ltr">{{x.name}}<span>  <b>{{x.price}} ש"ח</b></span></ion-radio>
+<ion-view view-title="קפה">
+    <ion-content dir="rtl">
+        <ion-spinner class="spinner spinner-energized" icon="lines" ng-show="showSpinner"></ion-spinner>
+        <div ng-show="!showSpinner">
+            <div class="coffee">
+                <div style="margin: auto; width: 50%;">
+                    <h4 class="md-title" dir="rtl" style="text-align: center; white-space: nowrap;">שתייה חמה</h4>
+                    <hr> </div>
             </div>
-        <div class="coffee">
-                <div>
-                    <h4>סוגי קפה</h4>
-                </div>
-                <div>
-                    <ion-checkbox class="item-checkbox-right" ng-repeat="x in coffeeTypes" ng-model="x.checked" ng-checked="x.checked" ng-change="CoffeeTypeChange(x)">{{x.name}}<span><br><b>{{x.price}} ש"ח</b></span></ion-checkbox>
-                </div>
-            </div>
-            <div class="milk">
-                <div>
-                    <h4>סוגי חלב</h4>
-                </div>
-                <div>
-                    <ion-checkbox class="item-checkbox-right" ng-repeat="x in milkTypes" ng-model="x.checked" ng-checked="x.checked" ng-change="MilkTypeChange(x)" >{{x.name}}<span><br><b>{{x.price}} ש"ח</b></span></ion-checkbox>  
-                </div>
-            </div>
-            <textarea class="form-control" rows="4" ng-model="exInfo" placeholder="הערות"></textarea>
             <div>
-                <h3>סה"כ: <span ng-bind="totalPrice" ></span> ש"ח</h3>
+                <div style="padding-right:10px;float:right;width:50%;">
+                    <md-radio-group class="md-primary" ng-model="coffeeType" style="float:right;" ng-change="onTypeChange(coffeeType)">
+                        <md-radio-button ng-repeat="type in types" value="{{type}}">{{type.displayName}}</md-radio-button>
+                    </md-radio-group>
+                </div>
+                <div style="padding-right:10px;float:right;width:50%;">
+                    <md-radio-group class="md-primary" ng-model="cupSize" ng-change="onSizeChange(cupSize)">
+                        <md-radio-button ng-repeat="size in sizes" value="{{size}}">{{size.name}} <span class="md-body-1" style="color:red;"><br>מחיר: {{size.price}} &#8362; </span></md-radio-button>
+                    </md-radio-group>
+                </div>
             </div>
-            <button class="button button-positive" ng-click="AddCoffeeToOrder()" style="float:left;">
-                הוסף להזמנה
-            </button>
-            <span ng-bind="test"></span>
-  </ion-content>
+        </div>
+    </ion-content>
+    <div class="bar bar-footer bar-default">
+        <md-input-container class="md-block">
+            <label dir="rtl">הערות</label>
+            <textarea ng-model="$root.coffeeExInfo" md-maxlength="20" rows="1"></textarea>
+        </md-input-container>
+        <div style="float:right;">
+            <md-button class="md-icon-button ion-minus-round"></md-button>
+            <p style="display:inline;">0</p>
+            <md-button class="md-icon-button ion-plus-round"></md-button>
+            <p style="padding-right: 20px;">סה"כ: <span style="color:red;">&#8362;<span ng-bind="coffeeTotalPrice" class="md-body-2"></span></span>
+            </p>
+        </div>
+        <md-button class="md-raised md-primary" style="margin: 0 auto; display: block;" ng-click="AddCoffeeToOrder()"> הוסף להזמנה </md-button>
+    </div>
 </ion-view>

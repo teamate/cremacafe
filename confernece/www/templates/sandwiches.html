@@ -1,0 +1,34 @@
+<ion-view view-title="כריכים">
+    <ion-content dir="rtl" class="sandwitch-content">
+        <ion-spinner class="spinner spinner-energized" icon="lines" ng-show="showSpinner"></ion-spinner>
+        <div ng-show="!showSpinner">
+            <div class="sandwitch">
+                <div style="margin: auto; width: 50%;">
+                    <h4 class="md-title" dir="rtl" style="text-align: center; white-space: nowrap;">כריכים בהרכבה אישית</h4>
+                    <hr> </div>
+            </div>
+            <div>
+                <md-radio-group class="md-primary" ng-model="sandwitchType" ng-change="TypesChange(sandwitchType)">
+                    <md-radio-button ng-repeat="type in types" value="{{type}}"><span class="md-body-2">{{type.displayName}}</span><span class="md-body-1" style="color:red;"><br>מחיר: {{type.productPrice}} &#8362; </span></md-radio-button>
+                </md-radio-group>
+            </div>
+            <div>
+                <md-checkbox class="extras-checkbox item item-checkbox-right md-primary" ng-repeat="extra in extras" ng-model="extra.checked" ng-change="ExtrasChange(extra)" style="width:100%;padding-right:100px;"><span class="md-body-2">{{extra.extraDisplayName}}</span><span class="md-body-1" style="color:red;"><br>בתוספת: {{extra.extraPrice}} &#8362; </span></md-checkbox>
+            </div>
+        </div>
+    </ion-content>
+    <div class="bar bar-footer bar-default">
+        <md-input-container class="md-block">
+            <label dir="rtl">הערות</label>
+            <textarea ng-model="$root.sandwitchExInfo" md-maxlength="20" rows="1"></textarea>
+        </md-input-container>
+        <div style="float:right;">
+            <md-button class="md-icon-button ion-minus-round"></md-button>
+            <p style="display:inline;">0</p>
+            <md-button class="md-icon-button ion-plus-round"></md-button>
+            <p style="padding-right: 20px;">סה"כ: <span style="color:red;">&#8362;<span ng-bind="sandwitchTotalPrice" class="md-body-2"></span></span>
+            </p>
+        </div>
+        <md-button class="md-raised md-primary" style="margin: 0 auto; display: block;" ng-click="AddSandwitchToOrder()"> הוסף להזמנה </md-button>
+    </div>
+</ion-view>

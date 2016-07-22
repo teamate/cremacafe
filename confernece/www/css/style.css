@@ -344,14 +344,9 @@ md-checkbox ._md-container {
   margin-right: 20px;
 }
 
-.sauces,
-.coffee,
-.milk {
-  width: 50%;
-  float: left;
-}
-
-.tosafot hr {
+.tosafot hr,
+.coffee hr,
+.sandwitch hr {
   padding: 0;
   border: none;
   border-top: medium double #333;
@@ -359,7 +354,9 @@ md-checkbox ._md-container {
   text-align: center;
 }
 
-.tosafot hr:after {
+.tosafot hr:after,
+.coffee hr:after,
+.sandwitch hr:after {
   content: "§";
   display: inline-block;
   position: relative;
@@ -371,11 +368,19 @@ md-checkbox ._md-container {
 
 .bar-footer {
   display: block;
-  height: 180px;
+  height: 40% !important;
+  -webkit-box-shadow: 0px 2px 15px #666;
+  -moz-box-shadow: 0px 2px 15px #666;
+  box-shadow: 0px 2px 15px #666;
 }
 
 .bar-footer p {
   text-align: right;
+}
+
+.toast-content,
+.sandwitch-content {
+  height: 50% !important;
 }
 
 
@@ -387,6 +392,10 @@ md-checkbox ._md-container {
 .order-bar-footer {
   height: 40% !important;
   display: block;
+  height: 40% !important;
+  -webkit-box-shadow: 0px 2px 15px #666;
+  -moz-box-shadow: 0px 2px 15px #666;
+  box-shadow: 0px 2px 15px #666;
 }
 
 .order-bar-footer .time {

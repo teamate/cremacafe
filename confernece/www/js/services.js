@@ -37,80 +37,20 @@ angular.module('AppServices', ['ngResource']).factory('HttpReqs', function ($htt
         });
     }
     return this
-}).factory('Coffee', function (Order) {
-    var userCoffee = {};
-    this.getCoffeeSizes = function () {
-        var coffee_sizes = [{
-            value: "0"
-            , name: "גדול"
-            , price: 5
-        }, {
-            value: "1"
-            , name: "קטן"
-            , price: 7
-        }, {
-            value: "2"
-            , name: "בינוני"
-            , price: 9
-        }];
-        return coffee_sizes;
+}).factory('Coffee', function ($http, Order) {
+    var userCoffee;
+    this.getCoffee = function () {
+        //var coffee = $http.get("http://192.168.43.80:5000/menu/products/coffee");
+        var coffee = $http.get(api_url + "/menu/products/coffee");
+        return coffee;
     }
-    this.getCoffeeTypes = function () {
-        var coffee_types = [{
-            value: "0"
-            , name: "הפוך"
-            , checked: true
-            , price: 0
-        }, {
-            value: "1"
-            , name: "שחור"
-            , checked: false
-            , price: 0
-        }, {
-            value: "2"
-            , name: "תה"
-            , checked: false
-            , price: 0
-        }, {
-            value: "3"
-            , name: "שוקו"
-            , checked: false
-            , price: 0
-        }];
-        return coffee_types;
-    }
-    this.getMilkTypes = function () {
-        var milk_types = [{
-            value: "0"
-            , name: "חלב 1%"
-            , checked: true
-            , price: 0
-        }, {
-            value: "1"
-            , name: "חלב 2%"
-            , checked: true
-            , price: 0
-        }, {
-            value: "2"
-            , name: "חלב 3%"
-            , checked: true
-            , price: 0
-        }, {
-            value: "3"
-            , name: "חלב סויה"
-            , checked: true
-            , price: 0
-        }];
-        return milk_types
-    }
-    this.CreateCoffee = function (size, coffeeType, milkType, info, totalPrice) {
+    this.CreateCoffee = function (type, size, info, totalPrice) {
+        var parsed_info = type.displayName + " בגודל " + size.name;
         userCoffee = {
-            "name": "coffee"
-            , "size": size
-            , "coffeeType": coffeeType
-            , "milkType": milkType
-            , "info": info
-            , "price": totalPrice
+            "productName": "קפה"
+            , "productDetails": parsed_info
+            , "productExtraInfo": info
+            , "productPrice": totalPrice
         };
     }
     this.AddToOrder = function () {
@@ -120,15 +60,12 @@ angular.module('AppServices', ['ngResource']).factory('HttpReqs', function ($htt
         return 1;
     }
     return this;
-}).factory('Sandwitch', function () {
-    this.getSandwitchesMenu = function () {
-        var result = HttpReqs.GetRequest("#");
-        return result;
-    }
 }).factory('Tost', function ($http, Order) {
     var userTosts;
     this.getToast = function () {
-        var toast = $http.get("http://192.168.0.33:5000/menu/products/toast");
+        //var toast = $http.get("http://192.168.0.33:5000/menu/products/toast");
+        //var toast = $http.get("http://192.168.43.80:5000/menu/products/toast");
+        var toast = $http.get(api_url + "/menu/products/toast");
         return toast;
     }
     this.CreateTost = function (extras, info, totalPrice) {
@@ -140,16 +77,45 @@ angular.module('AppServices', ['ngResource']).factory('HttpReqs', function ($htt
         else parsed_info = "ללא תוספות";
         console.log(parsed_info);
         userTosts = {
-            "name": "טוסט"
-            , "details": parsed_info
-            , "extraInfo": info
-            , "price": totalPrice
+            "productName": "טוסט"
+            , "productDetails": parsed_info
+            , "productExtraInfo": info
+            , "productPrice": totalPrice
         };
     }
     this.AddToOrder = function () {
         //Here i need to use the order service in order to write in the order file
         Order.WriteToStorage(userTosts);
         userTosts = {};
+        return 1;
+    }
+    return this;
+}).factory('Sandwitch', function ($http, Order) {
+    var userSandwitch;
+    this.getSandwitch = function () {
+        //var sandwitch = $http.get("http://192.168.0.33:5000/menu/products/sandwitch");
+        //var sandwitch = $http.get("http://192.168.43.80:5000/menu/products/sandwitch");
+        var sandwitch = $http.get(api_url + "/menu/products/sandwiches");
+        return sandwitch;
+    }
+    this.CreateSandwitch = function (type, extras, info, totalPrice) {
+        parsed_type = type.displayName + "\n";
+        var parsed_extras = "";
+        for (var i = 0; i < extras.length; i++) parsed_extras += extras[i].extraDisplayName + ", ";
+        parsed_extras = parsed_extras.substring(0, parsed_extras.length - 2);
+        if (extras.length) parsed_info = parsed_type + "בתוספת\n" + parsed_extras;
+        else parsed_info = parsed_type + "ללא תוספות";
+        userSandwitch = {
+            "productName": "סנדוויץ'"
+            , "productDetails": parsed_info
+            , "productExtraInfo": info
+            , "productPrice": totalPrice
+        };
+    }
+    this.AddToOrder = function () {
+        //Here i need to use the order service in order to write in the order file
+        Order.WriteToStorage(userSandwitch);
+        userSandwitch = {};
         return 1;
     }
     return this;
@@ -200,7 +166,9 @@ angular.module('AppServices', ['ngResource']).factory('HttpReqs', function ($htt
     return this;
 }).factory('Categories', function ($http) {
     this.getCategories = function () {
-        return $http.get("http://192.168.0.33:5000/menu/categories");
+        //return $http.get("http://192.168.0.33:5000/menu/categories");
+        //return $http.get("http://192.168.43.80:5000/menu/categories");
+        return $http.get(api_url + "/menu/categories");
     }
     return this;
 }).factory('MyFavorites', function () {
