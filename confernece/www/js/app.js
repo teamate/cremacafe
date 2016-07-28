@@ -4,11 +4,25 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
 var db = null;
-var api_url = "http://cremacafe.herokuapp.com"
-angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMaterial']).run(function ($ionicPlatform, $cordovaSQLite) {
+var api_url = "http://cremacafe.herokuapp.com";
+var username;
+angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMessages'
+  , 'ngMaterial', 'angular-loading-bar']).run(function ($ionicPlatform, $cordovaSQLite, $rootScope, $ionicLoading, $ionicPopup, $state) {
   $ionicPlatform.ready(function () {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
+    if (window.localStorage.getItem("username") != null) $state.go('app.sessions', {}, {
+      reload: true
+    });
+    $rootScope.$on('cfpLoadingBar:loading', function (event) {
+      $ionicLoading.show({
+        template: '<ion-spinner icon="android"></ion-spinner>'
+        , noBackdrop: false
+      });
+    });
+    $rootScope.$on('cfpLoadingBar:completed', function (event) {
+      $ionicLoading.hide();
+    });
     if (window.cordova && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
       cordova.plugins.Keyboard.disableScroll(true);
@@ -16,14 +30,10 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMater
     if (window.StatusBar) {
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
-    }
-    //    $ionicPlatform.ready(function(){
-    //        db = $cordovaSQLite.openDB("local.db");
-    //        $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS products(id integer primary key not null auto_increment identity(1,1), product_name text not null, product_info text not null, produt_price float not null)");
-    //        $cordoveSQLite.execute(db, "CREATE TABLE IF NOT EXISTS order(id integer primary key no null auto_increment identity(1,1), products integer foreign key references products(id) not null, total_price float not null, delay_time integer not null, costumer_name text not null, costumer_phone text not null)");
-    //    });
+    };
   });
-}).config(function ($stateProvider, $urlRouterProvider) {
+}).config(function ($stateProvider, $urlRouterProvider, cfpLoadingBarProvider) {
+  cfpLoadingBarProvider.includeBar = false;
   $stateProvider.state('app', {
     url: '/app'
     , abstract: true
@@ -120,5 +130,5 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMater
     }
   });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise("/app/sessions");
+  $urlRouterProvider.otherwise("/app/login");
 });

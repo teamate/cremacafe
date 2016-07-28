@@ -1,0 +1,12 @@
+<form name="authForm">
+    <md-input-container md-no-float class="md-block" dir="rtl">
+        <label dir="rtl">קוד אימות</label>
+        <textarea ng-model="$root.authToken" name="authInput" type="text" md-maxlength="6" md-minlength="6" ng-pattern="/^\d+$/" ng-minlength="6" ng-maxlength="6" required></textarea>
+        <md-icon class="ion-android-call"></md-icon>
+        <div ng-messages="authForm.authInput.$error" ng-if="authForm.authInput.$dirty" style="color:maroon" role="alert" dir="ltr">
+            <div ng-message="minlength">שדה קצר מדי</div>
+            <div ng-message="maxlength">שדה ארוך מדי</div>
+            <div ng-message="required">לא הכנסת קוד אימות</div>
+        </div>
+    </md-input-container>
+</form>

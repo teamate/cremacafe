@@ -27,9 +27,9 @@
             <textarea ng-model="$root.coffeeExInfo" md-maxlength="20" rows="1"></textarea>
         </md-input-container>
         <div style="float:right;">
-            <md-button class="md-icon-button ion-minus-round"></md-button>
-            <p style="display:inline;">0</p>
-            <md-button class="md-icon-button ion-plus-round"></md-button>
+            <md-button class="md-icon-button ion-minus-round" ng-disabled="coffeeAmount == 1" ng-click="coffeeAmount = coffeeAmount -1; coffeeTotalPrice = (coffeeTotalPrice/(coffeeAmount+1))*coffeeAmount"></md-button>
+            <p style="display:inline;"><span ng-bind="coffeeAmount"></span></p>
+            <md-button class="md-icon-button ion-plus-round" ng-disabled="coffeeAmount == 5" ng-click="coffeeAmount = coffeeAmount +1; coffeeTotalPrice = (coffeeTotalPrice/(coffeeAmount-1))*coffeeAmount"></md-button>
             <p style="padding-right: 20px;">סה"כ: <span style="color:red;">&#8362;<span ng-bind="coffeeTotalPrice" class="md-body-2"></span></span>
             </p>
         </div>

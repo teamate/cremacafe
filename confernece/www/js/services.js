@@ -37,6 +37,13 @@ angular.module('AppServices', ['ngResource']).factory('HttpReqs', function ($htt
         });
     }
     return this
+}).factory('Login', function () {
+    var localStorage = window.localStorage;
+    this.createUser = function (firstname, lastname) {
+        console.log(firstname + ' ' + lastname);
+        localStorage.setItem("username", firstname + ' ' + lastname);
+    }
+    return this;
 }).factory('Coffee', function ($http, Order) {
     var userCoffee;
     this.getCoffee = function () {
@@ -44,12 +51,13 @@ angular.module('AppServices', ['ngResource']).factory('HttpReqs', function ($htt
         var coffee = $http.get(api_url + "/menu/products/coffee");
         return coffee;
     }
-    this.CreateCoffee = function (type, size, info, totalPrice) {
+    this.CreateCoffee = function (type, size, info, totalPrice, amount) {
         var parsed_info = type.displayName + " בגודל " + size.name;
         userCoffee = {
             "productName": "קפה"
             , "productDetails": parsed_info
             , "productExtraInfo": info
+            , "productAmount": amount
             , "productPrice": totalPrice
         };
     }
@@ -68,7 +76,7 @@ angular.module('AppServices', ['ngResource']).factory('HttpReqs', function ($htt
         var toast = $http.get(api_url + "/menu/products/toast");
         return toast;
     }
-    this.CreateTost = function (extras, info, totalPrice) {
+    this.CreateTost = function (extras, info, totalPrice, amount) {
         console.log(extras, info, totalPrice);
         var parsed_extras = "";
         for (var i = 0; i < extras.length; i++) parsed_extras += extras[i].extraDisplayName + ", ";
@@ -80,6 +88,7 @@ angular.module('AppServices', ['ngResource']).factory('HttpReqs', function ($htt
             "productName": "טוסט"
             , "productDetails": parsed_info
             , "productExtraInfo": info
+            , "productAmount": amount
             , "productPrice": totalPrice
         };
     }
@@ -87,6 +96,35 @@ angular.module('AppServices', ['ngResource']).factory('HttpReqs', function ($htt
         //Here i need to use the order service in order to write in the order file
         Order.WriteToStorage(userTosts);
         userTosts = {};
+        return 1;
+    }
+    return this;
+}).factory('Shakshuka', function ($http, Order) {
+    var userShakshuka;
+    this.getShakshuka = function () {
+        var shakshuka = $http.get(api_url + "/menu/products/shakshuka");
+        return shakshuka;
+    }
+    this.createShakshuka = function (extras, info, totalPrice, amount) {
+        console.log(extras, info, totalPrice);
+        var parsed_extras = "";
+        for (var i = 0; i < extras.length; i++) parsed_extras += extras[i].extraDisplayName + ", ";
+        parsed_extras = parsed_extras.substring(0, parsed_extras.length - 2);
+        if (extras.length) parsed_info = "בתוספת: " + parsed_extras;
+        else parsed_info = "ללא תוספות";
+        console.log(parsed_info);
+        userShakshuka = {
+            "productName": "שקשוקה"
+            , "productDetails": parsed_info
+            , "productExtraInfo": info
+            , "productAmount": amount
+            , "productPrice": totalPrice
+        };
+    }
+    this.AddToOrder = function () {
+        //Here i need to use the order service in order to write in the order file
+        Order.WriteToStorage(userShakshuka);
+        userShakshuka = {};
         return 1;
     }
     return this;
@@ -98,17 +136,18 @@ angular.module('AppServices', ['ngResource']).factory('HttpReqs', function ($htt
         var sandwitch = $http.get(api_url + "/menu/products/sandwiches");
         return sandwitch;
     }
-    this.CreateSandwitch = function (type, extras, info, totalPrice) {
+    this.CreateSandwitch = function (type, extras, info, totalPrice, amount) {
         parsed_type = type.displayName + "\n";
         var parsed_extras = "";
         for (var i = 0; i < extras.length; i++) parsed_extras += extras[i].extraDisplayName + ", ";
         parsed_extras = parsed_extras.substring(0, parsed_extras.length - 2);
-        if (extras.length) parsed_info = parsed_type + "בתוספת\n" + parsed_extras;
+        if (extras.length) parsed_info = parsed_type + "בתוספת:\n " + parsed_extras;
         else parsed_info = parsed_type + "ללא תוספות";
         userSandwitch = {
-            "productName": "סנדוויץ'"
+            "productName": "כריך"
             , "productDetails": parsed_info
             , "productExtraInfo": info
+            , "productAmount": amount
             , "productPrice": totalPrice
         };
     }
@@ -119,9 +158,34 @@ angular.module('AppServices', ['ngResource']).factory('HttpReqs', function ($htt
         return 1;
     }
     return this;
-}).factory('Order', function ($ionicPlatform, $cordovaSQLite) {
+}).factory('Order', function ($ionicPlatform, $cordovaSQLite, $http) {
     var localStorage = window.localStorage;
+    var auth0 = new Auth0({
+        clientID: 'EgY7ZjhvdKrGc3r7X5k6DSXwZpczJIKL'
+        , domain: 'cremacafe.auth0.com'
+        , callbackURL: 'https://cremacafe.herokuapp.com/auth'
+    });
     var self = this;
+    this.getSmsPermissions = function () {
+        $ionicPlatform.ready(function () {
+            var permissions = cordova.plugins.permissions;
+            permissions.hasPermission(permissions, checkPermissionCallback, null);
+
+            function checkPermissionCallback(status) {
+                if (!status.hasPermission) {
+                    var errorCallback = function () {
+                        console.log("error getting permissions");
+                    }
+                    permissions.requestPermission(permissions.READ_SMS, function (status) {
+                        if (!status.hasPermission) errorCallback();
+                    }, errorCallback);
+                    permissions.requestPermission(permissions.RECEIVE_SMS, function (status) {
+                        if (!status.hasPermission) errorCallback();
+                    }, errorCallback);
+                }
+            };
+        })
+    }
     this.WriteToStorage = function (data) {
         $ionicPlatform.ready(function () {
             console.log("data: ", data);
@@ -162,6 +226,62 @@ angular.module('AppServices', ['ngResource']).factory('HttpReqs', function ($htt
         if ((result = JSON.parse(localStorage.getItem("order"))) != null) length = result.length;
         console.log("order length is:" + length);
         return length;
+    }
+    this.processOrder = function (phoneNumber, orderProducts, orderNotes, timeForPickup, totalAmount) {
+        console.log(orderProducts);
+        var date = new Date();
+        var total_order = {
+            'userName': window.localStorage.getItem('username')
+            , 'phoneNumber': phoneNumber
+            , 'orderProducts': orderProducts
+            , 'orderNotes': orderNotes
+            , 'timeForPickup': timeForPickup
+            , 'totalAmount': totalAmount
+            , 'orderDate': date.toLocaleDateString
+            , 'orderTime': date.toLocaleTimeString
+        }
+        var req = {
+            method: 'POST'
+            , url: api_url + "/orders"
+            , headers: {
+                'Content-Type': 'application/json'
+                    //                , 'Access-Control-Allow-Origin': '*'
+                    //                , 'Access-Control-Allow-Credentials': 'true'
+                    //                , 'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT'
+                    //                , 'Access-Control-Allow-Headers': 'Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers'
+            }
+            , data: total_order
+        }
+        return $http(req);
+    }
+    this.sendSms = function (phoneNumber) {
+        console.log("phone:" + phoneNumber);
+        var req = {
+            method: 'POST'
+            , url: api_url + '/auth/sendsms'
+            , headers: {
+                'Content-Type': 'application/json'
+            }
+            , data: {
+                "phoneNumber": phoneNumber
+            }
+        }
+        return $http(req);
+    }
+    this.login = function (phoneNumber, authToken) {
+        console.log(authToken);
+        var req = {
+            method: 'POST'
+            , url: api_url + '/auth/getcode'
+            , headers: {
+                'Content-Type': 'application/json'
+            }
+            , data: {
+                "phoneNumber": phoneNumber
+                , "passcode": authToken
+            }
+        }
+        return $http(req);
     }
     return this;
 }).factory('Categories', function ($http) {

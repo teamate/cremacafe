@@ -27,6 +27,33 @@ ion-content {
   transform: translate(-50%, -50%);
 }
 
+.successPopup,
+.failurePopup,
+.prodAddedPopup {
+  display: block;
+  margin: 0 auto;
+  width: 60px;
+}
+
+.ion-ios-checkmark-outline,
+.ion-ios-close-outline,
+.ion-android-checkbox-outline {
+  font-size: 80px;
+  height: 50% !important;
+}
+
+.ion-ios-checkmark-outline {
+  color: green;
+}
+
+.ion-ios-close-outline {
+  color: red;
+}
+
+.ion-android-checkbox-outline {
+  color: dodgerblue;
+}
+
 
 /*End of App Content*/
 
@@ -315,14 +342,22 @@ video#bgvid {
   transform: translateX(-50%) translateY(-50%);
 }
 
+.login-content {
+  background-color: beige
+}
+
 .app-icon {
   background-color: #fff;
   background: url('../img/nespresso_logo.jpg') center;
   background-size: cover;
   border-radius: 50%;
-  height: 125px;
+  height: 100px;
   margin: 0 auto;
-  width: 125px;
+  width: 100px;
+  margin-top: 40px;
+  -webkit-box-shadow: 5px 5px 14px #444;
+  -moz-box-shadow: 5px 5px 14px #444;
+  box-shadow: 5px 5px 14px #444;
 }
 
 .social-login {
@@ -346,7 +381,8 @@ md-checkbox ._md-container {
 
 .tosafot hr,
 .coffee hr,
-.sandwitch hr {
+.sandwitch hr,
+.shakshuka hr {
   padding: 0;
   border: none;
   border-top: medium double #333;
@@ -356,7 +392,8 @@ md-checkbox ._md-container {
 
 .tosafot hr:after,
 .coffee hr:after,
-.sandwitch hr:after {
+.sandwitch hr:after,
+.shakshuka hr:after {
   content: "§";
   display: inline-block;
   position: relative;

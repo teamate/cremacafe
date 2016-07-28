@@ -1,18 +1,30 @@
-<md-dialog ng-cloak>
-    <form>
-        <md-toolbar>
-            <div class="md-toolbar-tools">
-                <md-button class="md-icon-button ion-close-round" ng-click="cancel()"> </md-button>
-            </div>
-        </md-toolbar>
-    </form>
-    <md-dialog-content>
-        <div class="shakshuka-content" dir="rtl">
-            <div class="shakshuka-menu">
+<ion-view view-title="שקשוקה">
+    <ion-content dir="rtl" class="shakshuka-content">
+        <ion-spinner class="spinner spinner-energized" icon="lines" ng-show="showSpinner"></ion-spinner>
+        <div ng-show="!showSpinner">
+            <div class="shakshuka">
                 <div style="margin: auto; width: 50%;">
                     <h4 class="md-title" dir="rtl" style="text-align: center; white-space: nowrap;">שקשוקה</h4>
                     <hr> </div>
-                <div> </div>
+                <div>
+                    <md-checkbox class="extras-checkbox item item-checkbox-right md-primary" ng-repeat="x in extras" ng-model="x.checked" ng-change="ExtrasChange(x)" style="width:100%;padding-right:100px;"><span class="md-body-2">{{x.extraDisplayName}}</span><span class="md-body-1" style="color:red;"><br>בתוספת: {{x.extraPrice}} &#8362; </span></md-checkbox>
+                </div>
             </div>
-    </md-dialog-content>
-</md-dialog>
+        </div>
+        <div style="width:180px;"></div>
+    </ion-content>
+    <div class="bar bar-footer bar-default">
+        <md-input-container class="md-block">
+            <label dir="rtl">הערות</label>
+            <textarea ng-model="$root.shakshukaExInfo" md-maxlength="20" rows="1"></textarea>
+        </md-input-container>
+        <div style="float:right;">
+            <md-button class="md-icon-button ion-minus-round" ng-disabled="shakshukaAmount == 1" ng-click="shakshukaAmount = shakshukaAmount -1; shakshukaTotalPrice = (shakshukaTotalPrice/(shakshukaAmount+1))*shakshukaAmount"></md-button>
+            <p style="display:inline;"><span ng-bind="shakshukaAmount"></span></p>
+            <md-button class="md-icon-button ion-plus-round" ng-disabled="shakshukaAmount == 5" ng-click="shakshukaAmount = shakshukaAmount +1; shakshukaTotalPrice = (shakshukaTotalPrice/(shakshukaAmount-1))*shakshukaAmount"></md-button>
+            <p style="padding-right: 20px;">סה"כ: <span style="color:red;">&#8362;<span ng-bind="shakshukaTotalPrice" class="md-body-2"></span></span>
+            </p>
+        </div>
+        <md-button class="md-raised md-primary" ng-click="AddShakshukaToOrder()" style="margin: 0 auto; display: block;"> הוסף להזמנה </md-button>
+    </div>
+</ion-view>

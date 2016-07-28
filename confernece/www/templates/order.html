@@ -4,54 +4,54 @@
     </ion-nav-buttons>
     <ion-content class="order-content">
         <ion-spinner class="spinner spinner-energized" icon="lines" ng-show="showSpinner"></ion-spinner>
-        <div class="empty-order" ng-show="!showSpinner && order.length == 0">
+        <div class="empty-order" ng-show="order.length == 0">
             <h4>אין מוצרים בהזמנה</h4>
             <md-button class="md-raised md-primary" href="#/app/categories">התחל הזמנה חדשה</md-button>
         </div>
-        <div ng-show="!showSpinner && order.length > 0">
+        <div ng-show="order.length > 0">
             <ion-list class="list order-list" show-delete="$root.showDeleteButton" can-swipe="false">
                 <ion-item class="item orderProduct item-remove-animate" ng-repeat="x in order" item="x">
                     <div style="float:right; text-align:right;">
                         <h3 class="md-title">{{x.productName}}</h3>
                         <h4 class="md-subhead">{{x.productDetails}}</h4>
-                        <p class="md-body-1" dir='rtl'><q ng-show="x.extraInfo.length > 0">הערות: {{x.productExtraInfo}}</q></p>
+                        <p class="md-body-1" dir='rtl'><q ng-show="x.productExtraInfo.length > 0">הערות: {{x.productExtraInfo}}</q></p>
                     </div>
                     <div>
-                        <md-button class="md-icon-button ion-minus-round"></md-button>
-                        <p style="display:inline;">0</p>
-                        <md-button class="md-icon-button ion-plus-round"></md-button>
-                    </div>
-                    <h4 style="float:left;padding-left:30px;color:red;">&#8362; מחיר: {{x.productPrice}} </h4>
+                        <h4 style="padding-left:30px;padding-bottom:10px;color:black;">כמות: {{x.productAmount}} </h4> </div>
+                    <h4 style="padding-left:30px;color:grey;">&#8362; מחיר ליחיד: {{x.productPrice}} </h4>
+                    <h4 style="float:left;padding-left:30px;color:red;">&#8362; סה"כ: {{x.productPrice*x.productAmount}} </h4>
                     <ion-delete-button class="ion-minus-circled" ng-click="removeProduct($index)"> </ion-delete-button>
                 </ion-item>
             </ion-list>
         </div>
     </ion-content>
-    <div ng-show="!showSpinner && order.length > 0">
-        <div class="bar order-bar-footer bar-footer bar-default">
-            <md-input-container class="md-block">
-                <label dir="rtl">הערות</label>
-                <textarea ng-model="$root.orderExInfo" md-maxlength="150" rows="2"></textarea>
-            </md-input-container>
-            <div class="sum">
-                <p>סה"כ: <span style="color:red;">&#8362;<span ng-bind="$root.orderTotalPrice" class="md-body-2"></span></span>
-                </p>
-            </div>
-            <div class="time">
-                <div layout="row">
-                    <md-input-container>
-                        <label>זמן איסוף הזמנה</label>
-                        <md-select ng-model="selectedItem">
-                            <md-optgroup>
-                                <md-option>עכשיו</md-option>
-                                <md-option>בעוד 15 דקות</md-option>
-                                <md-option>בעוד חצי שעה</md-option>
-                            </md-optgroup>
-                        </md-select>
-                    </md-input-container>
+    <form name="orderForm">
+        <div ng-show="order.length > 0">
+            <div class="bar order-bar-footer bar-footer bar-default">
+                <md-input-container class="md-block">
+                    <label dir="rtl">הערות</label>
+                    <textarea ng-model="$root.orderExInfo" name="exInfoInput" ng-maxlength="150" md-maxlength="150" rows="2"></textarea>
+                </md-input-container>
+                <div class="sum">
+                    <p>סה"כ: <span style="color:red;">&#8362;<span ng-bind="$root.orderTotalPrice" class="md-body-2"></span></span>
+                    </p>
                 </div>
+                <div class="time">
+                    <div layout="row">
+                        <md-input-container>
+                            <label>זמן איסוף הזמנה</label>
+                            <md-select ng-model="timeForPickup">
+                                <md-optgroup>
+                                    <md-option ng-value="0" selected>עכשיו</md-option>
+                                    <md-option ng-value="15">בעוד 15 דקות</md-option>
+                                    <md-option ng-value="30">בעוד חצי שעה</md-option>
+                                </md-optgroup>
+                            </md-select>
+                        </md-input-container>
+                    </div>
+                </div>
+                <md-button class="accept-order md-raised md-primary" ng-click="sendOrder()" style="margin: 0 auto; display: block;" ng-disabled="orderForm.exInfoInput.$error.maxlength"> סיים הזמנה </md-button>
             </div>
-            <md-button class="accept-order md-raised md-primary" ng-click="AddTostToOrder()" style="margin: 0 auto; display: block;"> סיים הזמנה </md-button>
         </div>
-    </div>
+    </form>
 </ion-view>
