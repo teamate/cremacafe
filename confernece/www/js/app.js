@@ -6,7 +6,7 @@
 var db = null;
 var api_url = "http://cremacafe.herokuapp.com";
 var username;
-angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMessages'
+var app = angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMessages'
   , 'ngMaterial', 'angular-loading-bar']).run(function ($ionicPlatform, $cordovaSQLite, $rootScope, $ionicLoading, $ionicPopup, $state) {
   $ionicPlatform.ready(function () {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard

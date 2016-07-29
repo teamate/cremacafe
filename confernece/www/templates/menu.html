@@ -3,7 +3,7 @@
     <ion-nav-bar class="bar-assertive nav-bar">
       <ion-nav-back-button> </ion-nav-back-button>
       <ion-nav-buttons side="right">
-        <md-button id="cart-button" class="button button-icon ion-android-cart button-clear" ng-click="GoToOrder()"> <span class="label label-as-badge" ng-bind="$root.OrderLength" style="background-color:#5AC9EB; text-align:center;" ng-show="$root.OrderLength > 0"></span> </md-button>
+        <md-button id="cart-button" class="button button-icon ion-android-cart button-clear" ng-click="goTo('order')"> <span class="label label-as-badge" ng-bind="$root.OrderLength" style="background-color:#5AC9EB; text-align:center;" ng-show="$root.OrderLength > 0"></span> </md-button>
         <button class="button button-icon button-clear ion-navicon-round" menu-toggle="right"> </button>
       </ion-nav-buttons>
     </ion-nav-bar>
@@ -14,9 +14,9 @@
       <h2 class="title" style="text-align: center;"><span>שלום, {{username}}</span></h2> </ion-header-bar>
     <ion-content class="stable-bg has-expanded-header">
       <ion-list>
-        <ion-item menu-close href="#app/sessions" style="text-align: right;">ראשי</ion-item>
-        <ion-item menu-close href="#/app/categories" style="text-align: right;">קטגוריות</ion-item>
-        <ion-item menu-close href="#/app/order" style="text-align: right;">ההזמנה שלי</ion-item>
+        <ion-item menu-close ng-click="goTo('sessions')" style="text-align: right;">ראשי</ion-item>
+        <ion-item menu-close ng-click="goTo('categories')" style="text-align: right;">קטגוריות</ion-item>
+        <ion-item menu-close ng-click="goTo('order')" style="text-align: right;">ההזמנה שלי</ion-item>
       </ion-list>
     </ion-content>
   </ion-side-menu>

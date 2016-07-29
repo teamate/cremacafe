@@ -16,7 +16,12 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
         $state.go('app.order', {}, {
             reload: true
         });
-    }
+    };
+    $scope.goTo = function (view) {
+        $state.go('app.' + view, {}, {
+            reload: true
+        });
+    };
     $scope.$root.OrderLength = Order.getOrderLength();
 }).controller('LoginCtrl', function ($scope, $stateParams, $ionicSideMenuDelegate, $state, Login) {
     $ionicSideMenuDelegate.canDragContent(false);
@@ -31,6 +36,21 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
             reload: true
         });
     }
+    app.directive('focusMe', function ($timeout) {
+        return {
+            link: function (scope, element, attrs) {
+                scope.$watch(attrs.focusMe, function (value) {
+                    if (value === true) {
+                        console.log('value=', value);
+                        //$timeout(function() {
+                        element[0].focus();
+                        scope[attrs.focusMe] = false;
+                        //});
+                    }
+                });
+            }
+        };
+    });
 }).controller('CategoriesCtrl', function ($scope, $state, $stateParams, $mdDialog, $mdMedia, $ionicPopup, $timeout, $ionicNavBarDelegate, $ionicPlatform, Categories) {
     $ionicNavBarDelegate.showBackButton(false);
     //    $ionicPlatform.registerBackButtonAction(function () {
@@ -107,8 +127,8 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
             console.log(parsedType);
             console.log($scope.coffeeType);
             $scope.sizes = parsedType.sizes;
-            $scope.cupSize = JSON.stringify(parsedType.sizes[0]);
-            $scope.coffeeTotalPrice = totalPrice = parsedType.sizes[0].price;
+            //$scope.cupSize = JSON.stringify(parsedType.sizes[0]);
+            //$scope.coffeeTotalPrice = totalPrice = parsedType.sizes[0].price;
         }
     }
     $scope.onSizeChange = function (size) {
@@ -441,15 +461,17 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
 }).controller('SessionsCtrl', function ($rootScope, $scope, $ionicNavBarDelegate, $ionicSideMenuDelegate, $ionicPopup, $ionicPlatform, Order) {
     $ionicNavBarDelegate.showBackButton(false);
     $ionicSideMenuDelegate.canDragContent(true);
-//    var deregister = $ionicPlatform.registerBackButtonAction(function () {
-            //        ionic.Platform.exitApp();
-            //    }, 100);
-            //    $scope.$on('$ionicView.leave', function () {
-            //        console.log("leave main view");
-            //        deregister();
-            //    });
+    var deregister;
+    $scope.$on('$ionicView.leave', function () {
+        console.log("leave main view");
+        deregister();
+    });
     $scope.$on('$ionicView.enter', function () {
         // code to run each time view is entered
+        deregister = $ionicPlatform.registerBackButtonAction(function () {
+            ionic.Platform.exitApp();
+        }, 100);
+        $ionicSideMenuDelegate.canDragContent(true);
         var length = Order.getOrderLength();
         console.log(length);
         if (length > 0) $scope.isOrderEmpty = false;
