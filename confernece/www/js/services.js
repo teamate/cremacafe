@@ -81,8 +81,8 @@ angular.module('AppServices', ['ngResource']).factory('HttpReqs', function ($htt
         var parsed_extras = "";
         for (var i = 0; i < extras.length; i++) parsed_extras += extras[i].extraDisplayName + ", ";
         parsed_extras = parsed_extras.substring(0, parsed_extras.length - 2);
-        if (extras.length) parsed_info = "בתוספת\n" + parsed_extras;
-        else parsed_info = "ללא תוספות";
+        if (extras.length) parsed_info = parsed_extras;
+        else parsed_info = "";
         console.log(parsed_info);
         userTosts = {
             "productName": "טוסט"
@@ -110,8 +110,8 @@ angular.module('AppServices', ['ngResource']).factory('HttpReqs', function ($htt
         var parsed_extras = "";
         for (var i = 0; i < extras.length; i++) parsed_extras += extras[i].extraDisplayName + ", ";
         parsed_extras = parsed_extras.substring(0, parsed_extras.length - 2);
-        if (extras.length) parsed_info = "בתוספת: " + parsed_extras;
-        else parsed_info = "ללא תוספות";
+        if (extras.length) parsed_info = parsed_extras;
+        else parsed_info = "";
         console.log(parsed_info);
         userShakshuka = {
             "productName": "שקשוקה"
@@ -141,8 +141,8 @@ angular.module('AppServices', ['ngResource']).factory('HttpReqs', function ($htt
         var parsed_extras = "";
         for (var i = 0; i < extras.length; i++) parsed_extras += extras[i].extraDisplayName + ", ";
         parsed_extras = parsed_extras.substring(0, parsed_extras.length - 2);
-        if (extras.length) parsed_info = parsed_type + "בתוספת:\n " + parsed_extras;
-        else parsed_info = parsed_type + "ללא תוספות";
+        if (extras.length) parsed_info = parsed_type + ", " + parsed_extras;
+        else parsed_info = parsed_type;
         userSandwitch = {
             "productName": "כריך"
             , "productDetails": parsed_info
@@ -207,9 +207,9 @@ angular.module('AppServices', ['ngResource']).factory('HttpReqs', function ($htt
         });
         return result;
     }
-    this.ClearLocalStorage = function () {
+    this.removeOrder = function () {
         $ionicPlatform.ready(function () {
-            localStorage.clear();
+            localStorage.removeItem("order");
         });
     }
     this.RemoveItem = function (index) {

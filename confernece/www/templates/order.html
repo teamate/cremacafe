@@ -13,13 +13,14 @@
                 <ion-item class="item orderProduct item-remove-animate" ng-repeat="x in order" item="x">
                     <div style="float:right; text-align:right;">
                         <h3 class="md-title">{{x.productName}}</h3>
-                        <h4 class="md-subhead">{{x.productDetails}}</h4>
+                        <h4 class="md-subhead" ng-show="x.productDetails.length > 0">:פירוט<br>{{x.productDetails}}</h4>
+                        <h4 class="md-subhead" ng-show="x.productDetails.length == 0">ללא תוספות</h4>
                         <p class="md-body-1" dir='rtl'><q ng-show="x.productExtraInfo.length > 0">הערות: {{x.productExtraInfo}}</q></p>
                     </div>
-                    <div>
-                        <h4 style="padding-left:30px;padding-bottom:10px;color:black;">כמות: {{x.productAmount}} </h4> </div>
-                    <h4 style="padding-left:30px;color:grey;">&#8362; מחיר ליחיד: {{x.productPrice}} </h4>
-                    <h4 style="float:left;padding-left:30px;color:red;">&#8362; סה"כ: {{x.productPrice*x.productAmount}} </h4>
+                    <div style="width:100px;">
+                        <h4 style="padding-bottom:10px;color:black;" dir="rtl">כמות: {{x.productAmount}} </h4>
+                        <h4 style="float:right;color:grey;">&#8362; מחיר ליחיד: {{x.productPrice}} </h4>
+                        <h4 style="float:right;color:red;">&#8362; סה"כ: {{x.productPrice*x.productAmount}} </h4> </div>
                     <ion-delete-button class="ion-minus-circled" ng-click="removeProduct($index)"> </ion-delete-button>
                 </ion-item>
             </ion-list>
@@ -30,7 +31,7 @@
             <div class="bar order-bar-footer bar-footer bar-default">
                 <md-input-container class="md-block">
                     <label dir="rtl">הערות</label>
-                    <textarea ng-model="$root.orderExInfo" name="exInfoInput" ng-maxlength="150" md-maxlength="150" rows="2"></textarea>
+                    <textarea ng-model="$root.orderExInfo" name="exInfoInput" ng-maxlength="150" md-maxlength="150" rows="2" style="text-align:right;"></textarea>
                 </md-input-container>
                 <div class="sum">
                     <p>סה"כ: <span style="color:red;">&#8362;<span ng-bind="$root.orderTotalPrice" class="md-body-2"></span></span>
@@ -38,13 +39,14 @@
                 </div>
                 <div class="time">
                     <div layout="row">
-                        <md-input-container>
+                        <md-input-container style="width:120px;" dir="rtl">
                             <label>זמן איסוף הזמנה</label>
                             <md-select ng-model="timeForPickup">
                                 <md-optgroup>
-                                    <md-option ng-value="0" selected>עכשיו</md-option>
+                                    <md-option ng-value="5" selected>בעוד 5 דקות</md-option>
+                                    <md-option ng-value="10">בעוד 10 דקות</md-option>
                                     <md-option ng-value="15">בעוד 15 דקות</md-option>
-                                    <md-option ng-value="30">בעוד חצי שעה</md-option>
+                                    <md-option ng-value="30">בעוד 30 דקות</md-option>
                                 </md-optgroup>
                             </md-select>
                         </md-input-container>

@@ -32,8 +32,9 @@ angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMessa
       StatusBar.styleDefault();
     };
   });
-}).config(function ($stateProvider, $urlRouterProvider, cfpLoadingBarProvider) {
+}).config(function ($stateProvider, $urlRouterProvider, $ionicConfigProvider, cfpLoadingBarProvider) {
   cfpLoadingBarProvider.includeBar = false;
+  $ionicConfigProvider.scrolling.jsScrolling(false);
   $stateProvider.state('app', {
     url: '/app'
     , abstract: true

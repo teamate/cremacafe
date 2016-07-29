@@ -18,14 +18,26 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
         });
     }
     $scope.$root.OrderLength = Order.getOrderLength();
-}).controller('LoginCtrl', function ($scope, $stateParams, $ionicSideMenuDelegate, Login) {
-    $ionicSideMenuDelegate.canDragContent(false)
+}).controller('LoginCtrl', function ($scope, $stateParams, $ionicSideMenuDelegate, $state, Login) {
+    $ionicSideMenuDelegate.canDragContent(false);
+    //    var deregister = $ionicPlatform.registerBackButtonAction(function () {
+    //        ionic.Platform.exitApp();
+    //    }, 100);
+    //    $scope.$on('$destroy', deregister);
     $scope.createUser = function (userFirstName, userLastName) {
         console.log(userFirstName, userLastName);
         Login.createUser(userFirstName, userLastName);
+        $state.go('app.sessions', {}, {
+            reload: true
+        });
     }
-}).controller('CategoriesCtrl', function ($scope, $state, $stateParams, $mdDialog, $mdMedia, $ionicPopup, $timeout, $ionicNavBarDelegate, Categories) {
+}).controller('CategoriesCtrl', function ($scope, $state, $stateParams, $mdDialog, $mdMedia, $ionicPopup, $timeout, $ionicNavBarDelegate, $ionicPlatform, Categories) {
     $ionicNavBarDelegate.showBackButton(false);
+    //    $ionicPlatform.registerBackButtonAction(function () {
+    //        $state.go('app.sessions', {}, {
+    //            reload: false
+    //        });
+    //    }, 100);
     $scope.showSpinner = false;
     var categories = Categories.getCategories();
     categories.then(function (result) {
@@ -51,8 +63,13 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
             reload: false
         });
     }
-}).controller('CoffeeCtrl', function ($scope, $location, $state, $stateParams, $ionicNavBarDelegate, $ionicPopup, $timeout, Coffee, Order) {
+}).controller('CoffeeCtrl', function ($scope, $location, $state, $stateParams, $ionicNavBarDelegate, $ionicPopup, $timeout, $ionicPlatform, Coffee, Order) {
     $ionicNavBarDelegate.showBackButton(true);
+    //    $ionicPlatform.registerBackButtonAction(function () {
+    //        $state.go('app.categories', {}, {
+    //            reload: false
+    //        });
+    //    }, 100);
     var types = [];
     var totalPrice = $scope.coffeeTotalPrice = 0;
     $scope.coffeeAmount = 1;
@@ -147,8 +164,13 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
             })
         }
     };
-}).controller('SandwitchCtrl', function ($rootScope, $scope, $location, $state, $ionicNavBarDelegate, $ionicPopup, $timeout, Sandwitch, Order) {
+}).controller('SandwitchCtrl', function ($rootScope, $scope, $location, $state, $ionicNavBarDelegate, $ionicPopup, $timeout, $ionicPlatform, Sandwitch, Order) {
     $ionicNavBarDelegate.showBackButton(true);
+    //    $ionicPlatform.registerBackButtonAction(function () {
+    //        $state.go('app.categories', {}, {
+    //            reload: false
+    //        });
+    //    }, 100);
     var types = [];
     var totalPrice = $scope.sandwitchTotalPrice = 0;
     var current_type_price = 0;
@@ -244,8 +266,13 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
             })
         }
     };
-}).controller('ShakshukaCtrl', function ($rootScope, $scope, $location, $state, $stateParams, $ionicNavBarDelegate, $ionicPopup, $timeout, Shakshuka, Order) {
+}).controller('ShakshukaCtrl', function ($rootScope, $scope, $location, $state, $stateParams, $ionicNavBarDelegate, $ionicPopup, $timeout, $ionicPlatform, Shakshuka, Order) {
     $ionicNavBarDelegate.showBackButton(true);
+    //    $ionicPlatform.registerBackButtonAction(function () {
+    //        $state.go('app.categories', {}, {
+    //            reload: false
+    //        });
+    //    }, 100);
     var shakshuka = null;
     var totalPrice = 0;
     $scope.shakshukaAmount = 1;
@@ -310,7 +337,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
                     , type: 'button-default'
                     , onTap: function (e) {
                         console.log('הכן שקשוקה חדש');
-                        $location.path('app/categories/shakshuka    ');
+                        $location.path('app/categories/shakshuka');
                     }
                     }, {
                     text: 'גש לקופה'
@@ -325,8 +352,13 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
             })
         }
     };
-}).controller('ToastCtrl', function ($rootScope, $scope, $location, $state, $stateParams, $ionicNavBarDelegate, $ionicPopup, $timeout, Tost, Order) {
+}).controller('ToastCtrl', function ($rootScope, $scope, $location, $state, $stateParams, $ionicNavBarDelegate, $ionicPopup, $timeout, $ionicPlatform, Tost, Order) {
     $ionicNavBarDelegate.showBackButton(true);
+    //    $ionicPlatform.registerBackButtonAction(function () {
+    //        $state.go('app.categories', {}, {
+    //            reload: false
+    //        });
+    //    }, 100);
     var toast = null;
     var totalPrice = 0;
     $scope.toastAmount = 1;
@@ -409,9 +441,13 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
 }).controller('SessionsCtrl', function ($rootScope, $scope, $ionicNavBarDelegate, $ionicSideMenuDelegate, $ionicPopup, $ionicPlatform, Order) {
     $ionicNavBarDelegate.showBackButton(false);
     $ionicSideMenuDelegate.canDragContent(true);
-//    $ionicPlatform.registerBackButtonAction(function () {
-            //        
+//    var deregister = $ionicPlatform.registerBackButtonAction(function () {
+            //        ionic.Platform.exitApp();
             //    }, 100);
+            //    $scope.$on('$ionicView.leave', function () {
+            //        console.log("leave main view");
+            //        deregister();
+            //    });
     $scope.$on('$ionicView.enter', function () {
         // code to run each time view is entered
         var length = Order.getOrderLength();
@@ -422,6 +458,11 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
     });
 }).controller('OrderCtrl', function ($scope, $timeout, $stateParams, $ionicNavBarDelegate, $ionicPlatform, $ionicPopup, $timeout, Order) {
     $ionicNavBarDelegate.showBackButton(false);
+    //    $ionicPlatform.registerBackButtonAction(function () {
+    //        $state.go('app.sessions', {}, {
+    //            reload: false
+    //        });
+    //    }, 100);
     $scope.$root.showDeleteButton = false;
     $scope.$root.orderTotalPrice = 0;
     var order = [];
@@ -456,7 +497,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
     $scope.clearOrder = function () {
         $ionicPlatform.ready(function () {
             $scope.$root.orderTotalPrice = 0;
-            Order.ClearLocalStorage();
+            Order.removeOrder();
             $scope.order = Order.ReadFromStorage();
             $scope.order = [];
             $scope.$root.OrderLength = Order.getOrderLength();
@@ -485,7 +526,6 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
             if (res) {
                 Order.getSmsPermissions();
                 var sms_enabled;
-                var authPopup;
                 if (SMS) SMS.startWatch(function () {
                     console.log('Waiting For Validation Sms');
                     sms_enabled = true;
@@ -495,7 +535,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
                 });
                 var phoneNumber = '+972' + $scope.phoneNumber;
                 Order.sendSms(phoneNumber).then(function (res) {
-                    authPopup = $ionicPopup.show({
+                    var authPopup = $ionicPopup.show({
                         templateUrl: 'templates/auth.html'
                         , title: 'הכנס קוד אימות'
                         , subTitle: ''
@@ -507,7 +547,8 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
                                 return 1;
                             }
                         }]
-                    }).then(function (res) {
+                    });
+                    authPopup.then(function (res) {
                         if (res) {
                             var authToken = $scope.authToken;
                             Order.login(phoneNumber, authToken).then(function (res) {
@@ -553,7 +594,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
                                 }, 4000);
                             });
                         }
-                    })
+                    });
                     document.addEventListener('onSMSArrive', function (e) {
                         var sms = e.data;
                         var myRegexp = /verification code is: (([0-9]){6})/g;
@@ -561,7 +602,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
                         if (match != null) {
                             var confirmaionCode = match[1];
                             Order.login(phoneNumber, confirmaionCode).then(function (res) {
-                                Order.processOrder("amit", phoneNumber, order, $scope.$root.orderExInfo, $scope.timeForPickup, $scope.$root.orderTotalPrice).then(function (res) {
+                                Order.processOrder(phoneNumber, order, $scope.$root.orderExInfo, $scope.timeForPickup, $scope.$root.orderTotalPrice).then(function (res) {
                                     var confirmPopup = $ionicPopup.show({
                                         templateUrl: 'templates/success.html'
                                         , title: "!ההזמנה נשלחה בהצלחה"
@@ -569,6 +610,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
                                         , scope: $scope
                                     });
                                     $timeout(function () {
+                                        authPopup.close();
                                         confirmPopup.close();
                                     }, 4000);
                                     console.log("send order to server");
@@ -608,7 +650,6 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
                             });
                         }
                     });
-                    authPopup.close();
                 }, function (err) {
                     var badConnPopup = $ionicPopup.show({
                         templateUrl: 'templates/bad_conn.html'

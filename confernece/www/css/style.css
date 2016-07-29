@@ -347,8 +347,7 @@ video#bgvid {
 }
 
 .app-icon {
-  background-color: #fff;
-  background: url('../img/nespresso_logo.jpg') center;
+  background: url('../img/crema-hat.png') center;
   background-size: cover;
   border-radius: 50%;
   height: 100px;
@@ -358,6 +357,17 @@ video#bgvid {
   -webkit-box-shadow: 5px 5px 14px #444;
   -moz-box-shadow: 5px 5px 14px #444;
   box-shadow: 5px 5px 14px #444;
+}
+
+.pictureTitle {
+  background: url(../img/cream_menu_transparent.png) center;
+  background-size: cover;
+  display: block;
+  margin: 0 auto;
+  margin-top: 60px;
+  margin-bottom: 30px;
+  width: 300px;
+  height: 200px;
 }
 
 .social-login {
