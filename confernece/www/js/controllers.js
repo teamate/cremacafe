@@ -172,7 +172,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
                         });
                     }
                     }, {
-                    text: 'גש לקופה'
+                    text: 'צפה בהזמנה'
                     , type: 'button-positive'
                     , onTap: function (e) {
                         console.log('גש לקופה');
@@ -286,7 +286,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
                         });
                     }
                     }, {
-                    text: 'גש לקופה'
+                    text: 'צפה בהזמנה'
                     , type: 'button-positive'
                     , onTap: function (e) {
                         console.log('גש לקופה');
@@ -372,7 +372,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
                         $location.path('app/categories/shakshuka');
                     }
                     }, {
-                    text: 'גש לקופה'
+                    text: 'צפה בהזמנה'
                     , type: 'button-positive'
                     , onTap: function (e) {
                         console.log('גש לקופה');
@@ -470,7 +470,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
                         $location.path('app/categories/toast');
                     }
                     }, {
-                    text: 'גש לקופה'
+                    text: 'צפה בהזמנה'
                     , type: 'button-positive'
                     , onTap: function (e) {
                         console.log('גש לקופה');
