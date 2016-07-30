@@ -574,7 +574,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
                         if (res) {
                             var authToken = $scope.authToken;
                             Order.login(phoneNumber, authToken).then(function (res) {
-                                Order.processOrder(phoneNumber, order, $scope.$root.orderExInfo, $scope.timeForPickup, $scope.$root.orderTotalPrice).then(function (res) {
+                                Order.processOrder(res.data.id_token, phoneNumber, order, $scope.$root.orderExInfo, $scope.timeForPickup, $scope.$root.orderTotalPrice).then(function (res) {
                                     var confirmPopup = $ionicPopup.show({
                                         templateUrl: 'templates/success.html'
                                         , title: "!ההזמנה נשלחה בהצלחה"
@@ -624,7 +624,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
                         if (match != null) {
                             var confirmaionCode = match[1];
                             Order.login(phoneNumber, confirmaionCode).then(function (res) {
-                                Order.processOrder(phoneNumber, order, $scope.$root.orderExInfo, $scope.timeForPickup, $scope.$root.orderTotalPrice).then(function (res) {
+                                Order.processOrder(res.data.id_token, phoneNumber, order, $scope.$root.orderExInfo, $scope.timeForPickup, $scope.$root.orderTotalPrice).then(function (res) {
                                     var confirmPopup = $ionicPopup.show({
                                         templateUrl: 'templates/success.html'
                                         , title: "!ההזמנה נשלחה בהצלחה"

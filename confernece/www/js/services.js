@@ -227,7 +227,7 @@ angular.module('AppServices', ['ngResource']).factory('HttpReqs', function ($htt
         console.log("order length is:" + length);
         return length;
     }
-    this.processOrder = function (phoneNumber, orderProducts, orderNotes, timeForPickup, totalAmount) {
+    this.processOrder = function (idToken, phoneNumber, orderProducts, orderNotes, timeForPickup, totalAmount) {
         console.log(orderProducts);
         var date = new Date();
         var total_order = {
@@ -245,6 +245,7 @@ angular.module('AppServices', ['ngResource']).factory('HttpReqs', function ($htt
             , url: api_url + "/orders"
             , headers: {
                 'Content-Type': 'application/json'
+                , 'Authorization': 'Bearer ' + idToken
                     //                , 'Access-Control-Allow-Origin': '*'
                     //                , 'Access-Control-Allow-Credentials': 'true'
                     //                , 'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT'
