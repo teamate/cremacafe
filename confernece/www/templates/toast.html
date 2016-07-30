@@ -1,5 +1,5 @@
 <ion-view view-title="טוסטים">
-    <ion-content dir="rtl" class="toast-content">
+    <ion-content dir="rtl" class="toast-content" delegate-handle="mainScroll" on-scroll="changeScrollIcon()">
         <ion-spinner class="spinner spinner-energized" icon="lines" ng-show="showSpinner"></ion-spinner>
         <div ng-show="!showSpinner">
             <div class="tosafot">
@@ -7,7 +7,7 @@
                     <h4 class="md-title" dir="rtl" style="text-align: center; white-space: nowrap;">טוסט בהרכבה אישית</h4>
                     <hr> </div>
                 <div>
-                    <md-checkbox class="extras-checkbox item item-checkbox-right md-primary" ng-repeat="x in extras" ng-model="x.checked" ng-change="ExtrasChange(x)" style="width:100%;padding-right:100px;"><span class="md-body-2">{{x.extraDisplayName}}</span><span class="md-body-1" style="color:red;"><br>בתוספת: {{x.extraPrice}} &#8362; </span></md-checkbox>
+                    <md-checkbox class="extras-checkbox item item-checkbox-right md-primary" ng-repeat="x in extras" ng-model="x.checked" ng-change="ExtrasChange(x)" style="width:100%;padding-right:50px;"><span class="md-body-2">{{x.extraDisplayName}}</span><span class="md-body-1" style="color:red;"><br>בתוספת: {{x.extraPrice}} &#8362; </span></md-checkbox>
                 </div>
             </div>
         </div>
@@ -29,4 +29,8 @@
             <md-button class="md-raised md-primary" ng-disabled="toastForm.exInfoInput.$error.maxlength" ng-click="AddTostToOrder()" style="margin: 0 auto; display: block;"> הוסף להזמנה </md-button>
         </div>
     </form>
+    <md-button class="md-fab md-mini md-primary" style="position:absolute;top:300px;" ng-click="scrollMainToDirection()">
+        <md-icon md-svg-src="android_asset/www/img/icons/up_arrow_white_48px.svg" ng-show="$root.showUp"></md-icon>
+        <md-icon md-svg-src="android_asset/www/img/icons/down_arrow_white_48px.svg" ng-show="!$root.showUp"></md-icon>
+    </md-button>
 </ion-view>

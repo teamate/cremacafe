@@ -42,9 +42,6 @@ var app = angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova'
         templateUrl: 'templates/login.html'
         , controller: 'LoginCtrl'
       }
-      , 'fabContent': {
-        template: ''
-      }
     }
   }).state('app.categories', {
     url: "/categories"
@@ -68,6 +65,9 @@ var app = angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova'
       'menuContent': {
         templateUrl: "templates/sandwiches.html"
         , controller: 'SandwitchCtrl'
+      }
+      , 'fabContent': {
+        template: "<h1>dsfsdfsdfsdf</h1>"
       }
     }
   }).state('app.shakshuka', {

@@ -184,13 +184,25 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
             })
         }
     };
-}).controller('SandwitchCtrl', function ($rootScope, $scope, $location, $state, $ionicNavBarDelegate, $ionicPopup, $timeout, $ionicPlatform, Sandwitch, Order) {
+}).controller('SandwitchCtrl', function ($rootScope, $scope, $location, $state, $ionicNavBarDelegate, $ionicScrollDelegate, $ionicPopup, $timeout, $ionicPlatform, Sandwitch, Order) {
     $ionicNavBarDelegate.showBackButton(true);
-    //    $ionicPlatform.registerBackButtonAction(function () {
-    //        $state.go('app.categories', {}, {
-    //            reload: false
-    //        });
-    //    }, 100);
+    $scope.changeScrollIcon = function () {
+        console.log('change scroll icons');
+        var scrollPosition = $ionicScrollDelegate.$getByHandle('mainScroll').getScrollPosition();
+        if (scrollPosition.top > 0) {
+            $scope.$root.showUp = true;
+            $scope.$apply();
+        }
+        else {
+            $scope.$root.showUp = false;
+            $scope.$apply();
+        }
+    }
+    $scope.scrollMainToDirection = function () {
+        var scroll_position = $ionicScrollDelegate.$getByHandle('mainScroll').getScrollPosition();
+        if (scroll_position.top != 0) $ionicScrollDelegate.$getByHandle('mainScroll').scrollTop(true);
+        else $ionicScrollDelegate.$getByHandle('mainScroll').scrollBottom(true);
+    };
     var types = [];
     var totalPrice = $scope.sandwitchTotalPrice = 0;
     var current_type_price = 0;
@@ -372,13 +384,25 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
             })
         }
     };
-}).controller('ToastCtrl', function ($rootScope, $scope, $location, $state, $stateParams, $ionicNavBarDelegate, $ionicPopup, $timeout, $ionicPlatform, Tost, Order) {
+}).controller('ToastCtrl', function ($rootScope, $scope, $location, $state, $stateParams, $ionicNavBarDelegate, $ionicScrollDelegate, $ionicPopup, $timeout, $ionicPlatform, Tost, Order) {
     $ionicNavBarDelegate.showBackButton(true);
-    //    $ionicPlatform.registerBackButtonAction(function () {
-    //        $state.go('app.categories', {}, {
-    //            reload: false
-    //        });
-    //    }, 100);
+    $scope.changeScrollIcon = function () {
+        console.log('change scroll icons');
+        var scrollPosition = $ionicScrollDelegate.$getByHandle('mainScroll').getScrollPosition();
+        if (scrollPosition.top > 0) {
+            $scope.$root.showUp = true;
+            $scope.$apply();
+        }
+        else {
+            $scope.$root.showUp = false;
+            $scope.$apply();
+        }
+    }
+    $scope.scrollMainToDirection = function () {
+        var scroll_position = $ionicScrollDelegate.$getByHandle('mainScroll').getScrollPosition();
+        if (scroll_position.top != 0) $ionicScrollDelegate.$getByHandle('mainScroll').scrollTop(true);
+        else $ionicScrollDelegate.$getByHandle('mainScroll').scrollBottom(true);
+    };
     var toast = null;
     var totalPrice = 0;
     $scope.toastAmount = 1;

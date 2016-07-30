@@ -1,5 +1,5 @@
 <ion-view view-title="כריכים">
-    <ion-content dir="rtl" class="sandwitch-content">
+    <ion-content dir="rtl" class="sandwitch-content" delegate-handle="mainScroll" on-scroll="changeScrollIcon()">
         <ion-spinner class="spinner spinner-energized" icon="lines" ng-show="showSpinner"></ion-spinner>
         <div ng-show="!showSpinner">
             <div class="sandwitch">
@@ -13,7 +13,7 @@
                 </md-radio-group>
             </div>
             <div>
-                <md-checkbox class="extras-checkbox item item-checkbox-right md-primary" ng-repeat="extra in extras" ng-model="extra.checked" ng-change="ExtrasChange(extra)" style="width:100%;padding-right:100px;"><span class="md-body-2">{{extra.extraDisplayName}}</span><span class="md-body-1" style="color:red;"><br>בתוספת: {{extra.extraPrice}} &#8362; </span></md-checkbox>
+                <md-checkbox class="extras-checkbox item item-checkbox-right md-primary" ng-repeat="extra in extras" ng-model="extra.checked" ng-change="ExtrasChange(extra)" style="width:100%;padding-right:50px;"><span class="md-body-2">{{extra.extraDisplayName}}</span><span class="md-body-1" style="color:red;"><br>בתוספת: {{extra.extraPrice}} &#8362; </span></md-checkbox>
             </div>
         </div>
     </ion-content>
@@ -33,4 +33,8 @@
             <md-button class="md-raised md-primary" style="margin: 0 auto; display: block;" ng-disabled="sandwichForm.exInfoInput.$error.maxlength" ng-click="AddSandwitchToOrder()"> הוסף להזמנה </md-button>
         </div>
     </form>
+    <md-button class="md-fab md-mini md-primary" style="position:absolute;top:300px;" ng-click="scrollMainToDirection()">
+        <md-icon md-svg-src="android_asset/www/img/icons/up_arrow_white_48px.svg" ng-show="$root.showUp"></md-icon>
+        <md-icon md-svg-src="android_asset/www/img/icons/down_arrow_white_48px.svg" ng-show="!$root.showUp"></md-icon>
+    </md-button>
 </ion-view>
