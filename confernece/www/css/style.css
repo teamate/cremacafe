@@ -54,6 +54,41 @@ ion-content {
   color: dodgerblue;
 }
 
+@media screen and (min-height: 500px) {
+  .directionFab {
+    position: absolute;
+    top: 250px;
+  }
+}
+
+@media screen and (min-height: 640px) {
+  .directionFab {
+    position: absolute;
+    top: 300px;
+  }
+}
+
+@media screen and (min-height: 732px) {
+  .directionFab {
+    position: absolute;
+    top: 350px;
+  }
+}
+
+@media screen and (min-height: 773px) {
+  .directionFab {
+    position: absolute;
+    top: 400px;
+  }
+}
+
+@media screen and (min-height: 960px) {
+  .directionFab {
+    position: absolute;
+    top: 500px;
+  }
+}
+
 
 /*End of App Content*/
 

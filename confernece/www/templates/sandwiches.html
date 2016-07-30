@@ -33,7 +33,7 @@
             <md-button class="md-raised md-primary" style="margin: 0 auto; display: block;" ng-disabled="sandwichForm.exInfoInput.$error.maxlength" ng-click="AddSandwitchToOrder()"> הוסף להזמנה </md-button>
         </div>
     </form>
-    <md-button class="md-fab md-mini md-primary" style="position:absolute;top:300px;" ng-click="scrollMainToDirection()">
+    <md-button class="md-fab md-mini md-primary directionFab" ng-click="scrollMainToDirection()">
         <md-icon md-svg-src="android_asset/www/img/icons/up_arrow_white_48px.svg" ng-show="$root.showUp"></md-icon>
         <md-icon md-svg-src="android_asset/www/img/icons/down_arrow_white_48px.svg" ng-show="!$root.showUp"></md-icon>
     </md-button>
