@@ -1,4 +1,4 @@
-<form name="phoneForm">
+<form name="phoneForm" ng-controller="OrderCtrl">
     <md-input-container md-no-float class="md-block" dir="rtl">
         <label dir="rtl">מספר טלפון</label>
         <textarea ng-model="$root.phoneNumber" name="phoneInput" type="text" md-maxlength="10" dir="ltr" ng-pattern="/^\d+$/" ng-minlength="10" ng-maxlength="10" required></textarea>

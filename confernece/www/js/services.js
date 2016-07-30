@@ -137,7 +137,7 @@ angular.module('AppServices', ['ngResource']).factory('HttpReqs', function ($htt
         return sandwitch;
     }
     this.CreateSandwitch = function (type, extras, info, totalPrice, amount) {
-        parsed_type = type.displayName + "\n";
+        parsed_type = type.displayName;
         var parsed_extras = "";
         for (var i = 0; i < extras.length; i++) parsed_extras += extras[i].extraDisplayName + ", ";
         parsed_extras = parsed_extras.substring(0, parsed_extras.length - 2);
