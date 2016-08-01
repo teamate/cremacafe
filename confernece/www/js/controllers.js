@@ -570,15 +570,17 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
                 }]
         }).then(function (res) {
             if (res) {
-                Order.getSmsPermissions();
-                var sms_enabled;
-                if (SMS) SMS.startWatch(function () {
-                    console.log('Waiting For Validation Sms');
-                    sms_enabled = true;
-                }, function () {
-                    console.log('failed to start watching');
-                    sms_enabled = false;
-                });
+                if (ionic.Platform.isAndroid()) {
+                    Order.getSmsPermissions();
+                    var sms_enabled;
+                    if (SMS) SMS.startWatch(function () {
+                        console.log('Waiting For Validation Sms');
+                        sms_enabled = true;
+                    }, function () {
+                        console.log('failed to start watching');
+                        sms_enabled = false;
+                    });
+                }
                 var phoneNumber = '+972' + $scope.phoneNumber;
                 Order.sendSms(phoneNumber).then(function (res) {
                     var authPopup = $ionicPopup.show({
@@ -641,26 +643,41 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
                             });
                         }
                     });
-                    document.addEventListener('onSMSArrive', function (e) {
-                        var sms = e.data;
-                        var myRegexp = /verification code is: (([0-9]){6})/g;
-                        var match = myRegexp.exec(sms.body);
-                        if (match != null) {
-                            var confirmaionCode = match[1];
-                            Order.login(phoneNumber, confirmaionCode).then(function (res) {
-                                Order.processOrder(res.data.id_token, phoneNumber, order, $scope.$root.orderExInfo, $scope.timeForPickup, $scope.$root.orderTotalPrice).then(function (res) {
-                                    var confirmPopup = $ionicPopup.show({
-                                        templateUrl: 'templates/success.html'
-                                        , title: "!ההזמנה נשלחה בהצלחה"
-                                        , subTitle: 'שים לב, לאחר שהזמנתך תהיה מוכנה, נעדכן אותך באמצעות הודעה לפלאפון שברשותך'
-                                        , scope: $scope
-                                    });
-                                    $timeout(function () {
-                                        authPopup.close();
-                                        confirmPopup.close();
-                                    }, 4000);
-                                    console.log("send order to server");
-                                    $scope.clearOrder();
+                    if (ionic.Platform.isAndroid()) {
+                        document.addEventListener('onSMSArrive', function (e) {
+                            var sms = e.data;
+                            var myRegexp = /verification code is: (([0-9]){6})/g;
+                            var match = myRegexp.exec(sms.body);
+                            if (match != null) {
+                                var confirmaionCode = match[1];
+                                Order.login(phoneNumber, confirmaionCode).then(function (res) {
+                                    Order.processOrder(res.data.id_token, phoneNumber, order, $scope.$root.orderExInfo, $scope.timeForPickup, $scope.$root.orderTotalPrice).then(function (res) {
+                                        var confirmPopup = $ionicPopup.show({
+                                            templateUrl: 'templates/success.html'
+                                            , title: "!ההזמנה נשלחה בהצלחה"
+                                            , subTitle: 'שים לב, לאחר שהזמנתך תהיה מוכנה, נעדכן אותך באמצעות הודעה לפלאפון שברשותך'
+                                            , scope: $scope
+                                        });
+                                        $timeout(function () {
+                                            authPopup.close();
+                                            confirmPopup.close();
+                                        }, 4000);
+                                        console.log("send order to server");
+                                        $scope.clearOrder();
+                                    }, function (err) {
+                                        var badConnPopup = $ionicPopup.show({
+                                            templateUrl: 'templates/bad_conn.html'
+                                            , title: '!שגיאה'
+                                            , subTitle: 'ישנה בעיה עם חיבור האינטרנט. אנא נסה שוב במועד מאוחר יותר'
+                                            , scope: $scope
+                                        });
+                                        $timeout(function () {
+                                            badConnPopup.close();
+                                            $state.go("app.sessions", {}, {
+                                                reload: false
+                                            });
+                                        }, 4000);
+                                    })
                                 }, function (err) {
                                     var badConnPopup = $ionicPopup.show({
                                         templateUrl: 'templates/bad_conn.html'
@@ -674,28 +691,15 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
                                             reload: false
                                         });
                                     }, 4000);
-                                })
-                            }, function (err) {
-                                var badConnPopup = $ionicPopup.show({
-                                    templateUrl: 'templates/bad_conn.html'
-                                    , title: '!שגיאה'
-                                    , subTitle: 'ישנה בעיה עם חיבור האינטרנט. אנא נסה שוב במועד מאוחר יותר'
-                                    , scope: $scope
                                 });
-                                $timeout(function () {
-                                    badConnPopup.close();
-                                    $state.go("app.sessions", {}, {
-                                        reload: false
-                                    });
-                                }, 4000);
-                            });
-                            SMS.stopWatch(function () {
-                                console.log('watching', 'watching stopped');
-                            }, function () {
-                                console.log('failed to stop watching');
-                            });
-                        }
-                    });
+                                SMS.stopWatch(function () {
+                                    console.log('watching', 'watching stopped');
+                                }, function () {
+                                    console.log('failed to stop watching');
+                                });
+                            }
+                        });
+                    }
                 }, function (err) {
                     var badConnPopup = $ionicPopup.show({
                         templateUrl: 'templates/bad_conn.html'
