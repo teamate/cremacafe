@@ -237,8 +237,8 @@ angular.module('AppServices', ['ngResource']).factory('HttpReqs', function ($htt
             , 'orderNotes': orderNotes
             , 'timeForPickup': timeForPickup
             , 'totalAmount': totalAmount
-            , 'orderDate': date.toLocaleDateString
-            , 'orderTime': date.toLocaleTimeString
+            , 'orderDate': date.toLocaleDateString()
+            , 'orderTime': date.toLocaleTimeString()
         }
         var req = {
             method: 'POST'
