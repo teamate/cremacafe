@@ -86,6 +86,14 @@ var app = angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova'
         , controller: 'ToastCtrl'
       }
     }
+  }).state('app.nargila', {
+    url: "/categories/nargila"
+    , views: {
+      'menuContent': {
+        templateUrl: "templates/nargila.html"
+        , controller: 'NargilaCtrl'
+      }
+    }
   }).state('app.search', {
     url: '/search'
     , views: {

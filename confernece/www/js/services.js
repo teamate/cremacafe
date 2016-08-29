@@ -51,8 +51,12 @@ angular.module('AppServices', ['ngResource']).factory('HttpReqs', function ($htt
         var coffee = $http.get(api_url + "/menu/products/coffee");
         return coffee;
     }
-    this.CreateCoffee = function (type, size, info, totalPrice, amount) {
-        var parsed_info = type.displayName + " בגודל " + size.name;
+    this.CreateCoffee = function (extras, type, size, info, totalPrice, amount) {
+        var parsed_info = type.displayName + " בגודל " + size.name + " בתוספת ";
+        var parsed_extras = "";
+        for (var i = 0; i < extras.length; i++) parsed_extras += extras[i].extraDisplayName + ", ";
+        parsed_extras = parsed_extras.substring(0, parsed_extras.length - 2);
+        if (extras.length) parsed_info += parsed_extras;
         userCoffee = {
             "productName": "קפה"
             , "productDetails": parsed_info
@@ -158,7 +162,7 @@ angular.module('AppServices', ['ngResource']).factory('HttpReqs', function ($htt
         return 1;
     }
     return this;
-}).factory('Order', function ($ionicPlatform, $cordovaSQLite, $http) {
+}).factory('Nargila', function ($http, Order) {}).factory('Order', function ($ionicPlatform, $cordovaSQLite, $http) {
     var localStorage = window.localStorage;
     var auth0 = new Auth0({
         clientID: 'EgY7ZjhvdKrGc3r7X5k6DSXwZpczJIKL'
@@ -228,7 +232,8 @@ angular.module('AppServices', ['ngResource']).factory('HttpReqs', function ($htt
         return length;
     }
     this.processOrder = function (idToken, phoneNumber, orderProducts, orderNotes, timeForPickup, totalAmount) {
-        console.log(orderProducts);
+        //console.log(orderProducts);
+        //cosnsole.log("total price: ", totalAmount);
         var date = new Date();
         var total_order = {
             'userName': window.localStorage.getItem('username')

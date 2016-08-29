@@ -104,6 +104,9 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
                 $scope.cupSize = JSON.stringify(types[0].sizes[0]);
                 $scope.coffeeTotalPrice = totalPrice = types[0].sizes[0].price;
             }
+            if (res.data.extra) {
+                $scope.extras = res.data.extras;
+            }
         }
     }, function (err) {
         var badConnPopup = $ionicPopup.show({
@@ -131,6 +134,11 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
             //$scope.coffeeTotalPrice = totalPrice = parsedType.sizes[0].price;
         }
     }
+    $scope.ExtrasChange = function (item) {
+        if (item.checked) totalPrice += JSON.parse(item.extraPrice);
+        else totalPrice -= JSON.parse(item.extraPrice);
+        $scope.coffeeTotalPrice = totalPrice;
+    }
     $scope.onSizeChange = function (size) {
         var parsedSize = JSON.parse(size);
         $scope.cupSize = size;
@@ -138,12 +146,15 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
         $scope.coffeeTotalPrice = totalPrice = parsedSize.price;
     }
     $scope.AddCoffeeToOrder = function () {
+        var extras = $scope.extras.filter(function (extra) {
+            return extra.checked == true;
+        });
         var coffee_type = JSON.parse($scope.coffeeType);
         var coffee_size = JSON.parse($scope.cupSize);
         var extra_info = $scope.$root.coffeeExInfo;
         var amount = $scope.coffeeAmount;
         console.log($scope.coffeeType, $scope.coffeeType);
-        Coffee.CreateCoffee(coffee_type, coffee_size, extra_info, totalPrice, amount);
+        Coffee.CreateCoffee(extras, coffee_type, coffee_size, extra_info, totalPrice, amount);
         var result = Coffee.AddToOrder($ionicPopup);
         if (result) {
             $scope.$root.coffeeExInfo = "";
@@ -482,8 +493,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
             })
         }
     };
-}).controller('SessionsCtrl', function ($rootScope, $scope, $ionicNavBarDelegate, $ionicSideMenuDelegate, $ionicPopup, $ionicPlatform, Order) {
-    $ionicNavBarDelegate.showBackButton(false);
+}).controller('NargilaCtrl', function () {}).controller('SessionsCtrl', function ($rootScope, $scope, $ionicNavBarDelegate, $ionicSideMenuDelegate, $ionicPopup, $ionicPlatform, Order) {
     $ionicSideMenuDelegate.canDragContent(true);
     var deregister;
     $scope.$on('$ionicView.leave', function () {
@@ -492,6 +502,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
     });
     $scope.$on('$ionicView.enter', function () {
         // code to run each time view is entered
+        $ionicNavBarDelegate.showBackButton(false);
         deregister = $ionicPlatform.registerBackButtonAction(function () {
             ionic.Platform.exitApp();
         }, 100);
@@ -502,7 +513,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
         else $scope.isOrderEmpty = true;
         //var permissions = cordova.plugins.permissions;
     });
-}).controller('OrderCtrl', function ($scope, $timeout, $stateParams, $ionicNavBarDelegate, $ionicPlatform, $ionicPopup, $timeout, Order) {
+}).controller('OrderCtrl', function ($scope, $timeout, $stateParams, $ionicNavBarDelegate, $ionicPlatform, $ionicPopup, $ionicPopover, $timeout, Order) {
     $ionicNavBarDelegate.showBackButton(false);
     //    $ionicPlatform.registerBackButtonAction(function () {
     //        $state.go('app.sessions', {}, {
@@ -549,7 +560,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
             $scope.$root.OrderLength = Order.getOrderLength();
         })
     }
-    $scope.sendOrder = function () {
+    $scope.sendOrder = function (totalPrice) {
         var phonePopup = $ionicPopup.show({
             templateUrl: 'templates/phone.html'
             , title: 'הכנס מספר טלפון'
@@ -559,6 +570,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
                 text: 'בטל'
                 , type: "button-default"
                 , onTap: function (e) {
+                    $scope.$root.orderTotalPrice = totalPrice;
                     return 0;
                 }
                 }, {
@@ -600,7 +612,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
                         if (res) {
                             var authToken = $scope.authToken;
                             Order.login(phoneNumber, authToken).then(function (res) {
-                                Order.processOrder(res.data.id_token, phoneNumber, order, $scope.$root.orderExInfo, $scope.timeForPickup, $scope.$root.orderTotalPrice).then(function (res) {
+                                Order.processOrder(res.data.id_token, phoneNumber, order, $scope.$root.orderExInfo, $scope.timeForPickup, totalPrice).then(function (res) {
                                     var confirmPopup = $ionicPopup.show({
                                         templateUrl: 'templates/success.html'
                                         , title: "!ההזמנה נשלחה בהצלחה"
@@ -646,12 +658,12 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
                     if (ionic.Platform.isAndroid()) {
                         document.addEventListener('onSMSArrive', function (e) {
                             var sms = e.data;
-                            var myRegexp = /verification code is: (([0-9]){6})/g;
+                            var myRegexp = /([0-9]){6}/;
                             var match = myRegexp.exec(sms.body);
                             if (match != null) {
-                                var confirmaionCode = match[1];
+                                var confirmaionCode = match[0];
                                 Order.login(phoneNumber, confirmaionCode).then(function (res) {
-                                    Order.processOrder(res.data.id_token, phoneNumber, order, $scope.$root.orderExInfo, $scope.timeForPickup, $scope.$root.orderTotalPrice).then(function (res) {
+                                    Order.processOrder(res.data.id_token, phoneNumber, order, $scope.$root.orderExInfo, $scope.timeForPickup, totalPrice).then(function (res) {
                                         var confirmPopup = $ionicPopup.show({
                                             templateUrl: 'templates/success.html'
                                             , title: "!ההזמנה נשלחה בהצלחה"
@@ -701,6 +713,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
                         });
                     }
                 }, function (err) {
+                    console.log(err);
                     var badConnPopup = $ionicPopup.show({
                         templateUrl: 'templates/bad_conn.html'
                         , title: '!שגיאה'

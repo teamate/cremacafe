@@ -52,7 +52,7 @@
                         </md-input-container>
                     </div>
                 </div>
-                <md-button class="accept-order md-raised md-primary" ng-click="sendOrder()" style="margin: 0 auto; display: block;" ng-disabled="orderForm.exInfoInput.$error.maxlength"> סיים הזמנה </md-button>
+                <md-button class="accept-order md-raised md-primary" ng-click="sendOrder($root.orderTotalPrice)" style="margin: 0 auto; display: block;" ng-disabled="orderForm.exInfoInput.$error.maxlength"> סיים הזמנה </md-button>
                 <h5>!תשלום במזומן בקופה בלבד*</h5> </div>
         </div>
     </form>
