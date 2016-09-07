@@ -162,7 +162,37 @@ angular.module('AppServices', ['ngResource']).factory('HttpReqs', function ($htt
         return 1;
     }
     return this;
-}).factory('Nargila', function ($http, Order) {}).factory('Order', function ($ionicPlatform, $cordovaSQLite, $http) {
+}).factory('Nargila', function ($http, Order) {
+    var userNargila;
+    this.getNargila = function () {
+        //var sandwitch = $http.get("http://192.168.0.33:5000/menu/products/sandwitch");
+        //var sandwitch = $http.get("http://192.168.43.80:5000/menu/products/sandwitch");
+        var nargila = $http.get(api_url + "/menu/products/nargila");
+        return nargila;
+    }
+    this.CreateNargila = function (type, extras, info, totalPrice, amount) {
+        parsed_type = type.displayName;
+        var parsed_extras = "";
+        for (var i = 0; i < extras.length; i++) parsed_extras += extras[i].extraDisplayName + ", ";
+        parsed_extras = parsed_extras.substring(0, parsed_extras.length - 2);
+        if (extras.length) parsed_info = parsed_type + ", " + parsed_extras;
+        else parsed_info = parsed_type;
+        userNargila = {
+            "productName": "נרגילה"
+            , "productDetails": parsed_info
+            , "productExtraInfo": info
+            , "productAmount": amount
+            , "productPrice": totalPrice
+        };
+    }
+    this.AddToOrder = function () {
+        //Here i need to use the order service in order to write in the order file
+        Order.WriteToStorage(userNargila);
+        userNargila = {};
+        return 1;
+    }
+    return this;
+}).factory('Order', function ($ionicPlatform, $cordovaSQLite, $http) {
     var localStorage = window.localStorage;
     var auth0 = new Auth0({
         clientID: 'EgY7ZjhvdKrGc3r7X5k6DSXwZpczJIKL'

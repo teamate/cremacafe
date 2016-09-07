@@ -1,4 +1,4 @@
-angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', function ($scope, $ionicModal, $ionicPlatform, $timeout, $state, Order) {
+angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', function ($scope, $ionicModal, $ionicPlatform, $timeout, $ionicNavBarDelegate, $state, Order) {
     // With the new view caching in Ionic, Controllers are only called
     // when they are recreated or on app start, instead of every page change.
     // To listen for when this page is active (for example, to refresh data),
@@ -7,6 +7,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
     //});
     // Form data for the login modal
     $scope.$on('$ionicView.enter', function () {
+        $ionicNavBarDelegate.showBackButton(false);
         $ionicPlatform.ready(function () {
             $scope.username = window.localStorage.getItem("username");
             console.log($scope.username);
@@ -23,8 +24,11 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
         });
     };
     $scope.$root.OrderLength = Order.getOrderLength();
-}).controller('LoginCtrl', function ($scope, $stateParams, $ionicSideMenuDelegate, $state, Login) {
-    $ionicSideMenuDelegate.canDragContent(false);
+}).controller('LoginCtrl', function ($scope, $stateParams, $ionicSideMenuDelegate, $ionicNavBarDelegate, $state, Login) {
+    $scope.$on('$ionicView.enter', function () {
+        // code to run each time view is entered
+        $ionicNavBarDelegate.showBackButton(false);
+    });
     //    var deregister = $ionicPlatform.registerBackButtonAction(function () {
     //        ionic.Platform.exitApp();
     //    }, 100);
@@ -52,12 +56,10 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
         };
     });
 }).controller('CategoriesCtrl', function ($scope, $state, $stateParams, $mdDialog, $mdMedia, $ionicPopup, $timeout, $ionicNavBarDelegate, $ionicPlatform, Categories) {
-    $ionicNavBarDelegate.showBackButton(false);
-    //    $ionicPlatform.registerBackButtonAction(function () {
-    //        $state.go('app.sessions', {}, {
-    //            reload: false
-    //        });
-    //    }, 100);
+    $scope.$on('$ionicView.enter', function () {
+        // code to run each time view is entered
+        $ionicNavBarDelegate.showBackButton(false);
+    });
     $scope.showSpinner = false;
     var categories = Categories.getCategories();
     categories.then(function (result) {
@@ -84,12 +86,10 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
         });
     }
 }).controller('CoffeeCtrl', function ($scope, $location, $state, $stateParams, $ionicNavBarDelegate, $ionicPopup, $timeout, $ionicPlatform, Coffee, Order) {
-    $ionicNavBarDelegate.showBackButton(true);
-    //    $ionicPlatform.registerBackButtonAction(function () {
-    //        $state.go('app.categories', {}, {
-    //            reload: false
-    //        });
-    //    }, 100);
+    $scope.$on('$ionicView.enter', function () {
+        // code to run each time view is entered
+        $ionicNavBarDelegate.showBackButton(false);
+    });
     var types = [];
     var totalPrice = $scope.coffeeTotalPrice = 0;
     $scope.coffeeAmount = 1;
@@ -174,15 +174,6 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
                         });
                     }
                     }, {
-                    text: 'הכן קפה חדש'
-                    , type: 'button-default'
-                    , onTap: function (e) {
-                        console.log('הכן קפה חדש');
-                        $state.go('app.coffee', {}, {
-                            reload: true
-                        });
-                    }
-                    }, {
                     text: 'צפה בהזמנה'
                     , type: 'button-positive'
                     , onTap: function (e) {
@@ -196,7 +187,10 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
         }
     };
 }).controller('SandwitchCtrl', function ($rootScope, $scope, $location, $state, $ionicNavBarDelegate, $ionicScrollDelegate, $ionicPopup, $timeout, $ionicPlatform, Sandwitch, Order) {
-    $ionicNavBarDelegate.showBackButton(true);
+    $scope.$on('$ionicView.enter', function () {
+        // code to run each time view is entered
+        $ionicNavBarDelegate.showBackButton(false);
+    });
     $scope.changeScrollIcon = function () {
         console.log('change scroll icons');
         var scrollPosition = $ionicScrollDelegate.$getByHandle('mainScroll').getScrollPosition();
@@ -271,7 +265,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
         //            return;
         //        });
         if (result) {
-            $scope.$root.toastExInfo = "";
+            $scope.$root.sandwitchExInfo = "";
             $scope.$root.OrderLength = Order.getOrderLength();
             var successPopup = $ionicPopup.show({
                 templateUrl: 'templates/prod_added.html'
@@ -284,15 +278,6 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
                     , onTap: function (e) {
                         console.log('המשך לקנות');
                         $state.go('app.categories', {}, {
-                            reload: true
-                        });
-                    }
-                    }, {
-                    text: 'הכן כריך חדש'
-                    , type: 'button-default'
-                    , onTap: function (e) {
-                        console.log('הכן כריך חדש');
-                        $state.go('app.sandwiches', {}, {
                             reload: true
                         });
                     }
@@ -310,12 +295,10 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
         }
     };
 }).controller('ShakshukaCtrl', function ($rootScope, $scope, $location, $state, $stateParams, $ionicNavBarDelegate, $ionicPopup, $timeout, $ionicPlatform, Shakshuka, Order) {
-    $ionicNavBarDelegate.showBackButton(true);
-    //    $ionicPlatform.registerBackButtonAction(function () {
-    //        $state.go('app.categories', {}, {
-    //            reload: false
-    //        });
-    //    }, 100);
+    $scope.$on('$ionicView.enter', function () {
+        // code to run each time view is entered
+        $ionicNavBarDelegate.showBackButton(false);
+    });
     var shakshuka = null;
     var totalPrice = 0;
     $scope.shakshukaAmount = 1;
@@ -376,13 +359,6 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
                         $location.path('app/categories');
                     }
                     }, {
-                    text: 'הזמן מנה נוספת'
-                    , type: 'button-default'
-                    , onTap: function (e) {
-                        console.log('הכן שקשוקה חדש');
-                        $location.path('app/categories/shakshuka');
-                    }
-                    }, {
                     text: 'צפה בהזמנה'
                     , type: 'button-positive'
                     , onTap: function (e) {
@@ -396,7 +372,10 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
         }
     };
 }).controller('ToastCtrl', function ($rootScope, $scope, $location, $state, $stateParams, $ionicNavBarDelegate, $ionicScrollDelegate, $ionicPopup, $timeout, $ionicPlatform, Tost, Order) {
-    $ionicNavBarDelegate.showBackButton(true);
+    $scope.$on('$ionicView.enter', function () {
+        // code to run each time view is entered
+        $ionicNavBarDelegate.showBackButton(false);
+    });
     $scope.changeScrollIcon = function () {
         console.log('change scroll icons');
         var scrollPosition = $ionicScrollDelegate.$getByHandle('mainScroll').getScrollPosition();
@@ -474,11 +453,112 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
                         $location.path('app/categories');
                     }
                     }, {
-                    text: 'הכן טוסט חדש'
+                    text: 'צפה בהזמנה'
+                    , type: 'button-positive'
+                    , onTap: function (e) {
+                        console.log('גש לקופה');
+                        $state.go('app.order', {}, {
+                            reload: true
+                        });
+                    }
+                    }]
+            })
+        }
+    };
+}).controller('NargilaCtrl', function ($rootScope, $scope, $location, $state, $ionicNavBarDelegate, $ionicScrollDelegate, $ionicPopup, $timeout, $ionicPlatform, Nargila, Order) {
+    $scope.$on('$ionicView.enter', function () {
+        // code to run each time view is entered
+        $ionicNavBarDelegate.showBackButton(false);
+    });
+    $scope.changeScrollIcon = function () {
+        console.log('change scroll icons');
+        var scrollPosition = $ionicScrollDelegate.$getByHandle('mainScroll').getScrollPosition();
+        if (scrollPosition.top > 0) {
+            $scope.$root.showUp = true;
+            $scope.$apply();
+        }
+        else {
+            $scope.$root.showUp = false;
+            $scope.$apply();
+        }
+    }
+    $scope.scrollMainToDirection = function () {
+        var scroll_position = $ionicScrollDelegate.$getByHandle('mainScroll').getScrollPosition();
+        if (scroll_position.top != 0) $ionicScrollDelegate.$getByHandle('mainScroll').scrollTop(true);
+        else $ionicScrollDelegate.$getByHandle('mainScroll').scrollBottom(true);
+    };
+    var types = [];
+    var totalPrice = $scope.nargilaTotalPrice = 0;
+    var current_type_price = 0;
+    $scope.nargilaAmount = 1;
+    $scope.$root.nargilaExInfo = "";
+    $scope.showSpinner = false;
+    Nargila.getNargila().then(function (res) {
+        $scope.showSpinner = false;
+        if (res.data.type) {
+            $scope.types = types = res.data.types;
+            console.log(types[0]);
+            $scope.nargilaType = JSON.stringify(types[0]);
+            current_type_price = types[0].productPrice;
+            totalPrice = $scope.nargilaTotalPrice = JSON.parse(types[0].productPrice); //Default
+        }
+        if (res.data.extra) $scope.extras = res.data.extras;
+    }, function (error) {
+        var badConnPopup = $ionicPopup.show({
+            templateUrl: 'templates/bad_conn.html'
+            , title: '!שגיאה'
+            , subTitle: 'ישנה בעיה עם חיבור האינטרנט. אנא נסה שוב במועד מאוחר יותר'
+            , scope: $scope
+        });
+        $timeout(function () {
+            badConnPopup.close();
+            $state.go("app.sessions", {}, {
+                reload: false
+            });
+        }, 4000);
+    });
+    $scope.TypesChange = function (item) {
+        console.log(item);
+        totalPrice -= current_type_price;
+        totalPrice += JSON.parse(JSON.parse(item).productPrice);
+        current_type_price = JSON.parse(JSON.parse(item).productPrice);
+        $scope.nargilaTotalPrice = totalPrice;
+    }
+    $scope.ExtrasChange = function (item) {
+        if (item.checked) totalPrice += JSON.parse(item.extraPrice);
+        else totalPrice -= JSON.parse(item.extraPrice);
+        $scope.nargilaTotalPrice = totalPrice;
+    }
+    $scope.AddNargilaToOrder = function () {
+        console.log("adding nargila to order... ");
+        var extras = $scope.extras.filter(function (extra) {
+            return extra.checked == true;
+        });
+        var extra_info = $scope.$root.nargilaExInfo;
+        var type = JSON.parse($scope.nargilaType);
+        var amount = $scope.nargilaAmount;
+        Nargila.CreateNargila(type, extras, extra_info, totalPrice, amount);
+        var result = Nargila.AddToOrder($ionicPopup);
+        //        $scope.extras.filter(function (extra) {
+        //            extra.checked = false;
+        //            return;
+        //        });
+        if (result) {
+            $scope.$root.nargilaExInfo = "";
+            $scope.$root.OrderLength = Order.getOrderLength();
+            var successPopup = $ionicPopup.show({
+                templateUrl: 'templates/prod_added.html'
+                , title: '!ההזמנה עודכנה'
+                , subTitle: 'האם ברצונך להמשיך לקנות או לגשת להזמנה?'
+                , scope: $scope
+                , buttons: [{
+                    text: 'המשך לקנות'
                     , type: 'button-default'
                     , onTap: function (e) {
-                        console.log('הכן טוסט חדש');
-                        $location.path('app/categories/toast');
+                        console.log('המשך לקנות');
+                        $state.go('app.categories', {}, {
+                            reload: true
+                        });
                     }
                     }, {
                     text: 'צפה בהזמנה'
@@ -493,8 +573,11 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
             })
         }
     };
-}).controller('NargilaCtrl', function () {}).controller('SessionsCtrl', function ($rootScope, $scope, $ionicNavBarDelegate, $ionicSideMenuDelegate, $ionicPopup, $ionicPlatform, Order) {
-    $ionicSideMenuDelegate.canDragContent(true);
+}).controller('SessionsCtrl', function ($rootScope, $scope, $ionicNavBarDelegate, $ionicSideMenuDelegate, $ionicPopup, $ionicPlatform, Order) {
+    $scope.$on('$ionicView.enter', function () {
+        // code to run each time view is entered
+        $ionicNavBarDelegate.showBackButton(false);
+    });
     var deregister;
     $scope.$on('$ionicView.leave', function () {
         console.log("leave main view");
@@ -514,12 +597,10 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
         //var permissions = cordova.plugins.permissions;
     });
 }).controller('OrderCtrl', function ($scope, $timeout, $stateParams, $ionicNavBarDelegate, $ionicPlatform, $ionicPopup, $ionicPopover, $timeout, Order) {
-    $ionicNavBarDelegate.showBackButton(false);
-    //    $ionicPlatform.registerBackButtonAction(function () {
-    //        $state.go('app.sessions', {}, {
-    //            reload: false
-    //        });
-    //    }, 100);
+    $scope.$on('$ionicView.enter', function () {
+        // code to run each time view is entered
+        $ionicNavBarDelegate.showBackButton(false);
+    });
     $scope.$root.showDeleteButton = false;
     $scope.$root.orderTotalPrice = 0;
     var order = [];

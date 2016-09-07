@@ -427,7 +427,8 @@ md-checkbox ._md-container {
 .tosafot hr,
 .coffee hr,
 .sandwitch hr,
-.shakshuka hr {
+.shakshuka hr,
+.nargila hr {
   padding: 0;
   border: none;
   border-top: medium double #333;
@@ -461,7 +462,8 @@ md-checkbox ._md-container {
 }
 
 .toast-content,
-.sandwitch-content {
+.sandwitch-content,
+.nargila-content {
   height: 50% !important;
 }
 
