@@ -573,6 +573,100 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
             })
         }
     };
+}).controller('BurekasCtrl', function ($rootScope, $scope, $location, $state, $ionicNavBarDelegate, $ionicScrollDelegate, $ionicPopup, $timeout, $ionicPlatform, Burekas, Order) {
+    $scope.$on('$ionicView.enter', function () {
+        // code to run each time view is entered
+        $ionicNavBarDelegate.showBackButton(false);
+    });
+    $scope.changeScrollIcon = function () {
+        console.log('change scroll icons');
+        var scrollPosition = $ionicScrollDelegate.$getByHandle('mainScroll').getScrollPosition();
+        if (scrollPosition.top > 0) {
+            $scope.$root.showUp = true;
+            $scope.$apply();
+        }
+        else {
+            $scope.$root.showUp = false;
+            $scope.$apply();
+        }
+    }
+    $scope.scrollMainToDirection = function () {
+        var scroll_position = $ionicScrollDelegate.$getByHandle('mainScroll').getScrollPosition();
+        if (scroll_position.top != 0) $ionicScrollDelegate.$getByHandle('mainScroll').scrollTop(true);
+        else $ionicScrollDelegate.$getByHandle('mainScroll').scrollBottom(true);
+    };
+    var burekas = null;
+    var totalPrice = 0;
+    $scope.burekasAmount = 1;
+    $scope.$root.burekasExInfo = "";
+    $scope.showSpinner = false;
+    Burekas.getBurekas().then(function (res) {
+        $scope.showSpinner = false;
+        console.log(res.data);
+        burekas = res.data;
+        console.log(burekas.extra);
+        if (burekas.extra) $scope.extras = burekas.extras;
+        totalPrice = $scope.burekasTotalPrice = JSON.parse(burekas.productPrice); //Default
+    }, function (err) {
+        var badConnPopup = $ionicPopup.show({
+            templateUrl: 'templates/bad_conn.html'
+            , title: '!שגיאה'
+            , subTitle: 'ישנה בעיה עם חיבור האינטרנט. אנא נסה שוב במועד מאוחר יותר'
+            , scope: $scope
+        });
+        $timeout(function () {
+            badConnPopup.close();
+            $state.go("app.sessions", {}, {
+                reload: false
+            });
+        }, 4000);
+    });
+    $scope.ExtrasChange = function (item) {
+        console.log(item);
+        if (item.checked) totalPrice += JSON.parse(item.extraPrice);
+        else totalPrice -= JSON.parse(item.extraPrice);
+        $scope.burekasTotalPrice = totalPrice;
+    }
+    $scope.AddBurekasToOrder = function () {
+        var extras = $scope.extras.filter(function (extra) {
+            return extra.checked == true;
+        });
+        var extra_info = $scope.$root.burekasExInfo;
+        var amount = $scope.burekasAmount;
+        Burekas.createBurekas(extras, extra_info, totalPrice, amount);
+        var result = Burekas.AddToOrder($ionicPopup);
+        //        $scope.extras.filter(function (extra) {
+        //            extra.checked = false;
+        //            return;
+        //        });
+        if (result) {
+            $scope.$root.burekasExInfo = "";
+            $scope.$root.OrderLength = Order.getOrderLength();
+            var successPopup = $ionicPopup.show({
+                templateUrl: 'templates/prod_added.html'
+                , title: '!ההזמנה עודכנה'
+                , subTitle: 'האם ברצונך להמשיך לקנות או לגשת להזמנה?'
+                , scope: $scope
+                , buttons: [{
+                    text: 'המשך לקנות'
+                    , type: 'button-default'
+                    , onTap: function (e) {
+                        console.log('המשך לקנות');
+                        $location.path('app/categories');
+                    }
+                    }, {
+                    text: 'צפה בהזמנה'
+                    , type: 'button-positive'
+                    , onTap: function (e) {
+                        console.log('גש לקופה');
+                        $state.go('app.order', {}, {
+                            reload: true
+                        });
+                    }
+                    }]
+            })
+        }
+    };
 }).controller('SessionsCtrl', function ($rootScope, $scope, $ionicNavBarDelegate, $ionicSideMenuDelegate, $ionicPopup, $ionicPlatform, Order) {
     $scope.$on('$ionicView.enter', function () {
         // code to run each time view is entered

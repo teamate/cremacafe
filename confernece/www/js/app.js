@@ -86,6 +86,14 @@ var app = angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova'
         , controller: 'ToastCtrl'
       }
     }
+  }).state('app.burekas', {
+    url: "/categories/burekas"
+    , views: {
+      'menuContent': {
+        templateUrl: "templates/burekas.html"
+        , controller: 'BurekasCtrl'
+      }
+    }
   }).state('app.nargila', {
     url: "/categories/nargila"
     , views: {

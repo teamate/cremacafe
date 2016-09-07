@@ -428,7 +428,8 @@ md-checkbox ._md-container {
 .coffee hr,
 .sandwitch hr,
 .shakshuka hr,
-.nargila hr {
+.nargila hr,
+.burekas hr {
   padding: 0;
   border: none;
   border-top: medium double #333;
@@ -439,7 +440,9 @@ md-checkbox ._md-container {
 .tosafot hr:after,
 .coffee hr:after,
 .sandwitch hr:after,
-.shakshuka hr:after {
+.shakshuka hr:after,
+.nargila hr:after,
+.burekas hr:after {
   content: "§";
   display: inline-block;
   position: relative;
@@ -463,7 +466,8 @@ md-checkbox ._md-container {
 
 .toast-content,
 .sandwitch-content,
-.nargila-content {
+.nargila-content,
+.burekas-content {
   height: 50% !important;
 }
 

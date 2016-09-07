@@ -192,6 +192,35 @@ angular.module('AppServices', ['ngResource']).factory('HttpReqs', function ($htt
         return 1;
     }
     return this;
+}).factory('Burekas', function ($http, Order) {
+    var userBurekas;
+    this.getBurekas = function () {
+        var burekas = $http.get(api_url + "/menu/products/burekas");
+        return burekas;
+    }
+    this.createBurekas = function (extras, info, totalPrice, amount) {
+        console.log(extras, info, totalPrice);
+        var parsed_extras = "";
+        for (var i = 0; i < extras.length; i++) parsed_extras += extras[i].extraDisplayName + ", ";
+        parsed_extras = parsed_extras.substring(0, parsed_extras.length - 2);
+        if (extras.length) parsed_info = parsed_extras;
+        else parsed_info = "";
+        console.log(parsed_info);
+        userBurekas = {
+            "productName": "בורקס גדול"
+            , "productDetails": parsed_info
+            , "productExtraInfo": info
+            , "productAmount": amount
+            , "productPrice": totalPrice
+        };
+    }
+    this.AddToOrder = function () {
+        //Here i need to use the order service in order to write in the order file
+        Order.WriteToStorage(userBurekas);
+        userBurekas = {};
+        return 1;
+    }
+    return this;
 }).factory('Order', function ($ionicPlatform, $cordovaSQLite, $http) {
     var localStorage = window.localStorage;
     var auth0 = new Auth0({
