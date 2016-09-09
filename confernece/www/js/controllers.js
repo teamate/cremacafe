@@ -693,15 +693,16 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
         //var permissions = cordova.plugins.permissions;
     });
 }).controller('OrderCtrl', function ($scope, $timeout, $stateParams, $ionicNavBarDelegate, $ionicPlatform, $ionicPopup, $ionicPopover, $timeout, Order) {
-    $scope.$on('$ionicView.enter', function () {
+    $scope.$on('$ionicView.leave', function () {
         // code to run each time view is entered
-        $ionicNavBarDelegate.showBackButton(false);
+        $scope.$root.showDeleteButton = false;
     });
     $scope.$root.showDeleteButton = false;
     $scope.$root.orderTotalPrice = 0;
     var order = [];
     $scope.$on('$ionicView.enter', function () {
         // code to run each time view is entered
+        $ionicNavBarDelegate.showBackButton(false);
         $scope.showSpinner = false;
         $ionicPlatform.ready(function () {
             order = Order.ReadFromStorage();
@@ -738,6 +739,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
         })
     }
     $scope.sendOrder = function (totalPrice) {
+        var deregisterBackButton = $ionicPlatform.registerBackButtonAction(function (e) {}, 401);
         var phonePopup = $ionicPopup.show({
             templateUrl: 'templates/phone.html'
             , title: 'הכנס מספר טלפון'
@@ -758,6 +760,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
                 }
                 }]
         }).then(function (res) {
+            deregisterBackButton();
             if (res) {
                 if (ionic.Platform.isAndroid()) {
                     Order.getSmsPermissions();
@@ -772,6 +775,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
                 }
                 var phoneNumber = '+972' + $scope.phoneNumber;
                 Order.sendSms(phoneNumber).then(function (res) {
+                    var deregisterBackButton = $ionicPlatform.registerBackButtonAction(function (e) {}, 401);
                     var authPopup = $ionicPopup.show({
                         templateUrl: 'templates/auth.html'
                         , title: 'הכנס קוד אימות'
@@ -786,6 +790,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
                         }]
                     });
                     authPopup.then(function (res) {
+                        deregisterBackButton();
                         if (res) {
                             var authToken = $scope.authToken;
                             Order.login(phoneNumber, authToken).then(function (res) {
@@ -809,6 +814,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
                                         , subTitle: 'ישנה בעיה עם חיבור האינטרנט. אנא נסה שוב במועד מאוחר יותר'
                                         , scope: $scope
                                     });
+                                    $scope.$root.orderTotalPrice = totalPrice;
                                     $timeout(function () {
                                         badConnPopup.close();
                                         $state.go("app.sessions", {}, {
@@ -823,6 +829,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
                                     , subTitle: 'ישנה בעיה עם חיבור האינטרנט. אנא נסה שוב במועד מאוחר יותר'
                                     , scope: $scope
                                 });
+                                $scope.$root.orderTotalPrice = totalPrice;
                                 $timeout(function () {
                                     badConnPopup.close();
                                     $state.go("app.sessions", {}, {
@@ -840,6 +847,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
                             if (match != null) {
                                 var confirmaionCode = match[0];
                                 Order.login(phoneNumber, confirmaionCode).then(function (res) {
+                                    deregisterBackButton();
                                     Order.processOrder(res.data.id_token, phoneNumber, order, $scope.$root.orderExInfo, $scope.timeForPickup, totalPrice).then(function (res) {
                                         var confirmPopup = $ionicPopup.show({
                                             templateUrl: 'templates/success.html'
@@ -860,6 +868,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
                                             , subTitle: 'ישנה בעיה עם חיבור האינטרנט. אנא נסה שוב במועד מאוחר יותר'
                                             , scope: $scope
                                         });
+                                        $scope.$root.orderTotalPrice = totalPrice;
                                         $timeout(function () {
                                             badConnPopup.close();
                                             $state.go("app.sessions", {}, {
@@ -874,6 +883,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
                                         , subTitle: 'ישנה בעיה עם חיבור האינטרנט. אנא נסה שוב במועד מאוחר יותר'
                                         , scope: $scope
                                     });
+                                    $scope.$root.orderTotalPrice = totalPrice;
                                     $timeout(function () {
                                         badConnPopup.close();
                                         $state.go("app.sessions", {}, {
@@ -897,6 +907,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
                         , subTitle: 'ישנה בעיה עם חיבור האינטרנט. אנא נסה שוב במועד מאוחר יותר'
                         , scope: $scope
                     });
+                    $scope.$root.orderTotalPrice = totalPrice;
                     $timeout(function () {
                         badConnPopup.close();
                         $state.go("app.sessions", {}, {
