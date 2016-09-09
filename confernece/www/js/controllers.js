@@ -89,6 +89,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
     $scope.$on('$ionicView.enter', function () {
         // code to run each time view is entered
         $ionicNavBarDelegate.showBackButton(false);
+        $scope.disableExtra = true;
     });
     var types = [];
     var totalPrice = $scope.coffeeTotalPrice = 0;
@@ -142,8 +143,9 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
     $scope.onSizeChange = function (size) {
         var parsedSize = JSON.parse(size);
         $scope.cupSize = size;
-        console.log($scope.cupSize);
         $scope.coffeeTotalPrice = totalPrice = parsedSize.price;
+        if (parsedSize.name == "בינוני") $scope.disableExtra = false;
+        else $scope.disableExtra = true;
     }
     $scope.AddCoffeeToOrder = function () {
         var extras = $scope.extras.filter(function (extra) {
