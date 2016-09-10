@@ -1,5 +1,5 @@
 <ion-view view-title="{{view_title}}">
-    <ion-content dir="rtl" class="shakshuka-content">
+    <ion-content dir="rtl" class="shakshuka-content" delegate-handle="mainScroll" on-scroll="changeScrollIcon()">
         <ion-spinner class="spinner spinner-energized" icon="lines" ng-show="showSpinner"></ion-spinner>
         <div ng-show="!showSpinner">
             <div class="shakshuka">
@@ -34,4 +34,8 @@
             <md-button class="md-raised md-primary" ng-disabled="shakshukaForm.exInfoInput.$error.maxlength" ng-click="AddShakshukaToOrder()" style="margin: 0 auto; display: block;"> הוסף להזמנה </md-button>
         </div>
     </form>
+    <md-button class="md-fab md-mini md-primary directionFab" ng-click="scrollMainToDirection()">
+        <md-icon md-svg-src="img/icons/up_arrow_white_48px.svg" ng-show="$root.showUp"></md-icon>
+        <md-icon md-svg-src="img/icons/down_arrow_white_48px.svg" ng-show="!$root.showUp"></md-icon>
+    </md-button>
 </ion-view>
