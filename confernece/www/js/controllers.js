@@ -79,20 +79,40 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
             });
         }, 4000);
     });
-    $scope.OpenMenu = function (menu_name, ev) {
+    $scope.OpenMenu = function (menu_name, view_title, ev) {
         console.log(menu_name);
-        $state.go("app." + menu_name, {}, {
+        $state.go("app." + menu_name + '/:view_title', {
+            view_title: view_title
+        }, {
             reload: false
         });
     }
-}).controller('CoffeeCtrl', function ($scope, $location, $state, $stateParams, $ionicNavBarDelegate, $ionicPopup, $timeout, $ionicPlatform, Coffee, Order) {
+}).controller('CoffeeCtrl', function ($scope, $location, $state, $stateParams, $ionicNavBarDelegate, $ionicScrollDelegate, $ionicPopup, $timeout, $ionicPlatform, Coffee, Order) {
+    $scope.view_title = $stateParams.view_title;
     $scope.$on('$ionicView.enter', function () {
         // code to run each time view is entered
         $ionicNavBarDelegate.showBackButton(false);
-        $scope.disableExtra = true;
     });
+    $scope.changeScrollIcon = function () {
+        console.log('change scroll icons');
+        var scrollPosition = $ionicScrollDelegate.$getByHandle('mainScroll').getScrollPosition();
+        if (scrollPosition.top > 0) {
+            $scope.$root.showUp = true;
+            $scope.$apply();
+        }
+        else {
+            $scope.$root.showUp = false;
+            $scope.$apply();
+        }
+    }
+    $scope.scrollMainToDirection = function () {
+        var scroll_position = $ionicScrollDelegate.$getByHandle('mainScroll').getScrollPosition();
+        if (scroll_position.top != 0) $ionicScrollDelegate.$getByHandle('mainScroll').scrollTop(true);
+        else $ionicScrollDelegate.$getByHandle('mainScroll').scrollBottom(true);
+    };
     var types = [];
     var totalPrice = $scope.coffeeTotalPrice = 0;
+    var current_type_price = 0;
     $scope.coffeeAmount = 1;
     Coffee.getCoffee().then(function (res) {
         console.log(res);
@@ -102,7 +122,9 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
             $scope.sizeDisabled = types[0].size;
             if (types[0].size) {
                 $scope.sizes = types[0].sizes;
-                $scope.cupSize = JSON.stringify(types[0].sizes[0]);
+                $scope.cupSize = $scope.sizes[0];
+                console.log("cupSize: ", $scope.cupSize);
+                current_type_price = $scope.sizes[0].price;
                 $scope.coffeeTotalPrice = totalPrice = types[0].sizes[0].price;
             }
             if (res.data.extra) {
@@ -131,8 +153,12 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
             console.log(parsedType);
             console.log($scope.coffeeType);
             $scope.sizes = parsedType.sizes;
-            //$scope.cupSize = JSON.stringify(parsedType.sizes[0]);
-            //$scope.coffeeTotalPrice = totalPrice = parsedType.sizes[0].price;
+            $scope.cupSize = $scope.sizes[0];
+            totalPrice -= current_type_price;
+            totalPrice += JSON.parse($scope.sizes[0].price);
+            current_type_price = $scope.sizes[0].price;
+            $scope.coffeeTotalPrice = totalPrice;
+            console.log("changes cup size to: ", $scope.cupSize);
         }
     }
     $scope.ExtrasChange = function (item) {
@@ -141,11 +167,13 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
         $scope.coffeeTotalPrice = totalPrice;
     }
     $scope.onSizeChange = function (size) {
-        var parsedSize = JSON.parse(size);
-        $scope.cupSize = size;
-        $scope.coffeeTotalPrice = totalPrice = parsedSize.price;
-        if (parsedSize.name == "בינוני") $scope.disableExtra = false;
-        else $scope.disableExtra = true;
+        var parsedSize = size;
+        console.log("onSizeChange: ", parsedSize);
+        //$scope.cupSize = parsedSize;
+        totalPrice -= current_type_price;
+        totalPrice += JSON.parse(size.price);
+        current_type_price = size.price;
+        $scope.coffeeTotalPrice = totalPrice;
     }
     $scope.AddCoffeeToOrder = function () {
         var extras = $scope.extras.filter(function (extra) {
@@ -188,7 +216,8 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
             })
         }
     };
-}).controller('SandwitchCtrl', function ($rootScope, $scope, $location, $state, $ionicNavBarDelegate, $ionicScrollDelegate, $ionicPopup, $timeout, $ionicPlatform, Sandwitch, Order) {
+}).controller('SandwitchCtrl', function ($rootScope, $scope, $location, $state, $stateParams, $ionicNavBarDelegate, $ionicScrollDelegate, $ionicPopup, $timeout, $ionicPlatform, Sandwitch, Order) {
+    $scope.view_title = $stateParams.view_title;
     $scope.$on('$ionicView.enter', function () {
         // code to run each time view is entered
         $ionicNavBarDelegate.showBackButton(false);
@@ -297,6 +326,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
         }
     };
 }).controller('ShakshukaCtrl', function ($rootScope, $scope, $location, $state, $stateParams, $ionicNavBarDelegate, $ionicPopup, $timeout, $ionicPlatform, Shakshuka, Order) {
+    $scope.view_title = $stateParams.view_title;
     $scope.$on('$ionicView.enter', function () {
         // code to run each time view is entered
         $ionicNavBarDelegate.showBackButton(false);
@@ -374,6 +404,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
         }
     };
 }).controller('ToastCtrl', function ($rootScope, $scope, $location, $state, $stateParams, $ionicNavBarDelegate, $ionicScrollDelegate, $ionicPopup, $timeout, $ionicPlatform, Tost, Order) {
+    $scope.view_title = $stateParams.view_title;
     $scope.$on('$ionicView.enter', function () {
         // code to run each time view is entered
         $ionicNavBarDelegate.showBackButton(false);
@@ -467,7 +498,8 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
             })
         }
     };
-}).controller('NargilaCtrl', function ($rootScope, $scope, $location, $state, $ionicNavBarDelegate, $ionicScrollDelegate, $ionicPopup, $timeout, $ionicPlatform, Nargila, Order) {
+}).controller('NargilaCtrl', function ($rootScope, $scope, $location, $state, $stateParams, $ionicNavBarDelegate, $ionicScrollDelegate, $ionicPopup, $timeout, $ionicPlatform, Nargila, Order) {
+    $scope.view_title = $stateParams.view_title;
     $scope.$on('$ionicView.enter', function () {
         // code to run each time view is entered
         $ionicNavBarDelegate.showBackButton(false);
@@ -575,7 +607,8 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
             })
         }
     };
-}).controller('BurekasCtrl', function ($rootScope, $scope, $location, $state, $ionicNavBarDelegate, $ionicScrollDelegate, $ionicPopup, $timeout, $ionicPlatform, Burekas, Order) {
+}).controller('BurekasCtrl', function ($rootScope, $scope, $location, $state, $stateParams, $ionicNavBarDelegate, $ionicScrollDelegate, $ionicPopup, $timeout, $ionicPlatform, Burekas, Order) {
+    $scope.view_title = $stateParams.view_title;
     $scope.$on('$ionicView.enter', function () {
         // code to run each time view is entered
         $ionicNavBarDelegate.showBackButton(false);

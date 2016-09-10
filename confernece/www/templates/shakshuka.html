@@ -1,10 +1,10 @@
-<ion-view view-title="שקשוקה">
+<ion-view view-title="{{view_title}}">
     <ion-content dir="rtl" class="shakshuka-content">
         <ion-spinner class="spinner spinner-energized" icon="lines" ng-show="showSpinner"></ion-spinner>
         <div ng-show="!showSpinner">
             <div class="shakshuka">
                 <div style="margin: auto; width: 50%;">
-                    <h4 class="md-title" dir="rtl" style="text-align: center; white-space: nowrap;">שקשוקה</h4>
+                    <h4 class="md-title" dir="rtl" style="text-align: center; white-space: nowrap;" ng-bind="view_title"></h4>
                     <hr> </div>
                 <div style="padding-right:10px;">
                     <md-radio-group class="md-primary" ng-model="shakshukaType" style="float:right;">

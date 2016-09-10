@@ -51,51 +51,48 @@ var app = angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova'
         , controller: 'CategoriesCtrl'
       }
     }
-  }).state('app.coffee', {
-    url: "/categories/coffee"
+  }).state('app.coffee/:view_title', {
+    url: "/categories/coffee/:view_title"
     , views: {
       'menuContent': {
         templateUrl: "templates/coffee.html"
         , controller: 'CoffeeCtrl'
       }
     }
-  }).state('app.sandwiches', {
-    url: "/categories/sandwiches"
+  }).state('app.sandwiches/:view_title', {
+    url: "/categories/sandwiches/:view_title"
     , views: {
       'menuContent': {
         templateUrl: "templates/sandwiches.html"
         , controller: 'SandwitchCtrl'
       }
-      , 'fabContent': {
-        template: "<h1>dsfsdfsdfsdf</h1>"
-      }
     }
-  }).state('app.shakshuka', {
-    url: "/categories/shakshuka"
+  }).state('app.shakshuka/:view_title', {
+    url: "/categories/shakshuka/:view_title"
     , views: {
       'menuContent': {
         templateUrl: "templates/shakshuka.html"
         , controller: 'ShakshukaCtrl'
       }
     }
-  }).state('app.toast', {
-    url: "/categories/toast"
+  }).state('app.toast/:view_title', {
+    url: "/categories/toast/:view_title"
     , views: {
       'menuContent': {
         templateUrl: "templates/toast.html"
         , controller: 'ToastCtrl'
       }
     }
-  }).state('app.burekas', {
-    url: "/categories/burekas"
+  }).state('app.burekas/:view_title', {
+    url: "/categories/burekas/:view_title"
     , views: {
       'menuContent': {
         templateUrl: "templates/burekas.html"
         , controller: 'BurekasCtrl'
       }
     }
-  }).state('app.nargila', {
-    url: "/categories/nargila"
+  }).state('app.nargila/:view_title', {
+    url: "/categories/nargila/:view_title"
     , views: {
       'menuContent': {
         templateUrl: "templates/nargila.html"

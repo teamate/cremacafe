@@ -52,8 +52,8 @@ angular.module('AppServices', ['ngResource']).factory('HttpReqs', function ($htt
         return coffee;
     }
     this.CreateCoffee = function (extras, type, size, info, totalPrice, amount) {
-        var parsed_info = type.displayName + " בגודל " + size.name + " בתוספת ";
-        var parsed_extras = "";
+        var parsed_info = type.displayName + " בגודל " + size.name;
+        var parsed_extras = " בתוספת ";
         for (var i = 0; i < extras.length; i++) parsed_extras += extras[i].extraDisplayName + ", ";
         parsed_extras = parsed_extras.substring(0, parsed_extras.length - 2);
         if (extras.length) parsed_info += parsed_extras;

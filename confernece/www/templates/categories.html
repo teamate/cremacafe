@@ -2,7 +2,7 @@
     <ion-content>
         <ion-spinner class="spinner spinner-energized" icon="lines" ng-show="showSpinner">sdfsdf</ion-spinner>
         <div class="list card">
-            <a class="item item-image" id="category-item" ng-click="OpenMenu(x.categoryName, $event)" ng-repeat="x in categories"> <img ng-src={{x.categoryPicture}}>
+            <a class="item item-image" id="category-item" ng-click="OpenMenu(x.categoryName, x.displayName, $event)" ng-repeat="x in categories"> <img ng-src={{x.categoryPicture}}>
                 <div class="text-on-image card-title-shadow">
                     <h2 ng-bind="x.displayName"></h2>
                     <h3 ng-bind="x.displayLine"></h3> </div>

@@ -1,11 +1,16 @@
-<ion-view view-title="טוסטים">
+<ion-view view-title="{{view_title}}">
     <ion-content dir="rtl" class="toast-content" delegate-handle="mainScroll" on-scroll="changeScrollIcon()">
         <ion-spinner class="spinner spinner-energized" icon="lines" ng-show="showSpinner"></ion-spinner>
         <div ng-show="!showSpinner">
             <div class="tosafot">
                 <div style="margin: auto; width: 50%;">
-                    <h4 class="md-title" dir="rtl" style="text-align: center; white-space: nowrap;">טוסט בהרכבה אישית</h4>
+                    <h4 class="md-title" dir="rtl" style="text-align: center; white-space: nowrap;" ng-bind="view_title"></h4>
                     <hr> </div>
+                <div style="padding-right:10px;">
+                    <md-radio-group class="md-primary" ng-model="toastType" style="float:right;">
+                        <md-radio-button selected>טוסט</md-radio-button>
+                    </md-radio-group>
+                </div>
                 <div>
                     <md-checkbox class="extras-checkbox item item-checkbox-right md-primary" ng-repeat="x in extras" ng-model="x.checked" ng-change="ExtrasChange(x)" style="width:100%;padding-right:50px;"><span class="md-body-2">{{x.extraDisplayName}}</span><span class="md-body-1" style="color:red;"><br>בתוספת: {{x.extraPrice}} &#8362; </span></md-checkbox>
                 </div>
