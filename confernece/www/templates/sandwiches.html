@@ -13,6 +13,7 @@
                 </md-radio-group>
             </div>
             <div>
+                <h5 class="md-body-2" style="float:right;padding-top: 40px;margin-right: -50px;">תוספות</h5>
                 <md-checkbox class="extras-checkbox item item-checkbox-right md-primary" ng-repeat="extra in extras" ng-model="extra.checked" ng-change="ExtrasChange(extra)" style="width:100%;padding-right:50px;"><span class="md-body-2">{{extra.extraDisplayName}}</span><span class="md-body-1" style="color:red;"><br>בתוספת: {{extra.extraPrice}} &#8362; </span></md-checkbox>
             </div>
         </div>

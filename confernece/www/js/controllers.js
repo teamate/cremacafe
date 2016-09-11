@@ -81,13 +81,14 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
     });
     $scope.OpenMenu = function (menu_name, view_title, ev) {
         console.log(menu_name);
-        $state.go("app." + menu_name + '/:view_title', {
+        $state.go("app." + menu_name + '/:view_title' + '/:prod_name', {
             view_title: view_title
+            , prod_name: menu_name
         }, {
             reload: false
         });
     }
-}).controller('CoffeeCtrl', function ($scope, $location, $state, $stateParams, $ionicNavBarDelegate, $ionicScrollDelegate, $ionicPopup, $timeout, $ionicPlatform, Coffee, Order) {
+}).controller('CoffeeCtrl', function ($scope, $location, $state, $stateParams, $ionicNavBarDelegate, $ionicScrollDelegate, $ionicPopup, $timeout, $ionicPlatform, Product, Order) {
     $scope.view_title = $stateParams.view_title;
     $scope.$on('$ionicView.enter', function () {
         // code to run each time view is entered
@@ -114,7 +115,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
     var totalPrice = $scope.coffeeTotalPrice = 0;
     var current_type_price = 0;
     $scope.coffeeAmount = 1;
-    Coffee.getCoffee().then(function (res) {
+    Product.getProduct($stateParams.prod_name).then(function (res) {
         console.log(res);
         if (res.data.type) {
             $scope.types = types = res.data.types;
@@ -184,8 +185,8 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
         var extra_info = $scope.$root.coffeeExInfo;
         var amount = $scope.coffeeAmount;
         console.log($scope.coffeeType, $scope.coffeeType);
-        Coffee.CreateCoffee(extras, coffee_type, coffee_size, extra_info, totalPrice, amount);
-        var result = Coffee.AddToOrder($ionicPopup);
+        Product.createUserProduct($stateParams.view_title, coffee_type, coffee_size, extras, null, extra_info, totalPrice, amount);
+        var result = Product.addProductToOrder();
         if (result) {
             $scope.$root.coffeeExInfo = "";
             $scope.$root.OrderLength = Order.getOrderLength();
@@ -216,7 +217,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
             })
         }
     };
-}).controller('SandwitchCtrl', function ($rootScope, $scope, $location, $state, $stateParams, $ionicNavBarDelegate, $ionicScrollDelegate, $ionicPopup, $timeout, $ionicPlatform, Sandwitch, Order) {
+}).controller('SandwitchCtrl', function ($rootScope, $scope, $location, $state, $stateParams, $ionicNavBarDelegate, $ionicScrollDelegate, $ionicPopup, $timeout, $ionicPlatform, Product, Order) {
     $scope.view_title = $stateParams.view_title;
     $scope.$on('$ionicView.enter', function () {
         // code to run each time view is entered
@@ -245,7 +246,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
     $scope.sandwichAmount = 1;
     $scope.$root.sandwitchExInfo = "";
     $scope.showSpinner = false;
-    Sandwitch.getSandwitch().then(function (res) {
+    Product.getProduct($stateParams.prod_name).then(function (res) {
         $scope.showSpinner = false;
         if (res.data.type) {
             $scope.types = types = res.data.types;
@@ -289,8 +290,8 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
         var extra_info = $scope.$root.sandwitchExInfo;
         var type = JSON.parse($scope.sandwitchType);
         var amount = $scope.sandwichAmount;
-        Sandwitch.CreateSandwitch(type, extras, extra_info, totalPrice, amount);
-        var result = Sandwitch.AddToOrder($ionicPopup);
+        Product.createUserProduct($stateParams.view_title, type, null, extras, null, extra_info, totalPrice, amount);
+        var result = Product.addProductToOrder();
         //        $scope.extras.filter(function (extra) {
         //            extra.checked = false;
         //            return;
@@ -325,7 +326,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
             })
         }
     };
-}).controller('ShakshukaCtrl', function ($rootScope, $scope, $location, $state, $stateParams, $ionicNavBarDelegate, $ionicScrollDelegate, $ionicPopup, $timeout, $ionicPlatform, Shakshuka, Order) {
+}).controller('ShakshukaCtrl', function ($rootScope, $scope, $location, $state, $stateParams, $ionicNavBarDelegate, $ionicScrollDelegate, $ionicPopup, $timeout, $ionicPlatform, Product, Order) {
     $scope.view_title = $stateParams.view_title;
     $scope.$on('$ionicView.enter', function () {
         // code to run each time view is entered
@@ -353,7 +354,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
     $scope.shakshukaAmount = 1;
     $scope.$root.shakshukaExInfo = "";
     $scope.showSpinner = false;
-    Shakshuka.getShakshuka().then(function (res) {
+    Product.getProduct($stateParams.prod_name).then(function (res) {
         $scope.showSpinner = false;
         console.log(res.data);
         shakshuka = res.data;
@@ -386,8 +387,8 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
         });
         var extra_info = $scope.$root.shakshukaExInfo;
         var amount = $scope.shakshukaAmount;
-        Shakshuka.createShakshuka(extras, extra_info, totalPrice, amount);
-        var result = Shakshuka.AddToOrder($ionicPopup);
+        Product.createUserProduct($stateParams.view_title, null, null, extras, null, extra_info, totalPrice, amount);
+        var result = Product.addProductToOrder();
         //        $scope.extras.filter(function (extra) {
         //            extra.checked = false;
         //            return;
@@ -420,7 +421,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
             })
         }
     };
-}).controller('ToastCtrl', function ($rootScope, $scope, $location, $state, $stateParams, $ionicNavBarDelegate, $ionicScrollDelegate, $ionicPopup, $timeout, $ionicPlatform, Tost, Order) {
+}).controller('ToastCtrl', function ($rootScope, $scope, $location, $state, $stateParams, $ionicNavBarDelegate, $ionicScrollDelegate, $ionicPopup, $timeout, $ionicPlatform, Product, Order) {
     $scope.view_title = $stateParams.view_title;
     $scope.$on('$ionicView.enter', function () {
         // code to run each time view is entered
@@ -448,7 +449,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
     $scope.toastAmount = 1;
     $scope.$root.toastExInfo = "";
     $scope.showSpinner = false;
-    Tost.getToast().then(function (res) {
+    Product.getProduct($stateParams.prod_name).then(function (res) {
         $scope.showSpinner = false;
         console.log(res.data);
         toast = res.data;
@@ -481,8 +482,8 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
         });
         var extra_info = $scope.$root.toastExInfo;
         var amount = $scope.toastAmount;
-        Tost.CreateTost(extras, extra_info, totalPrice, amount);
-        var result = Tost.AddToOrder($ionicPopup);
+        Product.createUserProduct($stateParams.view_title, null, null, extras, null, extra_info, totalPrice, amount);
+        var result = Product.addProductToOrder();
         //        $scope.extras.filter(function (extra) {
         //            extra.checked = false;
         //            return;
@@ -515,7 +516,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
             })
         }
     };
-}).controller('NargilaCtrl', function ($rootScope, $scope, $location, $state, $stateParams, $ionicNavBarDelegate, $ionicScrollDelegate, $ionicPopup, $timeout, $ionicPlatform, Nargila, Order) {
+}).controller('NargilaCtrl', function ($rootScope, $scope, $location, $state, $stateParams, $ionicNavBarDelegate, $ionicScrollDelegate, $ionicPopup, $timeout, $ionicPlatform, Product, Order) {
     $scope.view_title = $stateParams.view_title;
     $scope.$on('$ionicView.enter', function () {
         // code to run each time view is entered
@@ -544,7 +545,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
     $scope.nargilaAmount = 1;
     $scope.$root.nargilaExInfo = "";
     $scope.showSpinner = false;
-    Nargila.getNargila().then(function (res) {
+    Product.getProduct($stateParams.prod_name).then(function (res) {
         $scope.showSpinner = false;
         if (res.data.type) {
             $scope.types = types = res.data.types;
@@ -588,8 +589,8 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
         var extra_info = $scope.$root.nargilaExInfo;
         var type = JSON.parse($scope.nargilaType);
         var amount = $scope.nargilaAmount;
-        Nargila.CreateNargila(type, extras, extra_info, totalPrice, amount);
-        var result = Nargila.AddToOrder($ionicPopup);
+        Product.createUserProduct($stateParams.view_title, type, null, extras, null, extra_info, totalPrice, amount);
+        var result = Product.addProductToOrder();
         //        $scope.extras.filter(function (extra) {
         //            extra.checked = false;
         //            return;
@@ -624,7 +625,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
             })
         }
     };
-}).controller('BurekasCtrl', function ($rootScope, $scope, $location, $state, $stateParams, $ionicNavBarDelegate, $ionicScrollDelegate, $ionicPopup, $timeout, $ionicPlatform, Burekas, Order) {
+}).controller('BurekasCtrl', function ($rootScope, $scope, $location, $state, $stateParams, $ionicNavBarDelegate, $ionicScrollDelegate, $ionicPopup, $timeout, $ionicPlatform, Product, Order) {
     $scope.view_title = $stateParams.view_title;
     $scope.$on('$ionicView.enter', function () {
         // code to run each time view is entered
@@ -652,7 +653,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
     $scope.burekasAmount = 1;
     $scope.$root.burekasExInfo = "";
     $scope.showSpinner = false;
-    Burekas.getBurekas().then(function (res) {
+    Product.getProduct($stateParams.prod_name).then(function (res) {
         $scope.showSpinner = false;
         console.log(res.data);
         burekas = res.data;
@@ -685,8 +686,8 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
         });
         var extra_info = $scope.$root.burekasExInfo;
         var amount = $scope.burekasAmount;
-        Burekas.createBurekas(extras, extra_info, totalPrice, amount);
-        var result = Burekas.AddToOrder($ionicPopup);
+        Product.createUserProduct($stateParams.view_title, null, null, extras, null, extra_info, totalPrice, amount);
+        var result = Product.addProductToOrder();
         //        $scope.extras.filter(function (extra) {
         //            extra.checked = false;
         //            return;

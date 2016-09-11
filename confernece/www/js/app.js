@@ -51,48 +51,48 @@ var app = angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova'
         , controller: 'CategoriesCtrl'
       }
     }
-  }).state('app.coffee/:view_title', {
-    url: "/categories/coffee/:view_title"
+  }).state('app.coffee/:view_title/:prod_name', {
+    url: "/categories/coffee/:view_title/:prod_name"
     , views: {
       'menuContent': {
         templateUrl: "templates/coffee.html"
         , controller: 'CoffeeCtrl'
       }
     }
-  }).state('app.sandwiches/:view_title', {
-    url: "/categories/sandwiches/:view_title"
+  }).state('app.sandwiches/:view_title/:prod_name', {
+    url: "/categories/sandwiches/:view_title/:prod_name"
     , views: {
       'menuContent': {
         templateUrl: "templates/sandwiches.html"
         , controller: 'SandwitchCtrl'
       }
     }
-  }).state('app.shakshuka/:view_title', {
-    url: "/categories/shakshuka/:view_title"
+  }).state('app.shakshuka/:view_title/:prod_name', {
+    url: "/categories/shakshuka/:view_title/:prod_name"
     , views: {
       'menuContent': {
         templateUrl: "templates/shakshuka.html"
         , controller: 'ShakshukaCtrl'
       }
     }
-  }).state('app.toast/:view_title', {
-    url: "/categories/toast/:view_title"
+  }).state('app.toast/:view_title/:prod_name', {
+    url: "/categories/toast/:view_title/:prod_name"
     , views: {
       'menuContent': {
         templateUrl: "templates/toast.html"
         , controller: 'ToastCtrl'
       }
     }
-  }).state('app.burekas/:view_title', {
-    url: "/categories/burekas/:view_title"
+  }).state('app.burekas/:view_title/:prod_name', {
+    url: "/categories/burekas/:view_title/:prod_name"
     , views: {
       'menuContent': {
         templateUrl: "templates/burekas.html"
         , controller: 'BurekasCtrl'
       }
     }
-  }).state('app.nargila/:view_title', {
-    url: "/categories/nargila/:view_title"
+  }).state('app.nargila/:view_title/:prod_name', {
+    url: "/categories/nargila/:view_title/:prod_name"
     , views: {
       'menuContent': {
         templateUrl: "templates/nargila.html"
