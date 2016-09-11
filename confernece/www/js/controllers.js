@@ -88,8 +88,16 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
             reload: false
         });
     }
-}).controller('CoffeeCtrl', function ($scope, $location, $state, $stateParams, $ionicNavBarDelegate, $ionicScrollDelegate, $ionicPopup, $timeout, $ionicPlatform, Product, Order) {
-    $scope.view_title = $stateParams.view_title;
+}).controller('ProdCtrl', function ($scope, $location, $state, $stateParams, $ionicNavBarDelegate, $ionicScrollDelegate, $ionicPopup, $timeout, $ionicPlatform, Product, Order) {
+    var types = []
+        , sizes = []
+        , extras = []
+        , spices = [];
+    var prod_data;
+    var view_title = $scope.view_title = $stateParams.view_title;
+    var totalPrice = $scope.prodTotalPrice = 0;
+    var current_type_price = 0;
+    var prodAmount = $scope.prodAmount = 1;
     $scope.$on('$ionicView.enter', function () {
         // code to run each time view is entered
         $ionicNavBarDelegate.showBackButton(false);
@@ -111,26 +119,40 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
         if (scroll_position.top != 0) $ionicScrollDelegate.$getByHandle('mainScroll').scrollTop(true);
         else $ionicScrollDelegate.$getByHandle('mainScroll').scrollBottom(true);
     };
-    var types = [];
-    var totalPrice = $scope.coffeeTotalPrice = 0;
-    var current_type_price = 0;
-    $scope.coffeeAmount = 1;
     Product.getProduct($stateParams.prod_name).then(function (res) {
         console.log(res);
-        if (res.data.type) {
-            $scope.types = types = res.data.types;
-            $scope.coffeeType = JSON.stringify(types[0]);
+        prod_data = res.data;
+        if (prod_data.type) {
+            $scope.types = types = prod_data.types;
+            $scope.prodType = JSON.stringify(types[0]);
             $scope.sizeDisabled = types[0].size;
             if (types[0].size) {
-                $scope.sizes = types[0].sizes;
-                $scope.cupSize = $scope.sizes[0];
-                console.log("cupSize: ", $scope.cupSize);
-                current_type_price = $scope.sizes[0].price;
-                $scope.coffeeTotalPrice = totalPrice = types[0].sizes[0].price;
+                $scope.sizes = sizes = types[0].sizes;
+                $scope.prodSize = sizes[0];
+                console.log("prodSize: ", $scope.prodSize);
+                current_type_price = sizes[0].price;
+                $scope.prodTotalPrice = totalPrice = sizes[0].price;
             }
-            if (res.data.extra) {
-                $scope.extras = res.data.extras;
+            else {
+                current_type_price = JSON.parse(types[0].productPrice);
+                $scope.prodTotalPrice = totalPrice = JSON.parse(types[0].productPrice);
             }
+        }
+        else {
+            current_type_price = JSON.parse(prod_data.productPrice);
+            $scope.prodTotalPrice = totalPrice = JSON.parse(prod_data.productPrice);
+        }
+        if (prod_data.size) {
+            $scope.sizes = sizes = prod_data.sizes;
+            $scope.prodSize = sizes[0];
+            current_type_price = sizes[0].price;
+            $scope.prodTotalPrice = totalPrice = sizes[0].price;
+        }
+        if (prod_data.extra) {
+            $scope.extras = extras = prod_data.extras;
+        }
+        if (prod_data.spice) {
+            $scope.spices = spices = prod_data.spices;
         }
     }, function (err) {
         var badConnPopup = $ionicPopup.show({
@@ -148,25 +170,26 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
     });
     $scope.onTypeChange = function (type) {
         var parsedType = JSON.parse(type);
-        $scope.coffeeType = type;
-        $scope.sizeDisabled = parsedType.size;
+        $scope.prodType = type;
         if (parsedType.size) {
             console.log(parsedType);
-            console.log($scope.coffeeType);
-            $scope.sizes = parsedType.sizes;
-            $scope.cupSize = $scope.sizes[0];
+            console.log($scope.prodType);
             totalPrice -= current_type_price;
-            totalPrice += JSON.parse($scope.sizes[0].price);
-            current_type_price = $scope.sizes[0].price;
-            $scope.coffeeTotalPrice = totalPrice;
-            console.log("changes cup size to: ", $scope.cupSize);
+            if (parsedType.size) {
+                $scope.sizes = sizes = parsedType.sizes;
+                $scope.prodSize = sizes[0];
+                totalPrice += JSON.parse(sizes[0].price);
+                current_type_price = sizes[0].price;
+            }
+            else {
+                $scope.sizeDisabled = parsedType.size;
+                totalPrice += JSON.parse(parsedType.productPrice);
+                current_type_price = JSON.parse(parsedType.productPrice);
+            }
+            $scope.prodTotalPrice = totalPrice;
+            console.log("changes prod size to: ", $scope.prodSize);
         }
-    }
-    $scope.ExtrasChange = function (item) {
-        if (item.checked) totalPrice += JSON.parse(item.extraPrice);
-        else totalPrice -= JSON.parse(item.extraPrice);
-        $scope.coffeeTotalPrice = totalPrice;
-    }
+    };
     $scope.onSizeChange = function (size) {
         var parsedSize = size;
         console.log("onSizeChange: ", parsedSize);
@@ -174,21 +197,50 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
         totalPrice -= current_type_price;
         totalPrice += JSON.parse(size.price);
         current_type_price = size.price;
-        $scope.coffeeTotalPrice = totalPrice;
-    }
-    $scope.AddCoffeeToOrder = function () {
-        var extras = $scope.extras.filter(function (extra) {
-            return extra.checked == true;
-        });
-        var coffee_type = JSON.parse($scope.coffeeType);
-        var coffee_size = JSON.parse($scope.cupSize);
-        var extra_info = $scope.$root.coffeeExInfo;
-        var amount = $scope.coffeeAmount;
-        console.log($scope.coffeeType, $scope.coffeeType);
-        Product.createUserProduct($stateParams.view_title, coffee_type, coffee_size, extras, null, extra_info, totalPrice, amount);
+        $scope.prodTotalPrice = totalPrice;
+    };
+    $scope.onExtrasChange = function (item) {
+        if (item.checked) totalPrice += JSON.parse(item.extraPrice);
+        else totalPrice -= JSON.parse(item.extraPrice);
+        $scope.prodTotalPrice = totalPrice;
+    };
+    $scope.AddProductToOrder = function () {
+        var prod_type = null
+            , prod_size = null
+            , prod_extras = null
+            , prod_spices = null;
+        if (prod_data.type) {
+            prod_type = JSON.parse($scope.prodType);
+            if (prod_type.size) {
+                console.log($scope.prodSize);
+                try {
+                    prod_size = JSON.parse($scope.prodSize);
+                }
+                catch (e) {
+                    prod_size = $scope.prodSize;
+                }
+            }
+        }
+        if (prod_data.size || (prod_type != null && prod_type.size)) {
+            try {
+                prod_size = JSON.parse($scope.prodSize);
+            }
+            catch (e) {
+                prod_size = $scope.prodSize;
+            }
+        }
+        if (prod_data.extra) {
+            prod_extras = $scope.extras.filter(function (extra) {
+                return extra.checked == true;
+            });
+        }
+        var extra_info = $scope.$root.prodExInfo;
+        var amount = $scope.prodAmount;
+        console.log($scope.prodType);
+        Product.createUserProduct($stateParams.view_title, prod_type, prod_size, prod_extras, prod_spices, extra_info, totalPrice, amount);
         var result = Product.addProductToOrder();
         if (result) {
-            $scope.$root.coffeeExInfo = "";
+            $scope.$root.prodExInfo = "";
             $scope.$root.OrderLength = Order.getOrderLength();
             var successPopup = $ionicPopup.show({
                 templateUrl: 'templates/prod_added.html'
@@ -203,509 +255,6 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
                         $state.go('app.categories', {}, {
                             reload: true
                         });
-                    }
-                    }, {
-                    text: 'צפה בהזמנה'
-                    , type: 'button-positive'
-                    , onTap: function (e) {
-                        console.log('גש לקופה');
-                        $state.go('app.order', {}, {
-                            reload: true
-                        });
-                    }
-                    }]
-            })
-        }
-    };
-}).controller('SandwitchCtrl', function ($rootScope, $scope, $location, $state, $stateParams, $ionicNavBarDelegate, $ionicScrollDelegate, $ionicPopup, $timeout, $ionicPlatform, Product, Order) {
-    $scope.view_title = $stateParams.view_title;
-    $scope.$on('$ionicView.enter', function () {
-        // code to run each time view is entered
-        $ionicNavBarDelegate.showBackButton(false);
-    });
-    $scope.changeScrollIcon = function () {
-        console.log('change scroll icons');
-        var scrollPosition = $ionicScrollDelegate.$getByHandle('mainScroll').getScrollPosition();
-        if (scrollPosition.top > 0) {
-            $scope.$root.showUp = true;
-            $scope.$apply();
-        }
-        else {
-            $scope.$root.showUp = false;
-            $scope.$apply();
-        }
-    }
-    $scope.scrollMainToDirection = function () {
-        var scroll_position = $ionicScrollDelegate.$getByHandle('mainScroll').getScrollPosition();
-        if (scroll_position.top != 0) $ionicScrollDelegate.$getByHandle('mainScroll').scrollTop(true);
-        else $ionicScrollDelegate.$getByHandle('mainScroll').scrollBottom(true);
-    };
-    var types = [];
-    var totalPrice = $scope.sandwitchTotalPrice = 0;
-    var current_type_price = 0;
-    $scope.sandwichAmount = 1;
-    $scope.$root.sandwitchExInfo = "";
-    $scope.showSpinner = false;
-    Product.getProduct($stateParams.prod_name).then(function (res) {
-        $scope.showSpinner = false;
-        if (res.data.type) {
-            $scope.types = types = res.data.types;
-            console.log(types[0]);
-            $scope.sandwitchType = JSON.stringify(types[0]);
-            current_type_price = types[0].productPrice;
-            totalPrice = $scope.sandwitchTotalPrice = JSON.parse(types[0].productPrice); //Default
-        }
-        if (res.data.extra) $scope.extras = res.data.extras;
-    }, function (error) {
-        var badConnPopup = $ionicPopup.show({
-            templateUrl: 'templates/bad_conn.html'
-            , title: '!שגיאה'
-            , subTitle: 'ישנה בעיה עם חיבור האינטרנט. אנא נסה שוב במועד מאוחר יותר'
-            , scope: $scope
-        });
-        $timeout(function () {
-            badConnPopup.close();
-            $state.go("app.sessions", {}, {
-                reload: false
-            });
-        }, 4000);
-    });
-    $scope.TypesChange = function (item) {
-        console.log(item);
-        totalPrice -= current_type_price;
-        totalPrice += JSON.parse(JSON.parse(item).productPrice);
-        current_type_price = JSON.parse(JSON.parse(item).productPrice);
-        $scope.sandwitchTotalPrice = totalPrice;
-    }
-    $scope.ExtrasChange = function (item) {
-        if (item.checked) totalPrice += JSON.parse(item.extraPrice);
-        else totalPrice -= JSON.parse(item.extraPrice);
-        $scope.sandwitchTotalPrice = totalPrice;
-    }
-    $scope.AddSandwitchToOrder = function () {
-        console.log("im here");
-        var extras = $scope.extras.filter(function (extra) {
-            return extra.checked == true;
-        });
-        var extra_info = $scope.$root.sandwitchExInfo;
-        var type = JSON.parse($scope.sandwitchType);
-        var amount = $scope.sandwichAmount;
-        Product.createUserProduct($stateParams.view_title, type, null, extras, null, extra_info, totalPrice, amount);
-        var result = Product.addProductToOrder();
-        //        $scope.extras.filter(function (extra) {
-        //            extra.checked = false;
-        //            return;
-        //        });
-        if (result) {
-            $scope.$root.sandwitchExInfo = "";
-            $scope.$root.OrderLength = Order.getOrderLength();
-            var successPopup = $ionicPopup.show({
-                templateUrl: 'templates/prod_added.html'
-                , title: '!ההזמנה עודכנה'
-                , subTitle: 'האם ברצונך להמשיך לקנות או לגשת להזמנה?'
-                , scope: $scope
-                , buttons: [{
-                    text: 'המשך לקנות'
-                    , type: 'button-default'
-                    , onTap: function (e) {
-                        console.log('המשך לקנות');
-                        $state.go('app.categories', {}, {
-                            reload: true
-                        });
-                    }
-                    }, {
-                    text: 'צפה בהזמנה'
-                    , type: 'button-positive'
-                    , onTap: function (e) {
-                        console.log('גש לקופה');
-                        $state.go('app.order', {}, {
-                            reload: true
-                        });
-                    }
-                    }]
-            })
-        }
-    };
-}).controller('ShakshukaCtrl', function ($rootScope, $scope, $location, $state, $stateParams, $ionicNavBarDelegate, $ionicScrollDelegate, $ionicPopup, $timeout, $ionicPlatform, Product, Order) {
-    $scope.view_title = $stateParams.view_title;
-    $scope.$on('$ionicView.enter', function () {
-        // code to run each time view is entered
-        $ionicNavBarDelegate.showBackButton(false);
-    });
-    $scope.changeScrollIcon = function () {
-        console.log('change scroll icons');
-        var scrollPosition = $ionicScrollDelegate.$getByHandle('mainScroll').getScrollPosition();
-        if (scrollPosition.top > 0) {
-            $scope.$root.showUp = true;
-            $scope.$apply();
-        }
-        else {
-            $scope.$root.showUp = false;
-            $scope.$apply();
-        }
-    }
-    $scope.scrollMainToDirection = function () {
-        var scroll_position = $ionicScrollDelegate.$getByHandle('mainScroll').getScrollPosition();
-        if (scroll_position.top != 0) $ionicScrollDelegate.$getByHandle('mainScroll').scrollTop(true);
-        else $ionicScrollDelegate.$getByHandle('mainScroll').scrollBottom(true);
-    };
-    var shakshuka = null;
-    var totalPrice = 0;
-    $scope.shakshukaAmount = 1;
-    $scope.$root.shakshukaExInfo = "";
-    $scope.showSpinner = false;
-    Product.getProduct($stateParams.prod_name).then(function (res) {
-        $scope.showSpinner = false;
-        console.log(res.data);
-        shakshuka = res.data;
-        console.log(shakshuka.extra);
-        if (shakshuka.extra) $scope.extras = shakshuka.extras;
-        totalPrice = $scope.shakshukaTotalPrice = JSON.parse(shakshuka.productPrice); //Default
-    }, function (err) {
-        var badConnPopup = $ionicPopup.show({
-            templateUrl: 'templates/bad_conn.html'
-            , title: '!שגיאה'
-            , subTitle: 'ישנה בעיה עם חיבור האינטרנט. אנא נסה שוב במועד מאוחר יותר'
-            , scope: $scope
-        });
-        $timeout(function () {
-            badConnPopup.close();
-            $state.go("app.sessions", {}, {
-                reload: false
-            });
-        }, 4000);
-    });
-    $scope.ExtrasChange = function (item) {
-        console.log(item);
-        if (item.checked) totalPrice += JSON.parse(item.extraPrice);
-        else totalPrice -= JSON.parse(item.extraPrice);
-        $scope.shakshukaTotalPrice = totalPrice;
-    }
-    $scope.AddShakshukaToOrder = function () {
-        var extras = $scope.extras.filter(function (extra) {
-            return extra.checked == true;
-        });
-        var extra_info = $scope.$root.shakshukaExInfo;
-        var amount = $scope.shakshukaAmount;
-        Product.createUserProduct($stateParams.view_title, null, null, extras, null, extra_info, totalPrice, amount);
-        var result = Product.addProductToOrder();
-        //        $scope.extras.filter(function (extra) {
-        //            extra.checked = false;
-        //            return;
-        //        });
-        if (result) {
-            $scope.$root.shakshukaExInfo = "";
-            $scope.$root.OrderLength = Order.getOrderLength();
-            var successPopup = $ionicPopup.show({
-                templateUrl: 'templates/prod_added.html'
-                , title: '!ההזמנה עודכנה'
-                , subTitle: 'האם ברצונך להמשיך לקנות או לגשת להזמנה?'
-                , scope: $scope
-                , buttons: [{
-                    text: 'המשך לקנות'
-                    , type: 'button-default'
-                    , onTap: function (e) {
-                        console.log('המשך לקנות');
-                        $location.path('app/categories');
-                    }
-                    }, {
-                    text: 'צפה בהזמנה'
-                    , type: 'button-positive'
-                    , onTap: function (e) {
-                        console.log('גש לקופה');
-                        $state.go('app.order', {}, {
-                            reload: true
-                        });
-                    }
-                    }]
-            })
-        }
-    };
-}).controller('ToastCtrl', function ($rootScope, $scope, $location, $state, $stateParams, $ionicNavBarDelegate, $ionicScrollDelegate, $ionicPopup, $timeout, $ionicPlatform, Product, Order) {
-    $scope.view_title = $stateParams.view_title;
-    $scope.$on('$ionicView.enter', function () {
-        // code to run each time view is entered
-        $ionicNavBarDelegate.showBackButton(false);
-    });
-    $scope.changeScrollIcon = function () {
-        console.log('change scroll icons');
-        var scrollPosition = $ionicScrollDelegate.$getByHandle('mainScroll').getScrollPosition();
-        if (scrollPosition.top > 0) {
-            $scope.$root.showUp = true;
-            $scope.$apply();
-        }
-        else {
-            $scope.$root.showUp = false;
-            $scope.$apply();
-        }
-    }
-    $scope.scrollMainToDirection = function () {
-        var scroll_position = $ionicScrollDelegate.$getByHandle('mainScroll').getScrollPosition();
-        if (scroll_position.top != 0) $ionicScrollDelegate.$getByHandle('mainScroll').scrollTop(true);
-        else $ionicScrollDelegate.$getByHandle('mainScroll').scrollBottom(true);
-    };
-    var toast = null;
-    var totalPrice = 0;
-    $scope.toastAmount = 1;
-    $scope.$root.toastExInfo = "";
-    $scope.showSpinner = false;
-    Product.getProduct($stateParams.prod_name).then(function (res) {
-        $scope.showSpinner = false;
-        console.log(res.data);
-        toast = res.data;
-        console.log(toast.extra);
-        if (toast.extra) $scope.extras = toast.extras;
-        totalPrice = $scope.toastTotalPrice = JSON.parse(toast.productPrice); //Default
-    }, function (err) {
-        var badConnPopup = $ionicPopup.show({
-            templateUrl: 'templates/bad_conn.html'
-            , title: '!שגיאה'
-            , subTitle: 'ישנה בעיה עם חיבור האינטרנט. אנא נסה שוב במועד מאוחר יותר'
-            , scope: $scope
-        });
-        $timeout(function () {
-            badConnPopup.close();
-            $state.go("app.sessions", {}, {
-                reload: false
-            });
-        }, 4000);
-    });
-    $scope.ExtrasChange = function (item) {
-            if (item.checked) totalPrice += JSON.parse(item.extraPrice);
-            else totalPrice -= JSON.parse(item.extraPrice);
-            $scope.toastTotalPrice = totalPrice;
-        }
-        //adds a tost to the order
-    $scope.AddTostToOrder = function () {
-        var extras = $scope.extras.filter(function (extra) {
-            return extra.checked == true;
-        });
-        var extra_info = $scope.$root.toastExInfo;
-        var amount = $scope.toastAmount;
-        Product.createUserProduct($stateParams.view_title, null, null, extras, null, extra_info, totalPrice, amount);
-        var result = Product.addProductToOrder();
-        //        $scope.extras.filter(function (extra) {
-        //            extra.checked = false;
-        //            return;
-        //        });
-        if (result) {
-            $scope.$root.toastExInfo = "";
-            $scope.$root.OrderLength = Order.getOrderLength();
-            var successPopup = $ionicPopup.show({
-                templateUrl: 'templates/prod_added.html'
-                , title: '!ההזמנה עודכנה'
-                , subTitle: 'האם ברצונך להמשיך לקנות או לגשת להזמנה?'
-                , scope: $scope
-                , buttons: [{
-                    text: 'המשך לקנות'
-                    , type: 'button-default'
-                    , onTap: function (e) {
-                        console.log('המשך לקנות');
-                        $location.path('app/categories');
-                    }
-                    }, {
-                    text: 'צפה בהזמנה'
-                    , type: 'button-positive'
-                    , onTap: function (e) {
-                        console.log('גש לקופה');
-                        $state.go('app.order', {}, {
-                            reload: true
-                        });
-                    }
-                    }]
-            })
-        }
-    };
-}).controller('NargilaCtrl', function ($rootScope, $scope, $location, $state, $stateParams, $ionicNavBarDelegate, $ionicScrollDelegate, $ionicPopup, $timeout, $ionicPlatform, Product, Order) {
-    $scope.view_title = $stateParams.view_title;
-    $scope.$on('$ionicView.enter', function () {
-        // code to run each time view is entered
-        $ionicNavBarDelegate.showBackButton(false);
-    });
-    $scope.changeScrollIcon = function () {
-        console.log('change scroll icons');
-        var scrollPosition = $ionicScrollDelegate.$getByHandle('mainScroll').getScrollPosition();
-        if (scrollPosition.top > 0) {
-            $scope.$root.showUp = true;
-            $scope.$apply();
-        }
-        else {
-            $scope.$root.showUp = false;
-            $scope.$apply();
-        }
-    }
-    $scope.scrollMainToDirection = function () {
-        var scroll_position = $ionicScrollDelegate.$getByHandle('mainScroll').getScrollPosition();
-        if (scroll_position.top != 0) $ionicScrollDelegate.$getByHandle('mainScroll').scrollTop(true);
-        else $ionicScrollDelegate.$getByHandle('mainScroll').scrollBottom(true);
-    };
-    var types = [];
-    var totalPrice = $scope.nargilaTotalPrice = 0;
-    var current_type_price = 0;
-    $scope.nargilaAmount = 1;
-    $scope.$root.nargilaExInfo = "";
-    $scope.showSpinner = false;
-    Product.getProduct($stateParams.prod_name).then(function (res) {
-        $scope.showSpinner = false;
-        if (res.data.type) {
-            $scope.types = types = res.data.types;
-            console.log(types[0]);
-            $scope.nargilaType = JSON.stringify(types[0]);
-            current_type_price = types[0].productPrice;
-            totalPrice = $scope.nargilaTotalPrice = JSON.parse(types[0].productPrice); //Default
-        }
-        if (res.data.extra) $scope.extras = res.data.extras;
-    }, function (error) {
-        var badConnPopup = $ionicPopup.show({
-            templateUrl: 'templates/bad_conn.html'
-            , title: '!שגיאה'
-            , subTitle: 'ישנה בעיה עם חיבור האינטרנט. אנא נסה שוב במועד מאוחר יותר'
-            , scope: $scope
-        });
-        $timeout(function () {
-            badConnPopup.close();
-            $state.go("app.sessions", {}, {
-                reload: false
-            });
-        }, 4000);
-    });
-    $scope.TypesChange = function (item) {
-        console.log(item);
-        totalPrice -= current_type_price;
-        totalPrice += JSON.parse(JSON.parse(item).productPrice);
-        current_type_price = JSON.parse(JSON.parse(item).productPrice);
-        $scope.nargilaTotalPrice = totalPrice;
-    }
-    $scope.ExtrasChange = function (item) {
-        if (item.checked) totalPrice += JSON.parse(item.extraPrice);
-        else totalPrice -= JSON.parse(item.extraPrice);
-        $scope.nargilaTotalPrice = totalPrice;
-    }
-    $scope.AddNargilaToOrder = function () {
-        console.log("adding nargila to order... ");
-        var extras = $scope.extras.filter(function (extra) {
-            return extra.checked == true;
-        });
-        var extra_info = $scope.$root.nargilaExInfo;
-        var type = JSON.parse($scope.nargilaType);
-        var amount = $scope.nargilaAmount;
-        Product.createUserProduct($stateParams.view_title, type, null, extras, null, extra_info, totalPrice, amount);
-        var result = Product.addProductToOrder();
-        //        $scope.extras.filter(function (extra) {
-        //            extra.checked = false;
-        //            return;
-        //        });
-        if (result) {
-            $scope.$root.nargilaExInfo = "";
-            $scope.$root.OrderLength = Order.getOrderLength();
-            var successPopup = $ionicPopup.show({
-                templateUrl: 'templates/prod_added.html'
-                , title: '!ההזמנה עודכנה'
-                , subTitle: 'האם ברצונך להמשיך לקנות או לגשת להזמנה?'
-                , scope: $scope
-                , buttons: [{
-                    text: 'המשך לקנות'
-                    , type: 'button-default'
-                    , onTap: function (e) {
-                        console.log('המשך לקנות');
-                        $state.go('app.categories', {}, {
-                            reload: true
-                        });
-                    }
-                    }, {
-                    text: 'צפה בהזמנה'
-                    , type: 'button-positive'
-                    , onTap: function (e) {
-                        console.log('גש לקופה');
-                        $state.go('app.order', {}, {
-                            reload: true
-                        });
-                    }
-                    }]
-            })
-        }
-    };
-}).controller('BurekasCtrl', function ($rootScope, $scope, $location, $state, $stateParams, $ionicNavBarDelegate, $ionicScrollDelegate, $ionicPopup, $timeout, $ionicPlatform, Product, Order) {
-    $scope.view_title = $stateParams.view_title;
-    $scope.$on('$ionicView.enter', function () {
-        // code to run each time view is entered
-        $ionicNavBarDelegate.showBackButton(false);
-    });
-    $scope.changeScrollIcon = function () {
-        console.log('change scroll icons');
-        var scrollPosition = $ionicScrollDelegate.$getByHandle('mainScroll').getScrollPosition();
-        if (scrollPosition.top > 0) {
-            $scope.$root.showUp = true;
-            $scope.$apply();
-        }
-        else {
-            $scope.$root.showUp = false;
-            $scope.$apply();
-        }
-    }
-    $scope.scrollMainToDirection = function () {
-        var scroll_position = $ionicScrollDelegate.$getByHandle('mainScroll').getScrollPosition();
-        if (scroll_position.top != 0) $ionicScrollDelegate.$getByHandle('mainScroll').scrollTop(true);
-        else $ionicScrollDelegate.$getByHandle('mainScroll').scrollBottom(true);
-    };
-    var burekas = null;
-    var totalPrice = 0;
-    $scope.burekasAmount = 1;
-    $scope.$root.burekasExInfo = "";
-    $scope.showSpinner = false;
-    Product.getProduct($stateParams.prod_name).then(function (res) {
-        $scope.showSpinner = false;
-        console.log(res.data);
-        burekas = res.data;
-        console.log(burekas.extra);
-        if (burekas.extra) $scope.extras = burekas.extras;
-        totalPrice = $scope.burekasTotalPrice = JSON.parse(burekas.productPrice); //Default
-    }, function (err) {
-        var badConnPopup = $ionicPopup.show({
-            templateUrl: 'templates/bad_conn.html'
-            , title: '!שגיאה'
-            , subTitle: 'ישנה בעיה עם חיבור האינטרנט. אנא נסה שוב במועד מאוחר יותר'
-            , scope: $scope
-        });
-        $timeout(function () {
-            badConnPopup.close();
-            $state.go("app.sessions", {}, {
-                reload: false
-            });
-        }, 4000);
-    });
-    $scope.ExtrasChange = function (item) {
-        console.log(item);
-        if (item.checked) totalPrice += JSON.parse(item.extraPrice);
-        else totalPrice -= JSON.parse(item.extraPrice);
-        $scope.burekasTotalPrice = totalPrice;
-    }
-    $scope.AddBurekasToOrder = function () {
-        var extras = $scope.extras.filter(function (extra) {
-            return extra.checked == true;
-        });
-        var extra_info = $scope.$root.burekasExInfo;
-        var amount = $scope.burekasAmount;
-        Product.createUserProduct($stateParams.view_title, null, null, extras, null, extra_info, totalPrice, amount);
-        var result = Product.addProductToOrder();
-        //        $scope.extras.filter(function (extra) {
-        //            extra.checked = false;
-        //            return;
-        //        });
-        if (result) {
-            $scope.$root.burekasExInfo = "";
-            $scope.$root.OrderLength = Order.getOrderLength();
-            var successPopup = $ionicPopup.show({
-                templateUrl: 'templates/prod_added.html'
-                , title: '!ההזמנה עודכנה'
-                , subTitle: 'האם ברצונך להמשיך לקנות או לגשת להזמנה?'
-                , scope: $scope
-                , buttons: [{
-                    text: 'המשך לקנות'
-                    , type: 'button-default'
-                    , onTap: function (e) {
-                        console.log('המשך לקנות');
-                        $location.path('app/categories');
                     }
                     }, {
                     text: 'צפה בהזמנה'

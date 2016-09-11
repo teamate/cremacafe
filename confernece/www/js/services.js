@@ -11,8 +11,8 @@ angular.module('AppServices', ['ngResource']).factory('Login', function () {
         var product = $http.get(api_url + '/menu/products/' + prod_name);
         return product;
     };
-    this.createUserProduct = function (prod_display_name, type, size, extras, sausces, info, totalPrice, amount) {
-        console.log(prod_display_name + ": " + [type, size, extras, sausces, info, totalPrice, amount].join());
+    this.createUserProduct = function (prod_display_name, type, size, extras, spices, info, totalPrice, amount) {
+        console.log(prod_display_name + ": " + [type, size, extras, spices, info, totalPrice, amount].join());
         var parsed_info = ""
             , parsed_type, parsed_size, parsed_extras = "";
         if (type != null) {
@@ -21,7 +21,7 @@ angular.module('AppServices', ['ngResource']).factory('Login', function () {
         }
         if (size != null) {
             parsed_size = size.name;
-            parsed_info += " בגודל " + parsed_size;
+            parsed_info += " בגודל " + parsed_size + " ";
         }
         if (extras != null) {
             for (var i = 0; i < extras.length; i++) parsed_extras += extras[i].extraDisplayName + ", ";

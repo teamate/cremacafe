@@ -7,12 +7,12 @@
                     <h4 class="md-title" dir="rtl" style="text-align: center; white-space: nowrap;" ng-bind="view_title"></h4>
                     <hr> </div>
                 <div style="padding-right:10px;">
-                    <md-radio-group class="md-primary" ng-model="shakshukaType" style="float:right;">
+                    <md-radio-group class="md-primary" ng-model="prodType" style="float:right;">
                         <md-radio-button selected>שקשוקה</md-radio-button>
                     </md-radio-group>
                 </div>
                 <div>
-                    <md-checkbox class="extras-checkbox item item-checkbox-right md-primary" ng-repeat="x in extras" ng-model="x.checked" ng-change="ExtrasChange(x)" style="width:100%;padding-right:50px;"><span class="md-body-2">{{x.extraDisplayName}}</span><span class="md-body-1" style="color:red;"><br>בתוספת: {{x.extraPrice}} &#8362; </span></md-checkbox>
+                    <md-checkbox class="extras-checkbox item item-checkbox-right md-primary" ng-repeat="x in extras" ng-model="x.checked" ng-change="onExtrasChange(x)" style="width:100%;padding-right:50px;"><span class="md-body-2">{{x.extraDisplayName}}</span><span class="md-body-1" style="color:red;"><br>בתוספת: {{x.extraPrice}} &#8362; </span></md-checkbox>
                 </div>
             </div>
         </div>
@@ -22,16 +22,16 @@
         <div class="bar bar-footer bar-default">
             <md-input-container class="md-block">
                 <label dir="rtl">הערות</label>
-                <textarea ng-model="$root.shakshukaExInfo" name="exInfoInput" ng-maxlength="20" md-maxlength="20" rows="1" style="text-align:right;"></textarea>
+                <textarea ng-model="$root.prodExInfo" name="exInfoInput" ng-maxlength="20" md-maxlength="20" rows="1" style="text-align:right;"></textarea>
             </md-input-container>
             <div style="float:right;">
-                <md-button class="md-icon-button ion-minus-round" ng-disabled="shakshukaAmount == 1" ng-click="shakshukaAmount = shakshukaAmount -1; shakshukaTotalPrice = (shakshukaTotalPrice/(shakshukaAmount+1))*shakshukaAmount"></md-button>
-                <p style="display:inline;"><span ng-bind="shakshukaAmount"></span></p>
-                <md-button class="md-icon-button ion-plus-round" ng-disabled="shakshukaAmount == 5" ng-click="shakshukaAmount = shakshukaAmount +1; shakshukaTotalPrice = (shakshukaTotalPrice/(shakshukaAmount-1))*shakshukaAmount"></md-button>
-                <p style="padding-right: 20px;">סה"כ: <span style="color:red;">&#8362;<span ng-bind="shakshukaTotalPrice" class="md-body-2"></span></span>
+                <md-button class="md-icon-button ion-minus-round" ng-disabled="prodAmount == 1" ng-click="prodAmount = prodAmount -1; prodTotalPrice = (prodTotalPrice/(prodAmount+1))*prodAmount"></md-button>
+                <p style="display:inline;"><span ng-bind="prodAmount"></span></p>
+                <md-button class="md-icon-button ion-plus-round" ng-disabled="prodAmount == 5" ng-click="prodAmount = prodAmount +1; prodTotalPrice = (prodTotalPrice/(prodAmount-1))*prodAmount"></md-button>
+                <p style="padding-right: 20px;">סה"כ: <span style="color:red;">&#8362;<span ng-bind="prodTotalPrice" class="md-body-2"></span></span>
                 </p>
             </div>
-            <md-button class="md-raised md-primary" ng-disabled="shakshukaForm.exInfoInput.$error.maxlength" ng-click="AddShakshukaToOrder()" style="margin: 0 auto; display: block;"> הוסף להזמנה </md-button>
+            <md-button class="md-raised md-primary" ng-disabled="shakshukaForm.exInfoInput.$error.maxlength" ng-click="AddProductToOrder()" style="margin: 0 auto; display: block;"> הוסף להזמנה </md-button>
         </div>
     </form>
     <md-button class="md-fab md-mini md-primary directionFab" ng-click="scrollMainToDirection()">

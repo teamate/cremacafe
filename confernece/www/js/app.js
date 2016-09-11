@@ -56,7 +56,7 @@ var app = angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova'
     , views: {
       'menuContent': {
         templateUrl: "templates/coffee.html"
-        , controller: 'CoffeeCtrl'
+        , controller: 'ProdCtrl'
       }
     }
   }).state('app.sandwiches/:view_title/:prod_name', {
@@ -64,7 +64,7 @@ var app = angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova'
     , views: {
       'menuContent': {
         templateUrl: "templates/sandwiches.html"
-        , controller: 'SandwitchCtrl'
+        , controller: 'ProdCtrl'
       }
     }
   }).state('app.shakshuka/:view_title/:prod_name', {
@@ -72,7 +72,7 @@ var app = angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova'
     , views: {
       'menuContent': {
         templateUrl: "templates/shakshuka.html"
-        , controller: 'ShakshukaCtrl'
+        , controller: 'ProdCtrl'
       }
     }
   }).state('app.toast/:view_title/:prod_name', {
@@ -80,7 +80,7 @@ var app = angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova'
     , views: {
       'menuContent': {
         templateUrl: "templates/toast.html"
-        , controller: 'ToastCtrl'
+        , controller: 'ProdCtrl'
       }
     }
   }).state('app.burekas/:view_title/:prod_name', {
@@ -88,7 +88,7 @@ var app = angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova'
     , views: {
       'menuContent': {
         templateUrl: "templates/burekas.html"
-        , controller: 'BurekasCtrl'
+        , controller: 'ProdCtrl'
       }
     }
   }).state('app.nargila/:view_title/:prod_name', {
@@ -96,7 +96,7 @@ var app = angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova'
     , views: {
       'menuContent': {
         templateUrl: "templates/nargila.html"
-        , controller: 'NargilaCtrl'
+        , controller: 'ProdCtrl'
       }
     }
   }).state('app.search', {
