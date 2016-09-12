@@ -1,21 +1,31 @@
 <ion-view view-title="{{view_title}}">
     <ion-content dir="rtl" class="sandwitch-content" delegate-handle="mainScroll" on-scroll="changeScrollIcon()">
         <ion-spinner class="spinner spinner-energized" icon="lines" ng-show="showSpinner"></ion-spinner>
-        <div ng-show="!showSpinner">
-            <div class="sandwitch">
-                <div style="margin: auto; width: 50%;">
-                    <h4 class="md-title" dir="rtl" style="text-align: center; white-space: nowrap;" ng-bind="view_title"></h4>
-                    <hr> </div>
-            </div>
-            <div>
-                <md-radio-group class="md-primary" ng-model="prodType" ng-change="onTypeChange(prodType)">
-                    <md-radio-button ng-repeat="type in types" value="{{type}}"><span class="md-body-2">{{type.displayName}}</span><span class="md-body-1" style="color:red;"><br>מחיר: {{type.productPrice}} &#8362; </span></md-radio-button>
-                </md-radio-group>
-            </div>
-            <div>
-                <h5 class="md-body-2" style="float:right;padding-top: 40px;margin-right: -50px;">תוספות</h5>
-                <md-checkbox class="extras-checkbox item item-checkbox-right md-primary" ng-repeat="extra in extras" ng-model="extra.checked" ng-change="onExtrasChange(extra)" style="width:100%;padding-right:50px;"><span class="md-body-2">{{extra.extraDisplayName}}</span><span class="md-body-1" style="color:red;"><br>בתוספת: {{extra.extraPrice}} &#8362; </span></md-checkbox>
-            </div>
+        <div class="sandwitch">
+            <div style="margin: auto; width: 50%;">
+                <h4 class="md-title" dir="rtl" style="text-align: center; white-space: nowrap;" ng-bind="view_title"></h4>
+                <hr> </div>
+        </div>
+        <div>
+            <md-radio-group class="md-primary" ng-model="prodType" ng-change="onTypeChange(prodType)">
+                <md-radio-button ng-repeat="type in types" value="{{type}}"><span class="md-body-2">{{type.displayName}}</span><span class="md-body-1" style="color:red;"><br>מחיר: {{type.productPrice}} &#8362; </span></md-radio-button>
+            </md-radio-group>
+        </div>
+        <h5 class="md-body-2md-body-2" style="padding-top: 20px;padding-bottom:10px;margin: auto; width:50%;text-align:center;">תוספות</h5>
+        <div>
+            <h5 class="md-body-2" style="float:right;padding-top: 40px;margin-right: -50px;">תוספות</h5>
+            <md-checkbox class="extras-checkbox item item-checkbox-right md-primary" ng-repeat="extra in extras" ng-model="extra.checked" ng-change="onExtrasChange(extra)" style="width:100%;padding-right:50px;"><span class="md-body-2">{{extra.extraDisplayName}}</span><span class="md-body-1" style="color:red;"><br>בתוספת: {{extra.extraPrice}} &#8362; </span></md-checkbox>
+        </div>
+        <h5 class="md-body-2md-body-2" style="padding-top: 30px;padding-bottom:10px;margin: auto; width:50%;text-align:center;">רטבים</h5>
+        <div>
+            <md-input-container style="margin: auto; width:50%;">
+                <label>רטבים</label>
+                <md-select ng-model="$root.prodSpices" multiple>
+                    <md-optgroup label="רטבים">
+                        <md-option ng-value="spice" ng-repeat="spice in spices">{{spice}}</md-option>
+                    </md-optgroup>
+                </md-select>
+            </md-input-container>
         </div>
     </ion-content>
     <form name="sandwichForm">

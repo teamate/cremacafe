@@ -234,6 +234,10 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
                 return extra.checked == true;
             });
         }
+        if (prod_data.spice) {
+            console.log("prodSpices:" + $scope.$root.prodSpices);
+            prod_spices = $scope.$root.prodSpices;
+        }
         var extra_info = $scope.$root.prodExInfo;
         var amount = $scope.prodAmount;
         console.log($scope.prodType);

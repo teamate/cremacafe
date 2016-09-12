@@ -14,7 +14,8 @@ angular.module('AppServices', ['ngResource']).factory('Login', function () {
     this.createUserProduct = function (prod_display_name, type, size, extras, spices, info, totalPrice, amount) {
         console.log(prod_display_name + ": " + [type, size, extras, spices, info, totalPrice, amount].join());
         var parsed_info = ""
-            , parsed_type, parsed_size, parsed_extras = "";
+            , parsed_type, parsed_size, parsed_extras = ""
+            , parsed_spices = "";
         if (type != null) {
             parsed_type = type.displayName;
             parsed_info += parsed_type + " ";
@@ -26,7 +27,12 @@ angular.module('AppServices', ['ngResource']).factory('Login', function () {
         if (extras != null) {
             for (var i = 0; i < extras.length; i++) parsed_extras += extras[i].extraDisplayName + ", ";
             parsed_extras = parsed_extras.substring(0, parsed_extras.length - 2);
-            if (extras.length) parsed_info += parsed_extras;
+            if (extras.length) parsed_info += " בתוספת: " + parsed_extras;
+        }
+        if (spices != null) {
+            console.log(spices);
+            parsed_spices = spices.join();
+            if (parsed_spices.length) parsed_info += " ורטבים: " + parsed_spices;
         }
         console.log(parsed_info);
         userProduct = {

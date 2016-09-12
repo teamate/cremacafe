@@ -1,21 +1,30 @@
 <ion-view view-title="{{view_title}}">
     <ion-content dir="rtl" class="toast-content" delegate-handle="mainScroll" on-scroll="changeScrollIcon()">
         <ion-spinner class="spinner spinner-energized" icon="lines" ng-show="showSpinner"></ion-spinner>
-        <div ng-show="!showSpinner">
-            <div class="tosafot">
-                <div style="margin: auto; width: 50%;">
-                    <h4 class="md-title" dir="rtl" style="text-align: center; white-space: nowrap;" ng-bind="view_title"></h4>
-                    <hr> </div>
+        <div class="tosafot">
+            <div style="margin: auto; width: 50%;">
+                <h4 class="md-title" dir="rtl" style="text-align: center; white-space: nowrap;" ng-bind="view_title"></h4>
+                <hr> </div>
+            <div>
+                <div style="padding-right:10px;">
+                    <md-radio-group class="md-primary" ng-model="prodType" style="float:right;">
+                        <md-radio-button selected>טוסט</md-radio-button>
+                    </md-radio-group>
+                </div>
+                <h5 class="md-body-2md-body-2" style="padding-top: 20px;padding-bottom:10px;margin: auto; width:50%;text-align:center;">תוספות</h5>
                 <div>
-                    <div style="padding-right:10px;">
-                        <md-radio-group class="md-primary" ng-model="prodType" style="float:right;">
-                            <md-radio-button selected>טוסט</md-radio-button>
-                        </md-radio-group>
-                    </div>
-                    <div>
-                        <h5 class="md-body-2md-body-2" style="float:right;padding-top: 40px;margin-right: -50px;">תוספות</h5>
-                        <md-checkbox class="extras-checkbox item item-checkbox-right md-primary" ng-repeat="x in extras" ng-model="x.checked" ng-change="onExtrasChange(x)" style="width:100%;padding-right:50px;"><span class="md-body-2">{{x.extraDisplayName}}</span><span class="md-body-1" style="color:red;"><br>בתוספת: {{x.extraPrice}} &#8362; </span></md-checkbox>
-                    </div>
+                    <md-checkbox class="extras-checkbox item item-checkbox-right md-primary" ng-repeat="x in extras" ng-model="x.checked" ng-change="onExtrasChange(x)" style="width:100%;padding-right:50px;"><span class="md-body-2">{{x.extraDisplayName}}</span><span class="md-body-1" style="color:red;"><br>בתוספת: {{x.extraPrice}} &#8362; </span></md-checkbox>
+                </div>
+                <h5 class="md-body-2md-body-2" style="padding-top: 30px;padding-bottom:10px;margin: auto; width:50%;text-align:center;">רטבים</h5>
+                <div>
+                    <md-input-container style="margin: auto; width:50%;">
+                        <label>רטבים</label>
+                        <md-select ng-model="$root.prodSpices" multiple>
+                            <md-optgroup label="רטבים">
+                                <md-option ng-value="spice" ng-repeat="spice in spices">{{spice}}</md-option>
+                            </md-optgroup>
+                        </md-select>
+                    </md-input-container>
                 </div>
             </div>
         </div>
