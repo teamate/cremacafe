@@ -1,11 +1,8 @@
-//GLOBAL VARS
 var api_url = "http://cremacafe.herokuapp.com";
 var username;
 var app = angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova', 'ngMessages'
   , 'ngMaterial', 'angular-loading-bar']).run(function ($ionicPlatform, $rootScope, $ionicLoading, $ionicPopup, $state) {
   $ionicPlatform.ready(function () {
-    // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-    // for form inputs)
     if (window.localStorage.getItem("username") != null) $state.go('app.sessions', {}, {
       reload: true
     });
@@ -23,7 +20,6 @@ var app = angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova'
       cordova.plugins.Keyboard.disableScroll(true);
     }
     if (window.StatusBar) {
-      // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     };
   });
@@ -138,6 +134,5 @@ var app = angular.module('starter', ['ionic', 'starter.controllers', 'ngCordova'
       }
     }
   });
-  // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise("/app/login");
 });

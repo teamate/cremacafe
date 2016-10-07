@@ -1,7 +1,6 @@
 angular.module('AppServices', ['ngResource']).factory('Login', function () {
     var localStorage = window.localStorage;
     this.createUser = function (firstname, lastname) {
-        console.log(firstname + ' ' + lastname);
         localStorage.setItem("username", firstname + ' ' + lastname);
     }
     return this;
@@ -12,7 +11,6 @@ angular.module('AppServices', ['ngResource']).factory('Login', function () {
         return product;
     };
     this.createUserProduct = function (prod_display_name, type, size, extras, spices, info, totalPrice, amount) {
-        console.log(prod_display_name + ": " + [type, size, extras, spices, info, totalPrice, amount].join());
         var parsed_info = ""
             , parsed_type, parsed_size, parsed_extras = ""
             , parsed_spices = "";
@@ -30,11 +28,9 @@ angular.module('AppServices', ['ngResource']).factory('Login', function () {
             if (extras.length) parsed_info += " בתוספת: " + parsed_extras;
         }
         if (spices != null) {
-            console.log(spices);
             parsed_spices = spices.join();
             if (parsed_spices.length) parsed_info += " ורטבים: " + parsed_spices;
         }
-        console.log(parsed_info);
         userProduct = {
             "productName": prod_display_name
             , "productDetails": parsed_info
@@ -64,9 +60,7 @@ angular.module('AppServices', ['ngResource']).factory('Login', function () {
 
             function checkPermissionCallback(status) {
                 if (!status.hasPermission) {
-                    var errorCallback = function () {
-                        console.log("error getting permissions");
-                    }
+                    var errorCallback = function () {}
                     permissions.requestPermission(permissions.READ_SMS, function (status) {
                         if (!status.hasPermission) errorCallback();
                     }, errorCallback);
@@ -79,13 +73,10 @@ angular.module('AppServices', ['ngResource']).factory('Login', function () {
     }
     this.WriteToStorage = function (data) {
         $ionicPlatform.ready(function () {
-            console.log("data: ", data);
             var temp = [];
             var res = JSON.parse(localStorage.getItem("order"));
-            console.log("res: " + res);
             if (res != null) temp = res;
             temp.push(data);
-            console.log(temp);
             localStorage.setItem("order", JSON.stringify(temp));
             //            window.localStorage.clear();
         });
@@ -94,7 +85,6 @@ angular.module('AppServices', ['ngResource']).factory('Login', function () {
         var result = [];
         $ionicPlatform.ready(function () {
             result = JSON.parse(localStorage.getItem("order"));
-            console.log(result);
         });
         return result;
     }
@@ -107,7 +97,6 @@ angular.module('AppServices', ['ngResource']).factory('Login', function () {
         $ionicPlatform.ready(function () {
             var result = JSON.parse(localStorage.getItem("order"));
             result.splice(index, 1);
-            //self.ClearLocalStorage();
             localStorage.setItem("order", JSON.stringify(result));
         })
     }
@@ -115,12 +104,9 @@ angular.module('AppServices', ['ngResource']).factory('Login', function () {
         var length = 0;
         var result;
         if ((result = JSON.parse(localStorage.getItem("order"))) != null) length = result.length;
-        console.log("order length is:" + length);
         return length;
     }
     this.processOrder = function (idToken, phoneNumber, orderProducts, orderNotes, timeForPickup, totalAmount) {
-        //console.log(orderProducts);
-        //cosnsole.log("total price: ", totalAmount);
         var date = new Date();
         var total_order = {
             'userName': window.localStorage.getItem('username')
@@ -138,10 +124,6 @@ angular.module('AppServices', ['ngResource']).factory('Login', function () {
             , headers: {
                 'Content-Type': 'application/json'
                 , 'Authorization': 'Bearer ' + idToken
-                    //                , 'Access-Control-Allow-Origin': '*'
-                    //                , 'Access-Control-Allow-Credentials': 'true'
-                    //                , 'Access-Control-Allow-Methods': 'GET,HEAD,OPTIONS,POST,PUT'
-                    //                , 'Access-Control-Allow-Headers': 'Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers'
             }
             , data: total_order
         }
@@ -179,8 +161,6 @@ angular.module('AppServices', ['ngResource']).factory('Login', function () {
     return this;
 }).factory('Categories', function ($http) {
     this.getCategories = function () {
-        //return $http.get("http://192.168.0.33:5000/menu/categories");
-        //return $http.get("http://192.168.43.80:5000/menu/categories");
         return $http.get(api_url + "/menu/categories");
     }
     return this;

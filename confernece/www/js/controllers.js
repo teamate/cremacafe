@@ -1,16 +1,8 @@
 angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', function ($scope, $ionicModal, $ionicPlatform, $timeout, $ionicNavBarDelegate, $state, Order) {
-    // With the new view caching in Ionic, Controllers are only called
-    // when they are recreated or on app start, instead of every page change.
-    // To listen for when this page is active (for example, to refresh data),
-    // listen for the $ionicView.enter event:
-    //$scope.$on('$ionicView.enter', function(e) {
-    //});
-    // Form data for the login modal
     $scope.$on('$ionicView.enter', function () {
         $ionicNavBarDelegate.showBackButton(false);
         $ionicPlatform.ready(function () {
             $scope.username = window.localStorage.getItem("username");
-            console.log($scope.username);
         })
     });
     $scope.GoToOrder = function () {
@@ -26,15 +18,9 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
     $scope.$root.OrderLength = Order.getOrderLength();
 }).controller('LoginCtrl', function ($scope, $stateParams, $ionicSideMenuDelegate, $ionicNavBarDelegate, $state, Login) {
     $scope.$on('$ionicView.enter', function () {
-        // code to run each time view is entered
         $ionicNavBarDelegate.showBackButton(false);
     });
-    //    var deregister = $ionicPlatform.registerBackButtonAction(function () {
-    //        ionic.Platform.exitApp();
-    //    }, 100);
-    //    $scope.$on('$destroy', deregister);
     $scope.createUser = function (userFirstName, userLastName) {
-        console.log(userFirstName, userLastName);
         Login.createUser(userFirstName, userLastName);
         $state.go('app.sessions', {}, {
             reload: true
@@ -45,11 +31,8 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
             link: function (scope, element, attrs) {
                 scope.$watch(attrs.focusMe, function (value) {
                     if (value === true) {
-                        console.log('value=', value);
-                        //$timeout(function() {
                         element[0].focus();
                         scope[attrs.focusMe] = false;
-                        //});
                     }
                 });
             }
@@ -57,7 +40,6 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
     });
 }).controller('CategoriesCtrl', function ($scope, $state, $stateParams, $mdDialog, $mdMedia, $ionicPopup, $timeout, $ionicNavBarDelegate, $ionicPlatform, Categories) {
     $scope.$on('$ionicView.enter', function () {
-        // code to run each time view is entered
         $ionicNavBarDelegate.showBackButton(false);
     });
     $scope.showSpinner = false;
@@ -80,7 +62,6 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
         }, 4000);
     });
     $scope.OpenMenu = function (menu_name, view_title, ev) {
-        console.log(menu_name);
         $state.go("app." + menu_name + '/:view_title' + '/:prod_name', {
             view_title: view_title
             , prod_name: menu_name
@@ -99,11 +80,10 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
     var current_type_price = 0;
     var prodAmount = $scope.prodAmount = 1;
     $scope.$on('$ionicView.enter', function () {
-        // code to run each time view is entered
         $ionicNavBarDelegate.showBackButton(false);
+        spices = [];
     });
     $scope.changeScrollIcon = function () {
-        console.log('change scroll icons');
         var scrollPosition = $ionicScrollDelegate.$getByHandle('mainScroll').getScrollPosition();
         if (scrollPosition.top > 0) {
             $scope.$root.showUp = true;
@@ -120,7 +100,6 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
         else $ionicScrollDelegate.$getByHandle('mainScroll').scrollBottom(true);
     };
     Product.getProduct($stateParams.prod_name).then(function (res) {
-        console.log(res);
         prod_data = res.data;
         if (prod_data.type) {
             $scope.types = types = prod_data.types;
@@ -129,7 +108,6 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
             if (types[0].size) {
                 $scope.sizes = sizes = types[0].sizes;
                 $scope.prodSize = sizes[0];
-                console.log("prodSize: ", $scope.prodSize);
                 current_type_price = sizes[0].price;
                 $scope.prodTotalPrice = totalPrice = sizes[0].price;
             }
@@ -172,8 +150,6 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
         var parsedType = JSON.parse(type);
         $scope.prodType = type;
         if (parsedType.size) {
-            console.log(parsedType);
-            console.log($scope.prodType);
             totalPrice -= current_type_price;
             if (parsedType.size) {
                 $scope.sizes = sizes = parsedType.sizes;
@@ -187,13 +163,10 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
                 current_type_price = JSON.parse(parsedType.productPrice);
             }
             $scope.prodTotalPrice = totalPrice;
-            console.log("changes prod size to: ", $scope.prodSize);
         }
     };
     $scope.onSizeChange = function (size) {
         var parsedSize = size;
-        console.log("onSizeChange: ", parsedSize);
-        //$scope.cupSize = parsedSize;
         totalPrice -= current_type_price;
         totalPrice += JSON.parse(size.price);
         current_type_price = size.price;
@@ -212,7 +185,6 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
         if (prod_data.type) {
             prod_type = JSON.parse($scope.prodType);
             if (prod_type.size) {
-                console.log($scope.prodSize);
                 try {
                     prod_size = JSON.parse($scope.prodSize);
                 }
@@ -235,12 +207,10 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
             });
         }
         if (prod_data.spice) {
-            console.log("prodSpices:" + $scope.$root.prodSpices);
             prod_spices = $scope.$root.prodSpices;
         }
         var extra_info = $scope.$root.prodExInfo;
         var amount = $scope.prodAmount;
-        console.log($scope.prodType);
         Product.createUserProduct($stateParams.view_title, prod_type, prod_size, prod_extras, prod_spices, extra_info, totalPrice, amount);
         var result = Product.addProductToOrder();
         if (result) {
@@ -255,7 +225,6 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
                     text: 'המשך לקנות'
                     , type: 'button-default'
                     , onTap: function (e) {
-                        console.log('המשך לקנות');
                         $state.go('app.categories', {}, {
                             reload: true
                         });
@@ -264,7 +233,6 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
                     text: 'צפה בהזמנה'
                     , type: 'button-positive'
                     , onTap: function (e) {
-                        console.log('גש לקופה');
                         $state.go('app.order', {}, {
                             reload: true
                         });
@@ -275,53 +243,41 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
     };
 }).controller('SessionsCtrl', function ($rootScope, $scope, $ionicNavBarDelegate, $ionicSideMenuDelegate, $ionicPopup, $ionicPlatform, Order) {
     $scope.$on('$ionicView.enter', function () {
-        // code to run each time view is entered
         $ionicNavBarDelegate.showBackButton(false);
     });
     var deregister;
     $scope.$on('$ionicView.leave', function () {
-        console.log("leave main view");
         deregister();
     });
     $scope.$on('$ionicView.enter', function () {
-        // code to run each time view is entered
         $ionicNavBarDelegate.showBackButton(false);
         deregister = $ionicPlatform.registerBackButtonAction(function () {
             ionic.Platform.exitApp();
         }, 100);
         $ionicSideMenuDelegate.canDragContent(true);
         var length = Order.getOrderLength();
-        console.log(length);
         if (length > 0) $scope.isOrderEmpty = false;
         else $scope.isOrderEmpty = true;
-        //var permissions = cordova.plugins.permissions;
     });
 }).controller('OrderCtrl', function ($scope, $timeout, $stateParams, $ionicNavBarDelegate, $ionicPlatform, $ionicPopup, $ionicPopover, $timeout, Order) {
     $scope.$on('$ionicView.leave', function () {
-        // code to run each time view is entered
         $scope.$root.showDeleteButton = false;
     });
     $scope.$root.showDeleteButton = false;
     $scope.$root.orderTotalPrice = 0;
     var order = [];
     $scope.$on('$ionicView.enter', function () {
-        // code to run each time view is entered
         $ionicNavBarDelegate.showBackButton(false);
         $scope.showSpinner = false;
         $ionicPlatform.ready(function () {
             order = Order.ReadFromStorage();
-            console.log($scope.check);
-            console.log(order);
             $scope.order = order;
             $scope.$root.orderTotalPrice = 0;
             if (order != null) order.forEach(function (o) {
-                console.log(o.productName);
-                console.log(o.productPrice);
                 $scope.$root.orderTotalPrice += o.productPrice * o.productAmount;
             });
             $timeout(function () {
                 $scope.showSpinner = false;
-                console.log('update with timeout fired');
             }, 1000);
         });
     });
@@ -370,10 +326,8 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
                     Order.getSmsPermissions();
                     var sms_enabled;
                     if (SMS) SMS.startWatch(function () {
-                        console.log('Waiting For Validation Sms');
                         sms_enabled = true;
                     }, function () {
-                        console.log('failed to start watching');
                         sms_enabled = false;
                     });
                 }
@@ -409,7 +363,6 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
                                         authPopup.close();
                                         confirmPopup.close();
                                     }, 4000);
-                                    console.log("send order to server");
                                     $scope.clearOrder();
                                 }, function (err) {
                                     var badConnPopup = $ionicPopup.show({
@@ -463,7 +416,6 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
                                             authPopup.close();
                                             confirmPopup.close();
                                         }, 4000);
-                                        console.log("send order to server");
                                         $scope.clearOrder();
                                     }, function (err) {
                                         var badConnPopup = $ionicPopup.show({
@@ -495,16 +447,11 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
                                         });
                                     }, 4000);
                                 });
-                                SMS.stopWatch(function () {
-                                    console.log('watching', 'watching stopped');
-                                }, function () {
-                                    console.log('failed to stop watching');
-                                });
+                                SMS.stopWatch(function () {}, function () {});
                             }
                         });
                     }
                 }, function (err) {
-                    console.log(err);
                     var badConnPopup = $ionicPopup.show({
                         templateUrl: 'templates/bad_conn.html'
                         , title: '!שגיאה'
