@@ -81,7 +81,9 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
     var prodAmount = $scope.prodAmount = 1;
     $scope.$on('$ionicView.enter', function () {
         $ionicNavBarDelegate.showBackButton(false);
-        spices = [];
+    });
+    $scope.$on('$ionicView.beforeEnter', function () {
+        if ($scope.$root.prodSpices != null) $scope.$root.prodSpices = [];
     });
     $scope.changeScrollIcon = function () {
         var scrollPosition = $ionicScrollDelegate.$getByHandle('mainScroll').getScrollPosition();
