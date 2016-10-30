@@ -1,25 +1,32 @@
-<ion-modal-view>
-  <ion-header-bar>
-    <h1 class="title">Login</h1>
-    <div class="buttons">
-      <button class="button button-clear" ng-click="closeLogin()">Close</button>
-    </div>
-  </ion-header-bar>
-  <ion-content>
-    <form ng-submit="doLogin()">
-      <div class="list">
-        <label class="item item-input">
-          <span class="input-label">Username</span>
-          <input type="text" ng-model="loginData.username">
-        </label>
-        <label class="item item-input">
-          <span class="input-label">Password</span>
-          <input type="password" ng-model="loginData.password">
-        </label>
-        <label class="item">
-          <button class="button button-block button-positive" type="submit">Log in</button>
-        </label>
+<ion-view hide-nav-bar="true">
+  <ion-content class="login-content" dir="rtl" scroll="false">
+    <div class="hero no-header flat">
+      <div class="content">
+        <!--        <div class="app-icon"></div>-->
+        <!--        <h1 style="text-align:center; margin-bottom: 20px;">קרמה קפה</h1> -->
+        <div class="pictureTitle"></div>
       </div>
+    </div>
+    <form name="loginForm" ng-submit="createUser(userFirstName,userLastName)">
+      <md-input-container class="md-block" flex-gt-sm style="margin-right:10px; margin-left: 10px;">
+        <label style="color:black;font-size:20px;">שם פרטי</label>
+        <input ng-model="userFirstName" name="firstInput" style="font-size:15px;" ng-pattern="/^[א-ת\s]*$/" required ng-clicked="focusInput=true" focus-me="focusInput">
+        <div ng-messages="loginForm.firstInput.$error" ng-if="loginForm.firstInput.$dirty">
+          <div ng-message="required">שדה חובה</div>
+          <div ng-message="pattern">אותיות בעברית בלבד</div>
+        </div>
+      </md-input-container>
+      <md-input-container class="md-block" flex-gt-sm style="margin-right:10px; margin-left: 10px;">
+        <label style="color:black;font-size:20px;">שם משפחה</label>
+        <input ng-model="userLastName" name="secondInput" style="font-size:15px;" ng-pattern="/^[א-ת\s]*$/" required ng-clicked="focusInput=true" focus-me="focusInput">
+        <div ng-messages="loginForm.secondInput.$error" ng-if="loginForm.secondInput.$dirty">
+          <div ng-message="required">שדה חובה</div>
+          <div ng-message="pattern">אותיות בעברית בלבד</div>
+        </div>
+      </md-input-container>
+      <md-button class="md-fab" type="submit" style="background-color:darkorange;display:block ;margin:0 auto;" ng-disabled="loginForm.firstInput.$invalid || loginForm.secondInput.$invalid">
+        <md-icon md-svg-src="img/icons/ic_keyboard_arrow_right_white_36px.svg"></md-icon>
+      </md-button>
     </form>
   </ion-content>
-</ion-modal-view>
+</ion-view>

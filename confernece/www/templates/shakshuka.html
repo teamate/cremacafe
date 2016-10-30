@@ -1,0 +1,51 @@
+<ion-view view-title="{{view_title}}">
+    <ion-content dir="rtl" class="shakshuka-content" delegate-handle="mainScroll" on-scroll="changeScrollIcon()">
+        <ion-spinner class="spinner spinner-energized" icon="lines" ng-show="showSpinner"></ion-spinner>
+        <div class="shakshuka">
+            <div style="margin: auto; width: 50%;">
+                <h4 class="md-title" dir="rtl" style="text-align: center; white-space: nowrap;" ng-bind="view_title"></h4>
+                <hr> </div>
+            <div style="padding-right:10px;">
+                <md-radio-group class="md-primary" ng-model="prodType" style="float:right;">
+                    <md-radio-button selected>שקשוקה</md-radio-button>
+                </md-radio-group>
+            </div>
+            <h5 class="md-body-2md-body-2" style="padding-top: 20px;padding-bottom:10px;margin: auto; width:50%;text-align:center;">תוספות</h5>
+            <div>
+                <md-checkbox class="extras-checkbox item item-checkbox-right md-primary" ng-repeat="x in extras" ng-model="x.checked" ng-change="onExtrasChange(x)" style="width:100%;padding-right:50px;"><span class="md-body-2">{{x.extraDisplayName}}</span><span class="md-body-1" style="color:red;"><br>בתוספת: {{x.extraPrice}} &#8362; </span></md-checkbox>
+            </div>
+            <h5 class="md-body-2md-body-2" style="padding-top: 30px;padding-bottom:10px;margin: auto; width:50%;text-align:center;">רטבים</h5>
+            <div>
+                <md-input-container style="margin: auto; width:50%;">
+                    <label>רטבים</label>
+                    <md-select ng-model="$root.prodSpices" multiple>
+                        <md-optgroup label="רטבים">
+                            <md-option ng-value="spice" ng-repeat="spice in spices">{{spice}}</md-option>
+                        </md-optgroup>
+                    </md-select>
+                </md-input-container>
+            </div>
+        </div>
+        <div style="width:180px;"></div>
+    </ion-content>
+    <form name="shakshukaForm">
+        <div class="bar bar-footer bar-default">
+            <md-input-container class="md-block">
+                <label dir="rtl">הערות</label>
+                <textarea ng-model="$root.prodExInfo" name="exInfoInput" ng-maxlength="20" md-maxlength="20" rows="1" style="text-align:right;"></textarea>
+            </md-input-container>
+            <div style="float:right;">
+                <md-button class="md-icon-button ion-minus-round" ng-disabled="prodAmount == 1" ng-click="prodAmount = prodAmount -1; prodTotalPrice = (prodTotalPrice/(prodAmount+1))*prodAmount"></md-button>
+                <p style="display:inline;"><span ng-bind="prodAmount"></span></p>
+                <md-button class="md-icon-button ion-plus-round" ng-disabled="prodAmount == 5" ng-click="prodAmount = prodAmount +1; prodTotalPrice = (prodTotalPrice/(prodAmount-1))*prodAmount"></md-button>
+                <p style="padding-right: 20px;">סה"כ: <span style="color:red;">&#8362;<span ng-bind="prodTotalPrice" class="md-body-2"></span></span>
+                </p>
+            </div>
+            <md-button class="md-raised md-primary" ng-disabled="shakshukaForm.exInfoInput.$error.maxlength" ng-click="AddProductToOrder()" style="margin: 0 auto; display: block;"> הוסף להזמנה </md-button>
+        </div>
+    </form>
+    <md-button class="md-fab md-mini md-primary directionFab" ng-click="scrollMainToDirection()">
+        <md-icon md-svg-src="img/icons/up_arrow_white_48px.svg" ng-show="$root.showUp"></md-icon>
+        <md-icon md-svg-src="img/icons/down_arrow_white_48px.svg" ng-show="!$root.showUp"></md-icon>
+    </md-button>
+</ion-view>

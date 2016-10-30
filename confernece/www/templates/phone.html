@@ -1,0 +1,12 @@
+<form name="phoneForm" ng-controller="OrderCtrl">
+    <md-input-container md-no-float class="md-block" dir="rtl">
+        <label dir="rtl">מספר טלפון</label>
+        <textarea ng-model="$root.phoneNumber" name="phoneInput" type="text" md-maxlength="10" dir="ltr" ng-pattern="/^\d+$/" ng-minlength="10" ng-maxlength="10" required></textarea>
+        <md-icon class="ion-android-call"></md-icon>
+        <div ng-messages="phoneForm.phoneInput.$error" ng-if="phoneForm.phoneInput.$dirty" style="color:maroon">
+            <div ng-message="minlength">שדה קצר מדי</div>
+            <div ng-message="maxlength">שדה ארוך מדי</div>
+            <div ng-message="required">לא הכנסת מספר טלפון</div>
+        </div>
+    </md-input-container>
+</form>

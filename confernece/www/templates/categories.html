@@ -1,43 +1,11 @@
-<ion-view view-title="קטגוריות" >
-  <ion-content>
-    <div class="list card">
-      <div class="item item-image">
-        <img src="../img/breads.jpg">  <!--for android replace .. with /android_asset/www-->
-        <div class="text-on-image card-title-shadow">
-          <h2>לחמים</h2>
-          <h3>מבחר לחמים טעימים לכל ימות השבוע</h3>
-        </div>
-      </div>
-    <div class="item item-image">
-      <img src="../img/maafim.jpg">
-      <div class="text-on-image card-title-shadow">
-        <h2>מאפים</h2>
-        <h3>כל סוגי המאפים, טריים ישר מהתנור</h3>
-      </div>
-    </div>
-    <div class="item item-image">
-      <img src="../img/tostim.jpg">
-      <div class="text-on-image card-title-shadow">
-        <h2>טוסטים</h2>
-        <h3>טוסטים בהרכבה אישית</h3>
-      </div>
-    </div>
-    <div class="item item-image">
-      <img src="../img/drinks.jpg">
-      <div class="text-on-image card-title-shadow">
-        <h2>שתייה</h2>
-        <h3>כל סוגי השתייה</h3>
-      </div>
-    </div>
-    </div>
-<!--      <ion-item class="image">
-        <img src="../img/maafim.jpg">
-      </ion-item>
-      <ion-item class="image">
-        <img src="../img/tostim.jpg">
-      </ion-item>
-      <ion-item class="image" style="background-color: tan;">
-        <img src="../img/drinks.jpg" >
-      </ion-item>-->
+<ion-view view-title="קטגוריות">
+    <ion-content>
+        <ion-spinner class="spinner spinner-energized" icon="lines" ng-show="showSpinner">sdfsdf</ion-spinner>
+        <div class="list card">
+            <a class="item item-image" id="category-item" ng-click="OpenMenu(x.categoryName, x.displayName, $event)" ng-repeat="x in categories"> <img ng-src={{x.categoryPicture}}>
+                <div class="text-on-image card-title-shadow">
+                    <h2 ng-bind="x.displayName"></h2>
+                    <h3 ng-bind="x.displayLine"></h3> </div>
+            </a>
     </ion-content>
 </ion-view>
