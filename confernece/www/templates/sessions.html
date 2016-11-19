@@ -1,15 +1,42 @@
 <ion-view view-title="קרמה קפה">
-    <ion-content dir="rtl" scroll="false">
-        <h5 ng-model="test"></h5>
-        <div class="container">
-            <div class="empty-order" ng-show="isOrderEmpty" style="background-color:transparent;">
-                <p class="md-body-12">אין מוצרים בהזמנה</p>
-                <md-button class="md-raised md-primary" href="#/app/categories"> הזמן עכשיו </md-button>
+    <ion-content dir="rtl" scroll="false" class="main-screen">
+        <h5 ng-model="test"></h5>    
+            <div class="img-container">
+                <img class="logo-img" src="img/cream_menu_transparent.png"/>
             </div>
-            <div class="full-order" ng-show="!isOrderEmpty" style="background-color:transparent;">
-                <p class="md-body-12">הוסף מוצרים להזמנה או שתעבור אליה</p>
-                <md-button class="md-raised md-primary" href="#/app/categories"> הוסף מוצרים </md-button>
-                <md-button class="md-raised md-warn" href="#/app/order"> גש להזמנה </md-button>
+        <div class="opening-buttons">
+                <div class="empty-order" ng-show="isOrderEmpty" style="background-color:transparent;">
+                    <md-button class="md-raised md-primary" href="#/app/categories"> הזמן עכשיו </md-button>
+                </div>
+                <div class="full-order" ng-show="!isOrderEmpty" style="background-color:transparent;">
+                    <md-button class="md-raised md-primary" href="#/app/categories"> הוסף מוצרים </md-button>
+                    <md-button class="md-raised md-warn" href="#/app/order"> גש להזמנה </md-button>
+                </div>
             </div>
+        <div class="footer">
+                    <table style="width:100%">
+                       <tr>
+                            <td colspan="2"><h5>שעות פתיחה:</h5></td>
+                        </tr>
+                        <tr>
+                                <td class="auto-width-column">א'-ה':</td>
+                                <td class="opening-hours">6:00-21:00</td>
+                                <td class="address">אוסישקין 10 ב"ש</td>
+                        </tr>
+                        <tr>
+                                <td class="auto-width-column">ו':</td>
+                                <td class="opening-hours">6:00-21:00</td>
+                                <td class="address">(צמוד למכללה הטכנולוגית)</td>
+                        </tr>
+                        <tr>
+                                
+                                
+                        </tr>
+
+                    </table>
+                <p class="developers"> powered by <a href="mailto:teammatetm@gmail.com">teammate </a> </p>
+        </div>
+           
+
     </ion-content>
 </ion-view>

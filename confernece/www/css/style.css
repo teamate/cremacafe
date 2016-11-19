@@ -350,13 +350,56 @@ Navigation Menu
   margin: auto;
   height: 50%;
   text-align: center;
-  padding-top: 200px;
+  padding-top: 20px;
 }
 
 .tosts-header {
   padding-top: 50px;
   padding-bottom: 50px;
   border-bottom: 3px grey solid;
+}
+
+.logo-img {
+  width: 80%;
+  height: 150px;
+
+}
+
+.address{
+  text-align: center;
+  font-weight: bold;
+}
+
+.auto-width-column{
+  width: 1px;
+  white-space: nowrap;
+  margin-left: 2px;
+}
+
+.opening-hours{
+  text-align: center;
+}
+
+.developers {
+        margin-top: 5px;
+}
+
+.opening-buttons {
+  .margin-top: 20px;
+}
+
+.img-container {
+  text-align: center;
+}
+
+
+.footer{
+  padding: 15px;
+  bottom:0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 
@@ -408,6 +451,13 @@ video#bgvid {
 .social-login {
   position: fixed;
   bottom: 0;
+}
+
+.main-screen {
+  background-color: beige;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 }
 
 
