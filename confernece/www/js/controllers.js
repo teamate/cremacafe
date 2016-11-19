@@ -225,7 +225,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
                 , scope: $scope
                 , buttons: [{
                     text: 'המשך לקנות'
-                    , type: 'button-default'
+                    , type: 'button-positive'
                     , onTap: function (e) {
                         $state.go('app.categories', {}, {
                             reload: true
@@ -233,7 +233,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
                     }
                     }, {
                     text: 'צפה בהזמנה'
-                    , type: 'button-positive'
+                    , type: 'button-default'
                     , onTap: function (e) {
                         $state.go('app.order', {}, {
                             reload: true
