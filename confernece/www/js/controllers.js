@@ -168,11 +168,12 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
         }
     };
     $scope.onSizeChange = function (size) {
-        var parsedSize = size;
+        var parsedSize = $scope.prodSize = size;
         totalPrice -= current_type_price;
         totalPrice += JSON.parse(size.price);
         current_type_price = size.price;
         $scope.prodTotalPrice = totalPrice;
+        
     };
     $scope.onExtrasChange = function (item) {
         if (item.checked) totalPrice += JSON.parse(item.extraPrice);
@@ -188,7 +189,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
             prod_type = JSON.parse($scope.prodType);
             if (prod_type.size) {
                 try {
-                    prod_size = JSON.parse($scope.prodSize);
+                    prod_size = $scope.prodSize;
                 }
                 catch (e) {
                     prod_size = $scope.prodSize;
