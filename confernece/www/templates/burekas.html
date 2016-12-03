@@ -6,8 +6,8 @@
                 <h4 class="md-title" dir="rtl" style="text-align: center; white-space: nowrap;" ng-bind="view_title"></h4>
                 <hr> </div>
             <div style="padding-right:10px;">
-                <md-radio-group class="md-primary" ng-model="prodType" style="float:right;">
-                    <md-radio-button selected>בורקס גדול</md-radio-button>
+                <md-radio-group class="md-primary" ng-model="prodType" ng-change="onTypeChange(prodType)">
+                    <md-radio-button ng-repeat="type in types" value="{{type}}"><span class="md-body-2">{{type.displayName}}</span><span class="md-body-1" style="color:red;"><br>מחיר: {{type.productPrice}} &#8362; </span></md-radio-button>
                 </md-radio-group>
             </div>
             <h5 class="md-body-2md-body-2" style="padding-top: 40px;padding-bottom:10px;margin: auto; width:50%;text-align:center;">תוספות</h5>
