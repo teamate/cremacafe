@@ -15,6 +15,11 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
             reload: true
         });
     };
+
+    $scope.openPolicy = function(){
+      window.open('http://nadavbara.github.io/', '_self', 'location=no');
+      return false;
+    };
     $scope.$root.OrderLength = Order.getOrderLength();
 }).controller('LoginCtrl', function ($scope, $stateParams, $ionicSideMenuDelegate, $ionicNavBarDelegate, $state, Login) {
     $scope.$on('$ionicView.enter', function () {
@@ -173,7 +178,7 @@ angular.module('starter.controllers', ['AppServices']).controller('AppCtrl', fun
         totalPrice += JSON.parse(size.price);
         current_type_price = size.price;
         $scope.prodTotalPrice = totalPrice;
-        
+
     };
     $scope.onExtrasChange = function (item) {
         if (item.checked) totalPrice += JSON.parse(item.extraPrice);
